@@ -1,0 +1,51 @@
+<!Doctype html>
+<html>
+	<head>
+		<title>Pantry Admin</title>
+		<link rel="stylesheet" href="styles.css">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+		<!-- <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"> -->
+	</head>
+	<body>
+		<div class="header">
+			<div class="header__logo">
+				<img src="assets/spr-logo.png">
+			</div>
+			<div class="header__list-icon">
+				<i class="fa fa-list fa-lg"></i>
+			</div>
+			<div class="header__text">
+				Orders Now
+				<a href="#openAddItemModal"><i class="fa fa-plus-circle"></i></a>
+				<!-- <a href="#"><i class="material-icons">add_circle_outline</i></a> -->
+			</div>
+		</div>
+		<div id="openAddItemModal" class="modalDialog">
+			<div class="inner">
+				<a href="#close" title="Close" class="close">X</a>
+				<h2>Add New Item</h2>
+				<div>
+					<div class="md__labels">Item Name</div>
+					<input class="md__input box-border" placeholder="Enter Item Name">
+				</div>
+				<div>
+					<div class="md__labels">Add SubCategory (Optional)</div>
+					<div class="md__plusminus">
+						<i id="addInput" class="fa fa-plus-square-o fa-lg"></i>
+						<i id="removeInput" class="fa fa-minus-square-o fa-lg"></i>
+					</div>
+					<div id="subCategories" class="md__subcat">
+						<input class="md__input box-border" placeholder="Enter SubCategory Name">
+						<!-- <input class="md__input box-border" placeholder="Enter SubCategory Name"> -->
+						<!-- <input class="md__input box-border" placeholder="Enter SubCategory Name">	 -->
+					</div>
+				</div>
+				<div>
+					<button type="button" class="md__btn md__btn_save">Save</button>
+					<button type="button" class="md__btn md__btn_cancel">Cancel</button>
+				</div>
+			</div>
+		</div>
+		<script src="app.js"></script>
+	</body>
+</html>
