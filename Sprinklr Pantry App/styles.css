@@ -487,6 +487,10 @@ body.has-active-menu{
     padding: 10px;
     vertical-align: bottom;
     text-align: center;
+    font-size: 13px;
+    font-family: "Helvetica Neue";
+	font-weight: bold;
+	letter-spacing: 1px;
 }
 
 .do__table-data {
@@ -497,6 +501,8 @@ body.has-active-menu{
     padding: 10px;
     vertical-align: middle;
     text-align: center;
+    font-size: 13px;
+    font-family: "Helvetica Neue";
 }
 /*.do__table-head_id {
 	width: 20%;
