@@ -562,3 +562,7 @@ body.has-active-menu{
 .order-queue .fa {
 	padding: 0 5px;
 }
+
+.do__row:hover{
+	background-color: #F1F2F7;
+}
