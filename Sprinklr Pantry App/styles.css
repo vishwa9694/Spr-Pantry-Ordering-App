@@ -212,16 +212,19 @@ body.has-active-menu{
 
 .header__list-icon {
 	display: inline-block;
-	border-radius: 50%;
-	border: 1px solid;
 	height: 36px;
 	width: 36px;
 	vertical-align: top;
 	text-align: center;
+	cursor: pointer;
 }
 
 .header__list-icon i {
 	margin-top: 10px
+}
+
+.fa-bars{
+	color: #767676;
 }
 
 .header__text {
