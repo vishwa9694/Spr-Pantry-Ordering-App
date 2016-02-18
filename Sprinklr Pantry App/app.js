@@ -37,3 +37,32 @@ function close(){
 buttonElement.addEventListener('click', open, false);
 maskElement.addEventListener('click', close, false);
 cancelElement.addEventListener('click', close, false);
+
+var orderCancel = document.getElementById("cancelBtn");
+function viewCancelDialog() {
+	document.getElementById("reasonDialog").style.opacity = 1;
+	document.getElementById("reasonDialog").style.pointerEvents = "auto";
+}
+
+orderCancel.addEventListener('click', viewCancelDialog, false);
+
+function closeCancelDialog() {
+	document.getElementById("reasonDialog").style.opacity = 0;
+	document.getElementById("reasonDialog").style.pointerEvents = "none";
+}
+
+document.getElementById("closeReason").addEventListener('click',closeCancelDialog, false);
+
+var openAddNewItemDialog = document.getElementById("openAddItemModal");
+function viewNewItemDialog() {
+	document.getElementById("AddItemModal").style.opacity = 1;
+	document.getElementById("AddItemModal").style.pointerEvents = "auto";
+}
+
+openAddNewItemDialog.addEventListener('click', viewNewItemDialog, false);
+function closeAddNewItemDialog() {
+	document.getElementById("AddItemModal").style.opacity = 0;
+	document.getElementById("AddItemModal").style.pointerEvents = "none";
+}
+
+document.getElementById("closeNewItemDialog").addEventListener('click',closeAddNewItemDialog, false);

@@ -257,6 +257,11 @@ body.has-active-menu{
 	height: 0;
 }
 
+.header__add-icon {
+	cursor: pointer;
+	display: inline-block;
+	float: right;
+}
 .header__text a {
 	float: right;
 }
@@ -308,10 +313,17 @@ body.has-active-menu{
 	-moz-box-shadow: 1px 1px 3px #000;
 	-webkit-box-shadow: 1px 1px 3px #000;
 	box-shadow: 1px 1px 3px #000;
+	cursor: pointer;
 }
 
 .close:hover { 
 	background: #fa8564; 
+}
+
+.md__heading {
+	font-size: large;
+    padding: 15px 0;
+    font-weight: 700;
 }
 
 .md__labels {
@@ -562,4 +574,8 @@ body.has-active-menu{
 
 .do__row:hover{
 	background-color: #F1F2F7;
+}
+
+.block {
+	display: block;
 }
