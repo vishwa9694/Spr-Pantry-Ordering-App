@@ -1,7 +1,16 @@
+<!DOCTYPE html>
+<html>
 <head>
     <link rel="stylesheet" type="text/css" href="style.css">
+<link rel="stylesheet" type="text/css" href="front_styles.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+<script  src = "http://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+ <script src="items_tiles.js"></script>
+
 </head>
 <body>
+    
+    
     <div class="header-container">
         
         <div class="logo">
@@ -10,183 +19,90 @@
             Never Ever Give Up
         </div>
     </div>
+    
+    
+    
     <div class="body-container">
-        
-    <div class="side">
+    <div class="base">
+        <div class="menu">
+        <div class="items">
+            <img src="http://princegladyexports.com/wp-content/uploads/2015/12/tea-08.jpg">
+            <div class="items_hover">
+                <i class="fa fa-plus-circle fa-3x add_item"id="add_item"></i>
+            </div>
+        </div>
+        <div class="items">
+            <img src="http://img.sndimg.com/food/image/upload/w_555,h_416,c_fit,fl_progressive,q_95/v1/img/recipes/61/85/6/o1JQgDK7R70fdgv2ChFA_baked%20eggs.JPG">
+            <div class="items_hover">
+                <a href="#" class="add_item"><i class="fa fa-plus-circle fa-3x"></i></a>
+            </div>
+        </div>
+        <div class="items">
+            <img src="http://i1.mirror.co.uk/incoming/article2579962.ece/ALTERNATES/s615/Tea-and-Biscuits.jpg">
+            <div class="items_hover">
+                <a href="#" class="add_item"><i class="fa fa-plus-circle fa-3x"></i></a>
+            </div>
+        </div>
+        <div class="items">
+            <img src="http://paleoaholic.com/wp-content/uploads/2013/07/ommlette.jpg">
+            <div class="items_hover">
+                <a href="#" class="add_item"><i class="fa fa-plus-circle fa-3x"></i></a>
+            </div>
+        </div>
+        <div class="items">
+            <img src="https://media.licdn.com/mpr/mpr/p/6/005/074/33e/3952002.jpg
+
+
+            ">
+            <div class="items_hover">
+                <a href="#" class="add_item"><i class="fa fa-plus-circle fa-3x"></i></a>
+            </div>
+        </div>
+        <div class="items">
+            <img src="http://blog.samratrai.com/wp-content/uploads/2012/12/chocos.png">
+            <div class="items_hover">
+                <a href="#" class="add_item"><i class="fa fa-plus-circle fa-3x"></i></a>
+            </div>
+        </div>
+        <div class="items">
+            <img src="http://princegladyexports.com/wp-content/uploads/2015/12/tea-08.jpg">
+            <div class="items_hover">
+                <a href="#" class="add_item"><i class="fa fa-plus-circle fa-3x"></i></a>
+            </div>
+        </div>
+    </div>
+    <table id="order_list">
+    </table>
+    <!-- <div class="order_person">
+        <div class="quantity">1</div>
+        <form action="demo_form.asp">
+            First name: <input type="text" name="FirstName" value="Mickey"><br>
+            Last name: <input type="text" name="LastName" value="Mouse"><br>
+            <input type="submit" value="Submit">
+        </form>
+
+    </div> -->
+
+    </div>    
+    <div class="side_element">
         <div class="side__queue">
         <div class="s-q__heading">
                Food Queue
         </div>
         <div class="s-q__element">
-        <table class="s-q__table">    
-                <tr>
+        <div class="s-q__div">
+            <table class="s-q__table">    
+                <tr class="s-q-e__item">
                 <td class="s-q__name">
                     Anup Kumar Rai
                 </td>
-                <td class="s-q__item">
-                    <img class ="s-q__img" src="http://media2.intoday.in/indiatoday/images/stories/maggi_-story_647_060115025849.jpg"></img>
-                    </td>
-                <td class=s-q__img>
+                <td class=s-q__item>
                 Maggi
                     </td>
                 </tr>
         
-                <tr>
-                <td class="s-q__name">
-                    Anup
-                </td>
-                <td class="s-q__item">
-                    <img class ="s-q__img" src="http://media2.intoday.in/indiatoday/images/stories/maggi_-story_647_060115025849.jpg"></img>
-                    </td>
-                <td class=s-q__img>
-                Maggi
-                    </td>
-                </tr>
-                <tr>
-                <td class="s-q__name">
-                    Anup
-                </td>
-                <td class="s-q__item">
-                    <img class ="s-q__img" src="http://media2.intoday.in/indiatoday/images/stories/maggi_-story_647_060115025849.jpg"></img>
-                    </td>
-                <td class=s-q__img>
-                Maggi
-                    </td>
-                </tr>
-                <tr>
-                <td class="s-q__name">
-                    Anup
-                </td>
-                <td class="s-q__item">
-                    <img class ="s-q__img" src="http://media2.intoday.in/indiatoday/images/stories/maggi_-story_647_060115025849.jpg"></img>
-                    </td>
-                <td class=s-q__img>
-                Maggi
-                    </td>
-                </tr>
-                <tr>
-                <td class="s-q__name">
-                    Anup
-                </td>
-                <td class="s-q__item">
-                    <img class ="s-q__img" src="http://media2.intoday.in/indiatoday/images/stories/maggi_-story_647_060115025849.jpg"></img>
-                    </td>
-                <td class=s-q__img>
-                Maggi
-                    </td>
-                </tr>
-                <tr>
-                <td class="s-q__name">
-                    Anup
-                </td>
-                <td class="s-q__item">
-                    <img class ="s-q__img" src="http://media2.intoday.in/indiatoday/images/stories/maggi_-story_647_060115025849.jpg"></img>
-                    </td>
-                <td class=s-q__img>
-                Maggi
-                    </td>
-                </tr>
-                <tr>
-                <td class="s-q__name">
-                    Anup
-                </td>
-                <td class="s-q__item">
-                    <img class ="s-q__img" src="http://media2.intoday.in/indiatoday/images/stories/maggi_-story_647_060115025849.jpg"></img>
-                    </td>
-                <td class=s-q__img>
-                Maggi
-                    </td>
-                </tr>
-                <tr>
-                <td class="s-q__name">
-                    Anup
-                </td>
-                <td class="s-q__item">
-                    <img class ="s-q__img" src="http://media2.intoday.in/indiatoday/images/stories/maggi_-story_647_060115025849.jpg"></img>
-                    </td>
-                <td class=s-q__img>
-                Maggi
-                    </td>
-                </tr>
-                <tr>
-                <td class="s-q__name">
-                    Anup
-                </td>
-                <td class="s-q__item">
-                    <img class ="s-q__img" src="http://media2.intoday.in/indiatoday/images/stories/maggi_-story_647_060115025849.jpg"></img>
-                    </td>
-                <td class=s-q__img>
-                Maggi
-                    </td>
-                </tr>
-                <tr>
-                <td class="s-q__name">
-                    Anup
-                </td>
-                <td class="s-q__item">
-                    <img class ="s-q__img" src="http://media2.intoday.in/indiatoday/images/stories/maggi_-story_647_060115025849.jpg"></img>
-                    </td>
-                <td class=s-q__img>
-                Maggi
-                    </td>
-                </tr>
-                <tr>
-                <td class="s-q__name">
-                    Anup
-                </td>
-                <td class="s-q__item">
-                    <img class ="s-q__img" src="http://media2.intoday.in/indiatoday/images/stories/maggi_-story_647_060115025849.jpg"></img>
-                    </td>
-                <td class=s-q__img>
-                Maggi
-                    </td>
-                </tr>
-                <tr>
-                <td class="s-q__name">
-                    Anup
-                </td>
-                <td class="s-q__item">
-                    <img class ="s-q__img" src="http://media2.intoday.in/indiatoday/images/stories/maggi_-story_647_060115025849.jpg"></img>
-                    </td>
-                <td class=s-q__img>
-                Maggi
-                    </td>
-                </tr>
-                <tr>
-                <td class="s-q__name">
-                    Anup
-                </td>
-                <td class="s-q__item">
-                    <img class ="s-q__img" src="http://media2.intoday.in/indiatoday/images/stories/maggi_-story_647_060115025849.jpg"></img>
-                    </td>
-                <td class=s-q__img>
-                Maggi
-                    </td>
-                </tr>
-                <tr>
-                <td class="s-q__name">
-                    Anup
-                </td>
-                <td class="s-q__item">
-                    <img class ="s-q__img" src="http://media2.intoday.in/indiatoday/images/stories/maggi_-story_647_060115025849.jpg"></img>
-                    </td>
-                <td class=s-q__img>
-                Maggi
-                    </td>
-                </tr>
-                <tr>
-                <td class="s-q__name">
-                    Anup
-                </td>
-                <td class="s-q__item">
-                    <img class ="s-q__img" src="http://media2.intoday.in/indiatoday/images/stories/maggi_-story_647_060115025849.jpg"></img>
-                    </td>
-                <td class=s-q__img>
-                Maggi
-                    </td>
-                </tr>
                 </table>
-            
+            </div>
             </div>
         </div>
         <div class="side__order">
@@ -194,11 +110,11 @@
                 Your Orders
             </div>
             <div class="s-o__element">
-            
+                <div class="s-o__table">
                 <table class="s-o-e__table">
                 <tr class="s-o-e__item">
                     <td class="item__name">
-                    Maggi
+                    Maggi first
                     </td>
                     <td class="add">
                     <button class="add-but">+</button>
@@ -211,15 +127,15 @@
                     <td class="add">
                         <button class="add-but">-</button>
                     </td>
-                            
+                    <td class="item-comment">
+                        <input class="in_comment" placeholder="Special Instructions" id="in-comment">
+                    </td>
+                         
                     </tr>
                 
-                </table>
-                
-             <table class="s-o-e__table">
                 <tr class="s-o-e__item">
                     <td class="item__name">
-                    Maggi
+                    Maggi first
                     </td>
                     <td class="add">
                     <button class="add-but">+</button>
@@ -232,14 +148,14 @@
                     <td class="add">
                         <button class="add-but">-</button>
                     </td>
+                    <td class="item-comment">
+                        <input class="in_comment" placeholder="Special Instructions" id="in-comment">
+                    </td>
                             
                     </tr>
-                
-                </table>
-             <table class="s-o-e__table">
                 <tr class="s-o-e__item">
                     <td class="item__name">
-                    Maggi
+                    Maggi first
                     </td>
                     <td class="add">
                     <button class="add-but">+</button>
@@ -252,122 +168,30 @@
                     <td class="add">
                         <button class="add-but">-</button>
                     </td>
-                            
-                    </tr>
-                
-                </table>
-             <table class="s-o-e__table">
-                <tr class="s-o-e__item">
-                    <td class="item__name">
-                    Maggi
-                    </td>
-                    <td class="add">
-                    <button class="add-but">+</button>
-                    </td>
-                    
-                    <td class="item-qty">
-                    5
-                    </td>
-                            
-                    <td class="add">
-                        <button class="add-but">-</button>
+                    <td class="item-comment">
+                        <input class="in_comment" placeholder="Special Instructions" id="in-comment">
                     </td>
                             
                     </tr>
                 
-                </table>
-            <table class="s-o-e__table">
-                <tr class="s-o-e__item">
-                    <td class="item__name">
-                    Maggi
-                    </td>
-                    <td class="add">
-                    <button class="add-but">+</button>
-                    </td>
-                    
-                    <td class="item-qty">
-                    5
-                    </td>
-                            
-                    <td class="add">
-                        <button class="add-but">-</button>
-                    </td>
-                            
-                    </tr>
-                
-                </table>
-            <table class="s-o-e__table">
-                <tr class="s-o-e__item">
-                    <td class="item__name">
-                    Maggi
-                    </td>
-                    <td class="add">
-                    <button class="add-but">+</button>
-                    </td>
-                    
-                    <td class="item-qty">
-                    5
-                    </td>
-                            
-                    <td class="add">
-                        <button class="add-but">-</button>
-                    </td>
-                            
-                    </tr>
-                
-                </table>
-            <table class="s-o-e__table">
-                <tr class="s-o-e__item">
-                    <td class="item__name">
-                    Maggi
-                    </td>
-                    <td class="add">
-                    <button class="add-but">+</button>
-                    </td>
-                    
-                    <td class="item-qty">
-                    5
-                    </td>
-                            
-                    <td class="add">
-                        <button class="add-but">-</button>
-                    </td>
-                            
-                    </tr>
-                
-                </table>
-            <table class="s-o-e__table">
-                <tr class="s-o-e__item">
-                    <td class="item__name">
-                    Maggi
-                    </td>
-                    <td class="add">
-                    <button class="add-but">+</button>
-                    </td>
-                    
-                    <td class="item-qty">
-                    5
-                    </td>
-                            
-                    <td class="add">
-                        <button class="add-but">-</button>
-                    </td>
-                            
-                    </tr>
-                
-                </table>
-            
+                    </table>
+                </div>
+             
             <div class="user-form">    
             
-            <input class ="user-input" id="user-name"value="Name">
+            <input class ="user-input" id="user-name"placeholder="Name">
                 
-            <input class ="user-input"id="user-table"value="Table Number">
-                </div>
-            
-                <button class="submit">
+            <input class ="user-input"id="user-table"placeholder="Table Number">
+                
+            <div class="submit">
+                <button class="submit-btn">
                 Submit</button>   
-             </div>
+                </div>
+                
+                </div>
+                </div>
         </div>
     </div>
     </div>
 </body>
+</html>
