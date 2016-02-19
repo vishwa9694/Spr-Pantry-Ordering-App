@@ -34,12 +34,64 @@ body{
 .header-text{
     display: inline-block;
     position:absolute;
-   bottom: 8px;
-    right: 3px;
-    font-family: impact;
-    color:rgb(192, 192, 192);
-    font-size: 35px;
-    
+    bottom: 20px;
+    right: 10px;
+    color:white;
+    top:10px;
+}
+.user-details
+{
+    display: none;
+    color:white;
+    //border: 2px solid white;
+    background-color:grey ;
+    width:100px;
+    height:32px;
+    border-radius: 32px;
+    text-align: center;
+    line-height: 32px;
+    font-family: Arial Rounded MT Bold;
+    font-size: 12px;
+
+}
+.ui__pic{
+    height:32px;
+    width:32px;
+    box-sizing: border-box;
+    display:inline-block;
+    border-radius: 100px;
+    float:left;
+}
+.ui__name{
+    display: inline-block;
+    vertical-align: middle;
+    line-height: normal;
+    max-width: 60px;
+    text-align: center;
+
+}
+#my-signin2{
+    display:none;
+}
+.sign-out
+{
+display:none;
+    background-color:grey ;
+    width:32px;
+    height:32px;
+    border-radius: 32px;
+    text-align: center;
+    line-height: 29px;
+
+}
+
+.fa-sign-out{
+    height:32px;
+    width:32px;
+    box-sizing: border-box;
+    display:block;
+    margin: 0px;
+    padding: 0px;
 }
 .header-container::after{
     content:" ";
@@ -56,14 +108,15 @@ height:100%;
     height:100%;
     display: inline-block;
     float: left;
-    width:70%;
+    width:72%;
+    overflow: scroll;
     
 }
 .side_element{
     display:inline-block;
 //    border: 2px solid black;
     height: 100%;
-    width: 25%;
+    width: 28%;
     float: right;
     height:90%;
 }
@@ -164,7 +217,7 @@ s-q-e__img{
     border-radius: 20px;
 }
 td {
-    height:30px;
+    height:0px;
     padding: 5px;
     
 }
