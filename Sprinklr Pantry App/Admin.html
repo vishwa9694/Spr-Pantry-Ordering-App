@@ -9,8 +9,8 @@
 	<body id="body">
 		<nav id="c-menu--slide-left" class="c-menu c-menu--slide-left">
 			<button class="c-menu__close" id="cancelButton">&larr; Close Menu</button>
-			<ul class="c-menu__items">
-				<li class="c-menu__item">Beverages</li>
+			<ul id = "categoryList" class="c-menu__items">
+				<!-- <li class="c-menu__item">Beverages</li>
 				<ul>
 					<li class="c-menu__product"><input type="checkbox" value="Green Tea" class="c-menu__product__check">Green Tea</li>
 					<li class="c-menu__product"><input type="checkbox" value="Green Tea" class="c-menu__product__check">Black Tea</li>
@@ -19,7 +19,7 @@
 				<li class="c-menu__item">About</li>
 				<li class="c-menu__item">Services</li>
 				<li class="c-menu__item">Work</li>
-				<li class="c-menu__item">Contact</li>
+				<li class="c-menu__item">Contact</li> -->
 			</ul>
 		</nav>
 		<div id="c-mask" class="c-mask"></div>
@@ -53,8 +53,8 @@
 								<th class="do__table-head box-border do__table-cell_actions">Actions</th>
 							</tr>
 						</thead>
-						<tbody>
-							<tr class="do__row">
+						<tbody id="queueTable">
+							<!-- <tr class="do__row">
 								<td class="do__table-data box-border do__table-cell_id">1</td>
 								<td class="do__table-data box-border do__table-cell_name">Vishwa</td>
 								<td class="do__table-data box-border do__table-cell_order">maggi</td>
@@ -62,7 +62,7 @@
 								<td class="do__table-data box-border do__table-cell_table">11</td>
 								<td class="do__table-data box-border do__table-cell_quantity">3</td>
 								<td class="do__table-data box-border do__table-cell_actions"><i class="fa fa-clock-o fa-2x"></i><i class="fa fa-check-circle-o fa-2x"></i><i id = "cancelBtn" class="fa fa-times fa-2x"></i></td>
-							</tr>
+							</tr> -->
 							
 						</tbody>	
 					</table>
@@ -82,104 +82,14 @@
 								<th class="do__table-head box-border do__table-cell_dot">Item</th>
 							</tr>
 						</thead>
-						<tbody>
-							<tr class="do__row">
+						<tbody id="deliveryTable">
+							<!-- <tr class="do__row">
 								<td class="do__table-data box-border do__table-cell_dot">1</td>
 								<td class="do__table-data box-border do__table-cell_dot">Vishwa</td>
 								<td class="do__table-data box-border do__table-cell_dot">11</td>
 								<td class="do__table-data box-border do__table-cell_dot">Maggi</td>
-							</tr>
-							<tr class="do__row">
-								<td class="do__table-data box-border do__table-cell_dot">1</td>
-								<td class="do__table-data box-border do__table-cell_dot">Vishwa</td>
-								<td class="do__table-data box-border do__table-cell_dot">11</td>
-								<td class="do__table-data box-border do__table-cell_dot">Maggi</td>
-							</tr>
-							<tr class="do__row">
-								<td class="do__table-data box-border do__table-cell_dot">1</td>
-								<td class="do__table-data box-border do__table-cell_dot">Vishwa</td>
-								<td class="do__table-data box-border do__table-cell_dot">11</td>
-								<td class="do__table-data box-border do__table-cell_dot">Maggi</td>
-							</tr>
-							<tr class="do__row">
-								<td class="do__table-data box-border do__table-cell_dot">1</td>
-								<td class="do__table-data box-border do__table-cell_dot">Vishwa</td>
-								<td class="do__table-data box-border do__table-cell_dot">11</td>
-								<td class="do__table-data box-border do__table-cell_dot">Maggi</td>
-							</tr>
-							<tr class="do__row">
-								<td class="do__table-data box-border do__table-cell_dot">1</td>
-								<td class="do__table-data box-border do__table-cell_dot">Vishwa</td>
-								<td class="do__table-data box-border do__table-cell_dot">11</td>
-								<td class="do__table-data box-border do__table-cell_dot">Maggi</td>
-							</tr>
-							<tr class="do__row">
-								<td class="do__table-data box-border do__table-cell_dot">1</td>
-								<td class="do__table-data box-border do__table-cell_dot">Vishwa</td>
-								<td class="do__table-data box-border do__table-cell_dot">11</td>
-								<td class="do__table-data box-border do__table-cell_dot">Maggi</td>
-							</tr>
-							<tr class="do__row">
-								<td class="do__table-data box-border do__table-cell_dot">1</td>
-								<td class="do__table-data box-border do__table-cell_dot">Vishwa</td>
-								<td class="do__table-data box-border do__table-cell_dot">11</td>
-								<td class="do__table-data box-border do__table-cell_dot">Maggi</td>
-							</tr>
-							<tr class="do__row">
-								<td class="do__table-data box-border do__table-cell_dot">1</td>
-								<td class="do__table-data box-border do__table-cell_dot">Vishwa</td>
-								<td class="do__table-data box-border do__table-cell_dot">11</td>
-								<td class="do__table-data box-border do__table-cell_dot">Maggi</td>
-							</tr>
-							<tr class="do__row">
-								<td class="do__table-data box-border do__table-cell_dot">1</td>
-								<td class="do__table-data box-border do__table-cell_dot">Vishwa</td>
-								<td class="do__table-data box-border do__table-cell_dot">11</td>
-								<td class="do__table-data box-border do__table-cell_dot">Maggi</td>
-							</tr>
-							<tr class="do__row">
-								<td class="do__table-data box-border do__table-cell_dot">1</td>
-								<td class="do__table-data box-border do__table-cell_dot">Vishwa</td>
-								<td class="do__table-data box-border do__table-cell_dot">11</td>
-								<td class="do__table-data box-border do__table-cell_dot">Maggi</td>
-							</tr>
-							<tr class="do__row">
-								<td class="do__table-data box-border do__table-cell_dot">1</td>
-								<td class="do__table-data box-border do__table-cell_dot">Vishwa</td>
-								<td class="do__table-data box-border do__table-cell_dot">11</td>
-								<td class="do__table-data box-border do__table-cell_dot">Maggi</td>
-							</tr>
-							<tr class="do__row">
-								<td class="do__table-data box-border do__table-cell_dot">1</td>
-								<td class="do__table-data box-border do__table-cell_dot">Vishwa</td>
-								<td class="do__table-data box-border do__table-cell_dot">11</td>
-								<td class="do__table-data box-border do__table-cell_dot">Maggi</td>
-							</tr>
-							<tr class="do__row">
-								<td class="do__table-data box-border do__table-cell_dot">1</td>
-								<td class="do__table-data box-border do__table-cell_dot">Vishwa</td>
-								<td class="do__table-data box-border do__table-cell_dot">11</td>
-								<td class="do__table-data box-border do__table-cell_dot">Maggi</td>
-							</tr>
-							<tr class="do__row">
-								<td class="do__table-data box-border do__table-cell_dot">1</td>
-								<td class="do__table-data box-border do__table-cell_dot">Vishwa</td>
-								<td class="do__table-data box-border do__table-cell_dot">11</td>
-								<td class="do__table-data box-border do__table-cell_dot">Maggi</td>
-							</tr>
-							<tr class="do__row">
-								<td class="do__table-data box-border do__table-cell_dot">1</td>
-								<td class="do__table-data box-border do__table-cell_dot">Vishwa</td>
-								<td class="do__table-data box-border do__table-cell_dot">11</td>
-								<td class="do__table-data box-border do__table-cell_dot">Maggi</td>
-							</tr>
-							<tr class="do__row">
-								<td class="do__table-data box-border do__table-cell_dot">1</td>
-								<td class="do__table-data box-border do__table-cell_dot">Vishwa</td>
-								<td class="do__table-data box-border do__table-cell_dot">11</td>
-								<td class="do__table-data box-border do__table-cell_dot">Maggi</td>
-							</tr>
-
+							</tr> -->
+							
 						</tbody>
 					</table>
 				</div>
@@ -212,20 +122,21 @@
 				<div title="Close" class="close" id="closeReason">X</div>
 				<div class="md__heading">Why are you cancelling order?</div>
 				<div class="md__labels block">
-					<input type="radio" name="reasons" checked="">
+					<input type="radio" name="reasons" value="1" checked>
 					Item not available
 				</div>
 				<div class="md__labels block">
-					<input type="radio" name="reasons" checked="">
+					<input type="radio" name="reasons" value="2">
 					Off Duty
 				</div>
 				<div class="md__labels block">
-					<input type="radio" name="reasons" checked="">
+					<input type="radio" name="reasons" value="3">
 					Other
 				</div>
-				<button type="button" class="md__btn md__btn_save block">Ok</button>
+				<button type="button" id="cancelOrderBtn" class="md__btn md__btn_save block">Ok</button>
 			</div>
 		</div>
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script> 
 		<script src="app.js"></script>
 	</body>
 </html>
