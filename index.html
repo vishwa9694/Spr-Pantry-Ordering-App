@@ -5,7 +5,7 @@
 <link rel="stylesheet" type="text/css" href="front_styles.css">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 <script  src = "http://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
- <script src="items_tiles.js"></script>
+ <script src="items_tiles.js" async></script>
 
 </head>
 <body>
@@ -15,9 +15,18 @@
         
         <div class="logo">
         </div>
-        <div class="header-text">
-            Never Ever Give Up
-        </div>
+        <ul class="notification_bar">
+            <li>
+                
+                    <i class="fa fa-bell-o bell"></i>
+                   <!--  <span id="notification_count">3</span> -->
+                    <ul class="notificationBody">
+                            <li id="notification__progress">Your Item : Maggi (1) is in progress</li>
+                            <li id="notification__cancel">Your Item : Maggi (1) has been cancelled
+                                <div id="notification__cancel__reason">Item not available</div></li>
+                    </ul>
+            </li>
+        </ul>
     </div>
     
     
@@ -31,9 +40,9 @@
                 <div class="items">
                     <img src="https://media.licdn.com/mpr/mpr/p/6/005/074/33e/3952002.jpg">
                     <div class="items_hover">
-                        <i class="fa fa-plus-circle fa-3x add_item" id="add_item4"></i>
+                        <i class="fa fa-plus-circle fa-3x add_item" id="add_item0"></i>
                     </div>
-                    <div class="item_name">
+                    <div class="item_name" id="tileName0">
                         Corn Flakes
                     </div>
                 </div>
@@ -41,9 +50,9 @@
                 <div class="items">
                     <img src="http://favim.com/orig/201107/12/bowl-brown-cereal-choco-flakes-chocolate-food-Favim.com-103328.jpg">
                     <div class="items_hover">
-                        <i class="fa fa-plus-circle fa-3x add_item" id="add_item5"></i>
+                        <i class="fa fa-plus-circle fa-3x add_item" id="add_item1"></i>
                     </div>
-                    <div class="item_name">
+                    <div class="item_name" id="tileName1">
                         Chocos
                     </div>
                 </div>
@@ -51,9 +60,9 @@
                 <div class="items">
                     <img src="http://smackagency.com/wp-content/uploads/2014/07/muesli.jpeg">
                     <div class="items_hover">
-                        <i class="fa fa-plus-circle fa-3x add_item" id="add_item5"></i>
+                        <i class="fa fa-plus-circle fa-3x add_item" id="add_item2"></i>
                     </div>
-                    <div class="item_name">
+                    <div class="item_name" id="tileName2">
                         Muesli
                     </div>
                 </div>
@@ -65,18 +74,18 @@
                 <div class="items">
                     <img src="http://img.sndimg.com/food/image/upload/w_555,h_416,c_fit,fl_progressive,q_95/v1/img/recipes/61/85/6/o1JQgDK7R70fdgv2ChFA_baked%20eggs.JPG">
                     <div class="items_hover">
-                        <i class="fa fa-plus-circle fa-3x add_item" id="add_item1"></i>
+                        <i class="fa fa-plus-circle fa-3x add_item" id="add_item3"></i>
                     </div>
-                     <div class="item_name">
+                     <div class="item_name" id="tileName3">
                         Eggs
                     </div>
                 </div>
                 <div class="items">
                     <img src="http://paleoaholic.com/wp-content/uploads/2013/07/ommlette.jpg">
                     <div class="items_hover">
-                        <i class="fa fa-plus-circle fa-3x add_item" id="add_item3"></i>
+                        <i class="fa fa-plus-circle fa-3x add_item" id="add_item4"></i>
                     </div>
-                    <div class="item_name">
+                    <div class="item_name" id="tileName4">
                         Omlete
                     </div>
                 </div>
@@ -88,9 +97,9 @@
                 <div class="items">
                     <img src="http://princegladyexports.com/wp-content/uploads/2015/12/tea-08.jpg">
                     <div class="items_hover">
-                        <i class="fa fa-plus-circle fa-3x add_item" id="add_item0"></i>
+                        <i class="fa fa-plus-circle fa-3x add_item" id="add_item5"></i>
                     </div>
-                    <div class="item_name">
+                    <div class="item_name" id="tileName5">
                         Green Tea
                     </div>
                 </div>
@@ -98,9 +107,9 @@
                 <div class="items">
                     <img src="http://i1.mirror.co.uk/incoming/article2579962.ece/ALTERNATES/s615/Tea-and-Biscuits.jpg">
                     <div class="items_hover">
-                        <i class="fa fa-plus-circle fa-3x add_item" id="add_item2"></i>
+                        <i class="fa fa-plus-circle fa-3x add_item" id="add_item6"></i>
                     </div>
-                    <div class="item_name">
+                    <div class="item_name" id="tileName6">
                         Tea
                     </div>
                 </div>
@@ -108,9 +117,9 @@
                 <div class="items">
                     <img src="http://1.bp.blogspot.com/_E-KyFEBON7g/SITdxzSDVgI/AAAAAAAAAJo/554faT9jyX0/s400/bournvita.gif">
                     <div class="items_hover">
-                        <i class="fa fa-plus-circle fa-3x add_item" id="add_item0"></i>
+                        <i class="fa fa-plus-circle fa-3x add_item" id="add_item7"></i>
                     </div>
-                    <div class="item_name">
+                    <div class="item_name" id="tileName7">
                         Bournvita
                     </div>
                 </div>
@@ -124,9 +133,9 @@
                 <div class="items">
                     <img src="http://princegladyexports.com/wp-content/uploads/2015/12/tea-08.jpg">
                     <div class="items_hover">
-                        <i class="fa fa-plus-circle fa-3x add_item" id="add_item0"></i>
+                        <i class="fa fa-plus-circle fa-3x add_item" id="add_item8" ></i>
                     </div>
-                    <div class="item_name">
+                    <div class="item_name" id="tileName8">
                         Green Tea
                     </div>
                 </div>
@@ -134,9 +143,9 @@
                 <div class="items">
                     <img src="http://i1.mirror.co.uk/incoming/article2579962.ece/ALTERNATES/s615/Tea-and-Biscuits.jpg">
                     <div class="items_hover">
-                        <i class="fa fa-plus-circle fa-3x add_item" id="add_item2"></i>
+                        <i class="fa fa-plus-circle fa-3x add_item" id="add_item9"></i>
                     </div>
-                    <div class="item_name">
+                    <div class="item_name" id="tileName9">
                         Tea
                     </div>
                 </div>
@@ -164,181 +173,26 @@
 
     </div> -->
     </div>    
-    <div class="side_element">
+    
+        <div class="side_element">
         <div class="side__queue">
         <div class="s-q__heading">
                Food Queue
         </div>
         <div class="s-q__element">
-        <table class="s-q__table">    
-                <tr>
+        <div class="s-q__div">
+            <table class="s-q__table">    
+                <tr class="s-q-e__item">
                 <td class="s-q__name">
                     Anup Kumar Rai
                 </td>
-                <td class="s-q__item">
-                    <img class ="s-q__img" src="http://media2.intoday.in/indiatoday/images/stories/maggi_-story_647_060115025849.jpg"></img>
-                    </td>
-                <td class=s-q__img>
+                <td class=s-q__item>
                 Maggi
                     </td>
                 </tr>
         
-                <tr>
-                <td class="s-q__name">
-                    Anup
-                </td>
-                <td class="s-q__item">
-                    <img class ="s-q__img" src="http://media2.intoday.in/indiatoday/images/stories/maggi_-story_647_060115025849.jpg"></img>
-                    </td>
-                <td class=s-q__img>
-                Maggi
-                    </td>
-                </tr>
-                <tr>
-                <td class="s-q__name">
-                    Anup
-                </td>
-                <td class="s-q__item">
-                    <img class ="s-q__img" src="http://media2.intoday.in/indiatoday/images/stories/maggi_-story_647_060115025849.jpg"></img>
-                    </td>
-                <td class=s-q__img>
-                Maggi
-                    </td>
-                </tr>
-                <tr>
-                <td class="s-q__name">
-                    Anup
-                </td>
-                <td class="s-q__item">
-                    <img class ="s-q__img" src="http://media2.intoday.in/indiatoday/images/stories/maggi_-story_647_060115025849.jpg"></img>
-                    </td>
-                <td class=s-q__img>
-                Maggi
-                    </td>
-                </tr>
-                <tr>
-                <td class="s-q__name">
-                    Anup
-                </td>
-                <td class="s-q__item">
-                    <img class ="s-q__img" src="http://media2.intoday.in/indiatoday/images/stories/maggi_-story_647_060115025849.jpg"></img>
-                    </td>
-                <td class=s-q__img>
-                Maggi
-                    </td>
-                </tr>
-                <tr>
-                <td class="s-q__name">
-                    Anup
-                </td>
-                <td class="s-q__item">
-                    <img class ="s-q__img" src="http://media2.intoday.in/indiatoday/images/stories/maggi_-story_647_060115025849.jpg"></img>
-                    </td>
-                <td class=s-q__img>
-                Maggi
-                    </td>
-                </tr>
-                <tr>
-                <td class="s-q__name">
-                    Anup
-                </td>
-                <td class="s-q__item">
-                    <img class ="s-q__img" src="http://media2.intoday.in/indiatoday/images/stories/maggi_-story_647_060115025849.jpg"></img>
-                    </td>
-                <td class=s-q__img>
-                Maggi
-                    </td>
-                </tr>
-                <tr>
-                <td class="s-q__name">
-                    Anup
-                </td>
-                <td class="s-q__item">
-                    <img class ="s-q__img" src="http://media2.intoday.in/indiatoday/images/stories/maggi_-story_647_060115025849.jpg"></img>
-                    </td>
-                <td class=s-q__img>
-                Maggi
-                    </td>
-                </tr>
-                <tr>
-                <td class="s-q__name">
-                    Anup
-                </td>
-                <td class="s-q__item">
-                    <img class ="s-q__img" src="http://media2.intoday.in/indiatoday/images/stories/maggi_-story_647_060115025849.jpg"></img>
-                    </td>
-                <td class=s-q__img>
-                Maggi
-                    </td>
-                </tr>
-                <tr>
-                <td class="s-q__name">
-                    Anup
-                </td>
-                <td class="s-q__item">
-                    <img class ="s-q__img" src="http://media2.intoday.in/indiatoday/images/stories/maggi_-story_647_060115025849.jpg"></img>
-                    </td>
-                <td class=s-q__img>
-                Maggi
-                    </td>
-                </tr>
-                <tr>
-                <td class="s-q__name">
-                    Anup
-                </td>
-                <td class="s-q__item">
-                    <img class ="s-q__img" src="http://media2.intoday.in/indiatoday/images/stories/maggi_-story_647_060115025849.jpg"></img>
-                    </td>
-                <td class=s-q__img>
-                Maggi
-                    </td>
-                </tr>
-                <tr>
-                <td class="s-q__name">
-                    Anup
-                </td>
-                <td class="s-q__item">
-                    <img class ="s-q__img" src="http://media2.intoday.in/indiatoday/images/stories/maggi_-story_647_060115025849.jpg"></img>
-                    </td>
-                <td class=s-q__img>
-                Maggi
-                    </td>
-                </tr>
-                <tr>
-                <td class="s-q__name">
-                    Anup
-                </td>
-                <td class="s-q__item">
-                    <img class ="s-q__img" src="http://media2.intoday.in/indiatoday/images/stories/maggi_-story_647_060115025849.jpg"></img>
-                    </td>
-                <td class=s-q__img>
-                Maggi
-                    </td>
-                </tr>
-                <tr>
-                <td class="s-q__name">
-                    Anup
-                </td>
-                <td class="s-q__item">
-                    <img class ="s-q__img" src="http://media2.intoday.in/indiatoday/images/stories/maggi_-story_647_060115025849.jpg"></img>
-                    </td>
-                <td class=s-q__img>
-                Maggi
-                    </td>
-                </tr>
-                <tr>
-                <td class="s-q__name">
-                    Anup
-                </td>
-                <td class="s-q__item">
-                    <img class ="s-q__img" src="http://media2.intoday.in/indiatoday/images/stories/maggi_-story_647_060115025849.jpg"></img>
-                    </td>
-                <td class=s-q__img>
-                Last Maggi
-                    </td>
-                </tr>
                 </table>
-            
+            </div>
             </div>
         </div>
         <div class="side__order">
@@ -346,209 +200,22 @@
                 Your Orders
             </div>
             <div class="s-o__element">
-            
-                <table class="s-o-e__table">
-                <tr class="s-o-e__item">
-                    <td class="item__name">
-                    Maggi first
-                    </td>
-                    <td class="add">
-                    <button class="add-but">+</button>
-                    </td>
-                    
-                    <td class="item-qty">
-                    5
-                    </td>
-                            
-                    <td class="add">
-                        <button class="add-but">-</button>
-                    </td>
-                            
-                    </tr>
-                <tr class="s-o-e__item">
-                    <td class="item__name">
-                    Maggi first
-                    </td>
-                    <td class="add">
-                    <button class="add-but">+</button>
-                    </td>
-                    
-                    <td class="item-qty">
-                    5
-                    </td>
-                            
-                    <td class="add">
-                        <button class="add-but">-</button>
-                    </td>
-                            
-                    </tr>
-                <tr class="s-o-e__item">
-                    <td class="item__name">
-                    Maggi first
-                    </td>
-                    <td class="add">
-                    <button class="add-but">+</button>
-                    </td>
-                    
-                    <td class="item-qty">
-                    5
-                    </td>
-                            
-                    <td class="add">
-                        <button class="add-but">-</button>
-                    </td>
-                            
-                    </tr>
-                <tr class="s-o-e__item">
-                    <td class="item__name">
-                    Maggi first
-                    </td>
-                    <td class="add">
-                    <button class="add-but">+</button>
-                    </td>
-                    
-                    <td class="item-qty">
-                    5
-                    </td>
-                            
-                    <td class="add">
-                        <button class="add-but">-</button>
-                    </td>
-                            
-                    </tr>
-                <tr class="s-o-e__item">
-                    <td class="item__name">
-                    Maggi first
-                    </td>
-                    <td class="add">
-                    <button class="add-but">+</button>
-                    </td>
-                    
-                    <td class="item-qty">
-                    5
-                    </td>
-                            
-                    <td class="add">
-                        <button class="add-but">-</button>
-                    </td>
-                            
-                    </tr>
-                <tr class="s-o-e__item">
-                    <td class="item__name">
-                    Maggi first
-                    </td>
-                    <td class="add">
-                    <button class="add-but">+</button>
-                    </td>
-                    
-                    <td class="item-qty">
-                    5
-                    </td>
-                            
-                    <td class="add">
-                        <button class="add-but">-</button>
-                    </td>
-                            
-                    </tr>
-                <tr class="s-o-e__item">
-                    <td class="item__name">
-                    Maggi first
-                    </td>
-                    <td class="add">
-                    <button class="add-but">+</button>
-                    </td>
-                    
-                    <td class="item-qty">
-                    5
-                    </td>
-                            
-                    <td class="add">
-                        <button class="add-but">-</button>
-                    </td>
-                            
-                    </tr>
-                <tr class="s-o-e__item">
-                    <td class="item__name">
-                    Maggi first
-                    </td>
-                    <td class="add">
-                    <button class="add-but">+</button>
-                    </td>
-                    
-                    <td class="item-qty">
-                    5
-                    </td>
-                            
-                    <td class="add">
-                        <button class="add-but">-</button>
-                    </td>
-                            
-                    </tr>
-                <tr class="s-o-e__item">
-                    <td class="item__name">
-                    Maggi first
-                    </td>
-                    <td class="add">
-                    <button class="add-but">+</button>
-                    </td>
-                    
-                    <td class="item-qty">
-                    5
-                    </td>
-                            
-                    <td class="add">
-                        <button class="add-but">-</button>
-                    </td>
-                            
-                    </tr>
-                <tr class="s-o-e__item">
-                    <td class="item__name">
-                    Maggi first
-                    </td>
-                    <td class="add">
-                    <button class="add-but">+</button>
-                    </td>
-                    
-                    <td class="item-qty">
-                    5
-                    </td>
-                            
-                    <td class="add">
-                        <button class="add-but">-</button>
-                    </td>
-                            
-                    </tr>
-                <tr class="s-o-e__item">
-                    <td class="item__name">
-                    Maggi first
-                    </td>
-                    <td class="add">
-                    <button class="add-but">+</button>
-                    </td>
-                    
-                    <td class="item-qty">
-                    5
-                    </td>
-                            
-                    <td class="add">
-                        <button class="add-but">-</button>
-                    </td>
-                            
-                    </tr>
-                
+                <div class="s-o__table">
+                <table class="s-o-e__table"><!--  table -->
                 </table>
-                
+                </div>
              
             <div class="user-form">    
             
-            <input class ="user-input" id="user-name"value="Name">
+            <input class ="user-input" id="user-name"placeholder="Name">
                 
-            <input class ="user-input"id="user-table"value="Table Number">
+            <input class ="user-input"id="user-table"placeholder="Table Number">
                 
-                </div>
             <div class="submit">
                 <button class="submit-btn">
                 Submit</button>   
+                </div>
+                
                 </div>
                 </div>
         </div>
