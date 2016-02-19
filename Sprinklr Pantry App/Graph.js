@@ -1,140 +1,119 @@
-
-function BarGraph(ctx) {
-  var that = this;				
-  // Draw method updates the canvas with the current display 
-
-  //filled with default values
-  this.width = 500;
-  this.height = 500;	
-  this.maxValue=100;
-  this.margin = 30;
-  this.colors = ["purple", "red", "green", "yellow"];
-  this.curArr = [1,1,1,1];
-  this.backgroundColor = "#fff";
-  this.xAxisLabelArr = [];
-  this.yAxisLabelArr = [];	
-  // Update method redraws the entire graph
-  this.update = function (newArr) {
-	that.curArr = newArr;
-	draw(newArr); 
-	}; 
-  var draw = function (arr) {
-							
-	  var numOfBars = arr.length;
-	  var barWidth;
-	  var barHeight;
-	  var border = 1;
-	  var ratio;
-	  var maxBarHeight;
-	  var gradient;
-	  var largestValue;
-	  var graphAreaX = 0;
-	  var graphAreaY = 0;
-	  var graphAreaWidth = that.width;
-	  var graphAreaHeight = that.height;
-	  var i;
-	  
-		// Update the dimensions of the canvas only if they have changed
-	  if (ctx.canvas.width !== that.width || ctx.canvas.height !== that.height) {
-		  ctx.canvas.width = that.width;
-		  ctx.canvas.height = that.height;
-	  }
-				
-	  // Draw the background color
-	  ctx.fillStyle = that.backgroundColor;
-	  ctx.fillRect(0, 0, that.width, that.height);
-					
-	  // If x axis labels exist then make room	
-	  if (that.xAxisLabelArr.length) {
-		graphAreaHeight -= 40;
-	  }
-				
-	  // Calculate dimensions of the bar
-	  barWidth = graphAreaWidth / numOfBars - that.margin * 2;
-	  maxBarHeight = graphAreaHeight - 25;
-				
-	  // Determine the largest value in the bar array
-	  var largestValue = 0;
-	  largestValue=arr.reduce(function(x,y){
-	  	return Math.max(x,y);
-	  },arr[0]);
-	  
-	  // For each bar
-	  for (i = 0; i < arr.length; i += 1) {
-			// Set the ratio of current bar compared to the maximum
-			if (that.maxValue) {
-			  ratio = arr[i] / that.maxValue;
-			} else {
-			  ratio = arr[i] / largestValue;
-			}
-			
-			barHeight = ratio * maxBarHeight;
-		  
-			// Turn on shadow
-			ctx.shadowOffsetX = 2;
-			ctx.shadowOffsetY = 2;
-			ctx.shadowBlur = 2;
-			ctx.shadowColor = "#999";			
-			// Draw bar background
-			ctx.fillStyle = "#333";			
-			ctx.fillRect(that.margin + i * that.width / numOfBars,
-			  graphAreaHeight - barHeight,
-			  barWidth,
-			  barHeight);
-				
-			// Turn off shadow
-			ctx.shadowOffsetX = 0;
-			ctx.shadowOffsetY = 0;
-			ctx.shadowBlur = 0;
-			// Draw bar color if it is large enough to be visible
-			if (barHeight > border * 2) {
-				// Create gradient
-				gradient = ctx.createLinearGradient(0, 0, 0, graphAreaHeight);
-				gradient.addColorStop(1-ratio, that.colors[i % that.colors.length]);
-				gradient.addColorStop(1, "#ffffff");
-				ctx.fillStyle = gradient;
-				// Fill rectangle with gradient
-				ctx.fillRect(that.margin + i * that.width / numOfBars + border,
-				  graphAreaHeight - barHeight + border,
-				  barWidth - border * 2,
-				  barHeight - border * 2);
-			}
-			// Write bar value
-			ctx.fillStyle = "#333";
-			ctx.font = "bold 12px sans-serif";
-			ctx.textAlign = "center";
-			ctx.fillText(parseInt(arr[i],10),
-				i * that.width / numOfBars + (that.width / numOfBars) / 2,
-				graphAreaHeight - barHeight - 10);	
-			// Draw bar label if it exists
-			if (that.xAxisLabelArr[i]) {					
-			  ctx.fillStyle = "#333";
-			  ctx.font = "bold 12px sans-serif";
-			  ctx.textAlign = "center";
-			  ctx.fillText(that.xAxisLabelArr[i],
-				  i * that.width / numOfBars + (that.width / numOfBars) / 2,
-				  that.height - 10);	
-			  };
-		};
-	  };	
-};
-
-
-var renderGraphs=function () {
-		function createCanvas(divName) {
+// Graph.prototype.setCanvasWidth=function(width){
+// 		this.canvasWidth=width;
+// 		console.log("setCanvasWidth ");
+// 	}
+// Graph.prototype.setCanvasHeight=function(height){
+// 		this.canvasHeight=height;
+// 		console.log("setCanvasWidth ");
+// 	}
+// Graph.prototype.setxAxisLabelArr=function(Arr){
+// 		this.xAxisLabelArr=Arr;
+// 		console.log("Set x-axis label");
+// }
+// Graph.prototype.setyAxisLabelArr=function(Arr){
+// 		this.yAxisLabelArr=Arr;
+// 		console.log("Set y-axis label");
+// }
+// Graph.prototype.setbackgroundcolor=function(color){
+// 		this.backgroundColor=color;
+// 		console.log("backgroundColor");
+// }
+//return canvas context 
+var createCanvas=function (divName) {
 			var div = document.getElementById(divName);
 			var canvas = document.createElement('canvas');
 			div.appendChild(canvas);
-			var ctx = canvas.getContext("2d");
-			return ctx;
+			var context = canvas.getContext("2d");
+			return context;
 		};
-		var ctx = createCanvas("BarGraph1");
-		var graph = new BarGraph(ctx);
-		graph.maxValue = 100;
-		graph.margin = 20;
-		graph.xAxisLabelArr = ["Mon", "Tue", "Wed", "Thu"];
-		graph.yAxisLabelArr=[10,20]
-		graph.update([Math.random() * 100, Math.random() * 100, Math.random() * 100, Math.random() * 100]);
-	};
 
+function Graph(context){
+	this.context=context;
+	this.graphName="Graph Name";
+	this.canvasWidth=500;
+	this.canvasHeight = 500;
+	this.xAxisLabelArr=["x1","x2","x3","x4"];
+	this.yAxisLabelArr=["y1","y2","y3","y4"];
+	this.backgroundColor="#fff";
+}
+Graph.prototype.giveBar=function(context,xpos,ypos,width,height){
+//.../
+}
+Graph.prototype.giveCircle=function(context,xpos,ypos,width,height){
+//.../
+}
+Graph.prototype.controlShadow=function(context,OffsetX,OffsetY,Blur,Color){
+	context.shadowOffsetX=OffsetX;
+	context.shadowOffsetY=OffsetY;
+	context.shadowBlur=Blur;
+	context.shadowColor=Color;
+			//return context;
+}
+
+
+//child class of Graph
+function BarGraph(context){
+	//  context=Object.create(BarGraph.prototype);
+	//default values
+	Graph.call(this,context);
+	this.barLengthsArr=[10,10,10,10,10,10,10];
+	this.maxValue=100;//scaled to max 100
+  	this.barMargins = 20;//distance between bars deafult value
+  	this.colors = "red";
+	//return this
+}
+// Object.setPrototypeOf(BarGraph.prototype,Graph.prototype);//doesnot work in safari 
+BarGraph.prototype=Object.create(Graph.prototype); //works everywhere
+BarGraph.prototype.constructor=BarGraph;
+
+
+BarGraph.prototype.update=function(newArr){	
+	console.log("update");
+	this.barLengthsArr=newArr;
+	this.draw();
+}
+BarGraph.prototype.draw=function(){
+	console.log("draw");
+	 //Assign dimesnsions to canvas
+	  this.context.canvas.width = this.canvasWidth;
+	  this.context.canvas.height = this.canvasHeight;		
+	  // Draw the background color
+	  this.context.fillStyle = this.backgroundColor;
+	  this.context.fillRect(0, 0, this.canvasWidth, this.canvasHeight);
+
+	  // If x axis labels exist then make room	
+	  if (this.xAxisLabelArr.length) {
+		this.canvasHeight -= 40;
+	  }
+	  if (this.yAxisLabelArr.length) {
+		this.canvasWidth -= 40;
+	  }
+
+	 var numOfBars=this.barLengthsArr.length;//number of bars
+	 var barWidth =this.canvasWidth/(2*numOfBars );//bar width
+	 this.barMargins=barWidth;//space between bars
+	 var maxBarHeight=this.canvasHeight*4/5;//scaled to this.so largest bar will be maxBarheight
+	 var largestValue = 0;
+	 var arr=this.barLengthsArr;
+	 largestValue=arr.reduce(function(x,y){
+	  	return Math.max(x,y);
+	  },arr[0]);
+	 
+	 var i,scale;
+	 //Draw each bar separately
+	 
+	 for (i=0;i<arr.length;i+=1){
+	 	scaledBarHeight=arr[i]/largestValue * maxBarHeight;
+	 	this.context.fillStyle="red";
+	 	this.context.fillRect(this.barMargins + i * this.canvasWidth / numOfBars,this.canvasHeight - scaledBarHeight,barWidth,scaledBarHeight);
+	 }
+}
+
+function renderGraphs(){
+	var context=createCanvas("BarGraph1");
+	var bgraph= new BarGraph(context);
+	//graph.margin 
+	bgraph.xAxisLabelArr=["Mon", "Tue", "Wed", "Thu","Fri","Sat","Sun"];
+	bgraph.update([10,20,30,40,50,60,70]);
+}
 renderGraphs();
