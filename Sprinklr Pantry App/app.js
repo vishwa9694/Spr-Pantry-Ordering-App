@@ -1,22 +1,3 @@
-// var inputCount = 1;
-// var addBtn = document.getElementById("addInput");
-// var removeBtn = document.getElementById("removeInput");
-// var subCategories = document.getElementById("subCategories");
-// addBtn.onclick = function () {
-// 	var newInput = document.createElement("input");
-// 	newInput.setAttribute("class","md__input box-border");
-// 	newInput.setAttribute("placeholder","Enter SubCategory Name");
-// 	subCategories.appendChild(newInput);
-// 	inputCount++;
-// }
-
-// removeBtn.onclick = function () {
-// 	if(inputCount > 1) {
-// 		subCategories.removeChild(subCategories.lastChild);
-// 		inputCount--;
-// 	}
-	
-// }
 
 $(function() {
 	var model = {
@@ -48,14 +29,42 @@ $(function() {
 					{
 						itemName: "Tea",
 						available: true,
+						imgSrc: "assets/defaultItem.png"
 					},
 					{
 						itemName: "Coffee",
 						available: true,
+						imgSrc: "assets/defaultItem.png"
+
 					},
 					{
 						itemName: "Bournvita",
 						available:true,
+						imgSrc: "assets/defaultItem.png"
+
+					}
+				],
+			},
+			{
+				category: "Snacks",
+				categoryItems: [
+					{
+						itemName: "Maggi",
+						available: true,
+						imgSrc: "assets/defaultItem.png"
+
+					},
+					{
+						itemName: "Chocos",
+						available: true,
+						imgSrc: "assets/defaultItem.png"
+
+					},
+					{
+						itemName: "Cornflakes",
+						available:true,
+						imgSrc: "assets/defaultItem.png"
+
 					}
 				],
 			}
@@ -70,7 +79,27 @@ $(function() {
 
 		getmenu: function() {
 			return model.menu;
-		}
+		},
+
+		addNewItem: function(categoryName, itemName, itemImg) {
+			var menu = this.getmenu();
+			var selectedCategory = menu.find(function(category) {
+				if(category.category === categoryName) {
+					return category;
+				}
+			});
+			if(selectedCategory) {
+				var item = {itemName: itemName, available: true, imgSrc: itemImg};
+				selectedCategory.categoryItems.push({itemName: itemName, available: true, imgSrc: itemImg});
+				leftSidePanelView.addItemInCategory(item, selectedCategory.category);
+			}
+			else {
+				var menuCategory = {category: categoryName, categoryItems:[{itemName: itemName, available: true, imgSrc: itemImg}]};
+				menu.push(menuCategory);
+				leftSidePanelView.addCategoryInSidePanel(menuCategory);
+			}
+			//console.log(menu);
+		},
 	};
 
 	// var rowCreator = function(rowObj){
@@ -142,26 +171,95 @@ $(function() {
 
 		cancelOrder: function() {
 			console.log($("input:radio[name='reasons']:checked").val());
-			$(controller.clickedItemOrder).remove();
 			cancelDialogView.closeCancelDialog();
+			$(controller.clickedItemOrder).remove();
+			
 		},
 	};
 
 	var addNewItemDialogView = {
+		categoryDiv: false,
 		init: function() {
 			$("#openAddItemModal").click(this.viewNewItemDialog);
 			$("#closeNewItemDialog").click(this.closeAddNewItemDialog);
+			
+			$("#categorySelect").change(function() {
+				if($( "#categorySelect option:selected" ).text() == "Add New Category" && !(addNewItemDialogView.categoryDiv)) {
+					//console.log("safd",3)
+					var newCategoryHTML = '<div id="newCategory"><div class="md__labels">New Category Name</div><input class="md__input box-border" placeholder="Enter Category Name"></div>';
+					$("#categorySelect").after(newCategoryHTML);
+					$("#newCategory input").on('input',function() {
+						$("#cnWarning").css("display", "none");
+						$("#newCategory input").removeClass("md__input_warning");
+					});
+					addNewItemDialogView.categoryDiv = true;
+				}
+				else {
+					if(addNewItemDialogView.categoryDiv) {
+						$("#newCategory").remove();
+						addNewItemDialogView.categoryDiv = false;
+					}
+				}
+			});
 
+			$("#saveItemBtn").click(function() {
+				var itemName = $("#itemNameInput").val();
+				var categoryName = $( "#categorySelect option:selected" ).text();
+				if(categoryName == "Add New Category") {
+					categoryName = $("#newCategory input").val();
+				}
+				var itemImg = $("#itemImg input").val() || "assets/defaultItem.png";
+				if(!itemName || !categoryName) {
+					if(!itemName) {
+						$("#inWarning").css("display", "block");
+						$("#itemNameInput").addClass("md__input_warning");
+					}
+					if(!categoryName) {
+						$("#newCategory").append($("<p>",{class:"md__warnings", text:"Category Name cannot be null", id:"cnWarning"}));
+						$("#cnWarning").css("display", "block");	
+						$("#newCategory input").addClass("md__input_warning");					
+					}
+				}
+				else {
+					controller.addNewItem(categoryName, itemName, itemImg);
+					addNewItemDialogView.closeAddNewItemDialog();
+				}
+			});
+			$("#cancelItemBtn").click(function() {
+				addNewItemDialogView.closeAddNewItemDialog();
+			});
+
+			$("#itemNameInput").on('input',function(){
+				$("#inWarning").css("display", "none");
+				$("#itemNameInput").removeClass("md__input_warning");
+			});
 		},
 
 		viewNewItemDialog: function() {
+			//console.log("safd",1)
 			document.getElementById("AddItemModal").style.opacity = 1;
 			document.getElementById("AddItemModal").style.pointerEvents = "auto";
+			var optionsHTML = "";
+			var menu = controller.getmenu();
+			menu.forEach(function(category) {
+				optionsHTML += "<option>"+category.category+"</option>"; 
+			});
+			
+			optionsHTML += "<option>Add New Category</option>";
+			$("#categorySelect").html(optionsHTML);
+						
 		},
 
 		closeAddNewItemDialog: function() {
 			document.getElementById("AddItemModal").style.opacity = 0;
 			document.getElementById("AddItemModal").style.pointerEvents = "none";
+			addNewItemDialogView.reset();
+		},
+
+		reset: function() {
+			$("#itemNameInput").val("");
+			$("#newCategory").remove();
+			addNewItemDialogView.categoryDiv = false;
 		},
 	};
 
@@ -173,16 +271,27 @@ $(function() {
 			$("#cancelButton").click(this.closeSidePanel);
 			var menu = controller.getmenu();
 			menu.forEach(function(menuCategory) {
-				$("#categoryList").append($("<li>", {class:"c-menu__item", text: menuCategory.category}));
-				var categoryItemsList = ($("<ul>"));
-				menuCategory.categoryItems.forEach(function(item) {
-					var categoryItem = $("<li>",{class:"c-menu__product"});
-					categoryItem.append($("<input>",{class: "c-menu__product__check", type:"checkbox", value: item.itemName, checked: item.available}));
-					categoryItem.append(document.createTextNode(item.itemName));
-					categoryItemsList.append(categoryItem);
-				});
-				$("#categoryList").append(categoryItemsList);
+				leftSidePanelView.addCategoryInSidePanel(menuCategory);
+				
 			});
+		},
+		addCategoryInSidePanel: function(menuCategory) {
+			$("#categoryList").append($("<li>", {class:"c-menu__item", text: menuCategory.category}));
+			var categoryItemsList = ($("<ul>",{id: menuCategory.category}));
+			menuCategory.categoryItems.forEach(function(item) {
+				var categoryItem = $("<li>",{class:"c-menu__product"});
+				categoryItem.append($("<input>",{class: "c-menu__product__check", type:"checkbox", value: item.itemName, checked: item.available}));
+				categoryItem.append(document.createTextNode(item.itemName));
+				categoryItemsList.append(categoryItem);
+			});
+			$("#categoryList").append(categoryItemsList);
+		},
+
+		addItemInCategory: function(item, selectedCategory) {
+			var categoryItem = $("<li>",{class:"c-menu__product"});
+			categoryItem.append($("<input>",{class: "c-menu__product__check", type:"checkbox", value: item.itemName, checked: item.available}));
+			categoryItem.append(document.createTextNode(item.itemName));
+			$("#"+selectedCategory).append(categoryItem);
 		},
 
 		openSidePanel: function() {
@@ -214,10 +323,13 @@ $(function() {
 			$("#deliveryTable").prepend(tableRow);
 		},
 	};
+
+	
 	orderQueueView.init();
 	cancelDialogView.init();
 	addNewItemDialogView.init();
 	leftSidePanelView.init();
+	
 });
 
 

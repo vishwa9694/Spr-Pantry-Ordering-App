@@ -101,7 +101,16 @@
 				<div class="md__heading">Add New Item</div>
 				<div>
 					<div class="md__labels">Item Name</div>
-					<input class="md__input box-border" placeholder="Enter Item Name">
+					<input class="md__input box-border" id="itemNameInput"placeholder="Enter Item Name">
+					<p id="inWarning" class="md__warnings">Item Name cannot be null</p>
+				</div>
+				<div id="selectDiv">
+					<div class="md__labels">Select Category</div>
+					<select id="categorySelect" class="md__input box-border" >
+						<!-- <option>Option 1</option>
+						<option>Option 1</option>
+						<option>Option 1</option> -->
+					</select>
 				</div>
 				<div>
 					<div class="md__labels">Add Item Image (Optional)</div>
@@ -112,8 +121,8 @@
 					</div>
 				</div>
 				<div>
-					<button type="button" class="md__btn md__btn_save">Save</button>
-					<button type="button" class="md__btn md__btn_cancel">Cancel</button>
+					<button id = "saveItemBtn" type="button" class="md__btn md__btn_save">Save</button>
+					<button id="cancelItemBtn" class="md__btn md__btn_cancel">Cancel</button>
 				</div>
 			</div>
 		</div>

@@ -334,7 +334,13 @@ body.has-active-menu{
     font-family: 'Helvetica Neue','Open Sans',sans-serif;
     font-size: 13px;
 }
-
+.md__warnings {
+	display: none;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    color: #a94442;
+    font-size: 13px;
+}
 .md__plusminus {
 	margin-left: 182px;
 	display: inline-block;
@@ -358,11 +364,15 @@ body.has-active-menu{
     outline: none;
     margin-bottom: 10px;
 }
-
 .md__input:focus {
 	border-color: #1FB5AD;
     /*color: #fff;*/
 }
+
+.md__input_warning {
+	border-color: #a94442;
+}
+
 
 .md__subcat {
 	max-height: 150px;
