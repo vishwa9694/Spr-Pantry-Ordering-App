@@ -20,7 +20,46 @@ $(function() {
 					status: "InQueue",
 				}
 			],
-		}],
+		},
+		{
+			orderNo:2,
+			orderName: "Anup",
+			table: 9,
+			items: [
+				{
+					itemName: "Cornflakes",
+					quantity: 1,
+					itemDescription: "cold",
+					status: "InQueue",
+				},
+				{
+					itemName: "Chocos",
+					quantity: 1,
+					itemDescription: "No description",
+					status: "InQueue",
+				}
+			],
+		},
+		{
+			orderNo:3,
+			orderName: "Akshat",
+			table: 9,
+			items: [
+				{
+					itemName: "Tea",
+					quantity: 1,
+					itemDescription: "cold",
+					status: "InQueue",
+				},
+				{
+					itemName: "Cornflakes",
+					quantity: 1,
+					itemDescription: "No description",
+					status: "InQueue",
+				}
+			],
+		}
+		],
 
 		menu: [
 			{
@@ -100,6 +139,25 @@ $(function() {
 			}
 			//console.log(menu);
 		},
+
+		onItemUnavailable: function(categoryName, itemName) {
+			var menu = this.getmenu();
+			var selectedCategory = menu.find(function(category) {
+				if(category.category === categoryName) {
+					return category;
+				}
+			});
+
+			var selectedItem = selectedCategory.categoryItems.find(function(item) {
+				if(item.itemName === itemName) {
+					return item;
+				}
+			});
+			selectedItem.available = false;
+			//console.log(menu);
+			orderQueueView.removeUnavailableOrders(selectedItem.itemName);
+
+		},
 	};
 
 	// var rowCreator = function(rowObj){
@@ -149,6 +207,10 @@ $(function() {
 					}
 				}(tableRow));
 			});
+		},
+
+		removeUnavailableOrders: function(itemName) {
+			$("#queueTable :contains('"+itemName+"')").remove();
 		},
 	};
 
@@ -274,13 +336,22 @@ $(function() {
 				leftSidePanelView.addCategoryInSidePanel(menuCategory);
 				
 			});
+			$(document).on('change', 'input:checkbox',(function() {
+				if(!$(this).is(":checked")) {
+					console.log("inIF");
+					var categoryName = $(this).parent().parent().attr('id');
+					controller.onItemUnavailable(categoryName, $(this).val());
+				}
+			}));
 		},
 		addCategoryInSidePanel: function(menuCategory) {
 			$("#categoryList").append($("<li>", {class:"c-menu__item", text: menuCategory.category}));
 			var categoryItemsList = ($("<ul>",{id: menuCategory.category}));
 			menuCategory.categoryItems.forEach(function(item) {
 				var categoryItem = $("<li>",{class:"c-menu__product"});
-				categoryItem.append($("<input>",{class: "c-menu__product__check", type:"checkbox", value: item.itemName, checked: item.available}));
+				var checkboxItem = $("<input>",{class: "c-menu__product__check", type:"checkbox", value: item.itemName, checked: item.available});
+				categoryItem.append(checkboxItem);
+				//checkboxItem.
 				categoryItem.append(document.createTextNode(item.itemName));
 				categoryItemsList.append(categoryItem);
 			});
