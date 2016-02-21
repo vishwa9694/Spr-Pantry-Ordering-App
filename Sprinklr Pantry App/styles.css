@@ -55,7 +55,9 @@ body {
           box-sizing: border-box;
 }
 
-
+.float-right {
+	float: right;
+}
 /*---------------------------------------------*/
 .c-menu{
 	position: fixed;
@@ -447,6 +449,7 @@ body.has-active-menu{
 }
 
 .do__heading {
+	/*display: inline-block;*/
 	width:100%;
 	border-color: #eff2f7;
     font-size: 13px;

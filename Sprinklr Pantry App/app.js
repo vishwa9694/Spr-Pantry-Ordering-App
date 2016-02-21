@@ -3,64 +3,68 @@ $(function() {
 	var model = {
 		orders: [
 		{
+			orderId:1,
 			orderNo:1,
 			orderName: "Vishwa",
 			table: 9,
-			items: [
-				{
-					itemName: "Cornflakes",
-					quantity: 1,
-					itemDescription: "cold",
-					status: "InQueue",
-				},
-				{
-					itemName: "Maggi",
-					quantity: 1,
-					itemDescription: "No description",
-					status: "InQueue",
-				}
-			],
+			itemName: "Cornflakes",
+			quantity: 1,
+			itemDescription: "cold",
+			status: "InQueue",
 		},
 		{
+			orderId:2,
+			orderNo:1,
+			orderName: "Vishwa",
+			table: 9,
+			itemName: "Chocos",
+			quantity: 1,
+			itemDescription: "cold",
+			status: "InQueue",
+		},
+		{
+			orderId:3,
 			orderNo:2,
 			orderName: "Anup",
 			table: 9,
-			items: [
-				{
-					itemName: "Cornflakes",
-					quantity: 1,
-					itemDescription: "cold",
-					status: "InQueue",
-				},
-				{
-					itemName: "Chocos",
-					quantity: 1,
-					itemDescription: "No description",
-					status: "InQueue",
-				}
-			],
+			itemName: "Maggi",
+			quantity: 1,
+			itemDescription: "-",
+			status: "InQueue",
 		},
 		{
+			orderId:4,
+			orderNo:2,
+			orderName: "Anup",
+			table: 9,
+			itemName: "Tea",
+			quantity: 1,
+			itemDescription: "cold",
+			status: "InQueue",
+		},
+		{
+			orderId:5,
 			orderNo:3,
 			orderName: "Akshat",
 			table: 9,
-			items: [
-				{
-					itemName: "Tea",
-					quantity: 1,
-					itemDescription: "cold",
-					status: "InQueue",
-				},
-				{
-					itemName: "Cornflakes",
-					quantity: 1,
-					itemDescription: "No description",
-					status: "InQueue",
-				}
-			],
-		}
+			itemName: "Cornflakes",
+			quantity: 1,
+			itemDescription: "cold",
+			status: "InQueue",
+		},
+		{
+			orderId:6,
+			orderNo:3,
+			orderName: "Akshat",
+			table: 9,
+			itemName: "Chocos",
+			quantity: 1,
+			itemDescription: "cold",
+			status: "InQueue",
+		},
+		
 		],
-
+		
 		menu: [
 			{
 				category: "Bevarages",
@@ -113,7 +117,40 @@ $(function() {
 	var controller = {
 		clickedItemOrder: null, 
 		getAllOrders: function() {
+
 			return model.orders;
+		},
+
+		getAllSortedOrders: function() {
+
+			return model.orders.sort(controller.compareOrders);
+		},
+
+		getClubbedOrders: function() {
+			if(!("clubbedOrders" in model)) {
+				var orders = this.getAllSortedOrders();
+				var tempOrders = orders.map(function(order) {
+					return order;
+				});
+				var clubbedOrders = [];
+				while(tempOrders.length > 0) {
+					var item = tempOrders[0].itemName;
+					console.log("inloop");
+					tempOrders.forEach(function(order, index) {
+						if(order.itemName === item) {
+							clubbedOrders.push(tempOrders.splice(index,1)[0]);
+						}
+					});	
+				}
+				model.clubbedOrders = clubbedOrders;
+			}
+			return model.clubbedOrders;	
+			
+
+		},
+
+		compareOrders: function(order1, order2) {
+			return (order1.orderNo - order2.orderNo);
 		},
 
 		getmenu: function() {
@@ -139,6 +176,23 @@ $(function() {
 			}
 			//console.log(menu);
 		},
+		cancelOrder: function() {
+			
+			this.clickedItemOrder.status = "Cancelled";
+			//console.log(model.orders);
+			//cancelDialogView.viewCancelDialog(orderId);
+		},
+
+		orderCompleted: function() {
+			this.clickedItemOrder.status = "Completed";
+			deliveredOrdersView.addDeliveredOrder(this.clickedItemOrder);
+			//console.log(model.orders);
+		},
+
+		orderInProgress: function() {
+			this.clickedItemOrder.status = "InProgress";
+			//console.log(model.orders);
+		},
 
 		onItemUnavailable: function(categoryName, itemName) {
 			var menu = this.getmenu();
@@ -154,6 +208,12 @@ $(function() {
 				}
 			});
 			selectedItem.available = false;
+			var orders = this.getAllOrders();
+			orders.forEach(function(order){
+				if(order.itemName === itemName) {
+					order.status = "Cancelled";
+				}
+			});
 			//console.log(menu);
 			orderQueueView.removeUnavailableOrders(selectedItem.itemName);
 
@@ -169,49 +229,81 @@ $(function() {
 			// console.log(this);
 			var orders = controller.getAllOrders();
 			orders.forEach(this.addOrderInQueue);
+			$("#clubOrdersCheck").change(function(){
+				if($(this).is(":checked")) {
+					$("#queueTable *").remove();
+					var clubbedOrders = controller.getClubbedOrders();
+					clubbedOrders.forEach(orderQueueView.addOrderInQueue);
+					//orderQueueView.showInProgressOrders(clubbedOrders);
+				}
+				else {
+					$("#queueTable *").remove();
+					//var clubbedOrders = controller.getClubbedOrders();
+					orders.forEach(orderQueueView.addOrderInQueue);
+					//orderQueueView.showInProgressOrders(orders);
+				}
+			});
 		},
 
 		addOrderInQueue: function(order) {
 			// var that = this;
 			// console.log(this);
-			order.items.forEach(function(item) {
-				var tableRow = $("<tr>", {class: "do__row"});
+			if(!(order.status === "Completed" || order.status === "Cancelled")) {
+				var tableRow = $("<tr>", {class: "do__row", id: order.orderId});
 				tableRow.append($("<td>", {class: "do__table-data box-border do__table-cell_id", text: order.orderNo}));
 				tableRow.append($("<td>", {class: "do__table-data box-border do__table-cell_name", text: order.orderName}));
-				tableRow.append($("<td>", {class: "do__table-data box-border do__table-cell_order", text: item.itemName}));
-				tableRow.append($("<td>", {class: "do__table-data box-border do__table-cell_description", text: item.itemDescription}));
+				tableRow.append($("<td>", {class: "do__table-data box-border do__table-cell_order", text: order.itemName}));
+				tableRow.append($("<td>", {class: "do__table-data box-border do__table-cell_description", text: order.itemDescription}));
 				tableRow.append($("<td>", {class: "do__table-data box-border do__table-cell_table", text: order.table}));
-				tableRow.append($("<td>", {class: "do__table-data box-border do__table-cell_quantity", text: item.quantity}));
+				tableRow.append($("<td>", {class: "do__table-data box-border do__table-cell_quantity", text: order.quantity}));
 				var actionsCell = $("<td>", {class: "do__table-data box-border do__table-cell_actions"});
 				var inProgressIcon = $("<i>", {class: "fa fa-clock-o fa-2x"});
 				var doneIcon = $("<i>", {class: "fa fa-check-circle-o fa-2x"});
 				var cancelIcon = $("<i>", {class: "fa fa-times fa-2x"});
 				tableRow.append(actionsCell.append(inProgressIcon, doneIcon, cancelIcon));
 				$("#queueTable").append(tableRow);
-				$(cancelIcon).click(function(currenttableRow) {
+				if(order.status === "InProgress") {
+					$(tableRow).css('background-color', "#dff0d8");
+				}
+				$(cancelIcon).click(function(currenttableRow, order) {
 					return function() {
+						controller.clickedItemOrder = order;
 						cancelDialogView.viewCancelDialog();
-						controller.clickedItemOrder = currenttableRow;
+						
 					}
-				}(tableRow));
-				$(doneIcon).click(function(currenttableRow, order, item) {
+				}(tableRow,order));
+				$(doneIcon).click(function(currenttableRow, order) {
 					return function() {
-						controller.clickedItemOrder = currenttableRow;
-						$(controller.clickedItemOrder).remove();
-						deliveredOrdersView.addDeliveredOrder(order, item);
+						controller.clickedItemOrder = order;
+						$("#"+controller.clickedItemOrder.orderId).remove();
+						controller.orderCompleted();
+						
+
 					}
-				}(tableRow, order, item));
-				$(inProgressIcon).click(function(tableRow){
+				}(tableRow, order));
+				$(inProgressIcon).click(function(tableRow, order){
 					return function() {
+						controller.clickedItemOrder = order;
 						tableRow.css('background-color', "#dff0d8");
+						controller.orderInProgress();
 					}
-				}(tableRow));
-			});
+				}(tableRow, order));
+			}
+			
+		
 		},
 
 		removeUnavailableOrders: function(itemName) {
 			$("#queueTable :contains('"+itemName+"')").remove();
 		},
+
+		// showInProgressOrders: function(orders) {
+		// 	orders.forEach(function(order){
+		// 		if(order.status === "InProgress") {
+		// 			$("#"+order.orderId).css('background-color', "#dff0d8");
+		// 		}
+		// 	});
+		// },
 	};
 
 	var cancelDialogView = {
@@ -234,8 +326,8 @@ $(function() {
 		cancelOrder: function() {
 			console.log($("input:radio[name='reasons']:checked").val());
 			cancelDialogView.closeCancelDialog();
-			$(controller.clickedItemOrder).remove();
-			
+			$("#"+controller.clickedItemOrder.orderId).remove();
+			controller.cancelOrder();
 		},
 	};
 
@@ -336,9 +428,9 @@ $(function() {
 				leftSidePanelView.addCategoryInSidePanel(menuCategory);
 				
 			});
-			$(document).on('change', 'input:checkbox',(function() {
+			$(document).on('change', '#c-menu--slide-left input:checkbox',(function() {
 				if(!$(this).is(":checked")) {
-					console.log("inIF");
+					//console.log("inIF");
 					var categoryName = $(this).parent().parent().attr('id');
 					controller.onItemUnavailable(categoryName, $(this).val());
 				}
@@ -385,12 +477,12 @@ $(function() {
 	};
 
 	var deliveredOrdersView = {
-		addDeliveredOrder: function(order, item) {
+		addDeliveredOrder: function(order) {
 			var tableRow = $("<tr>", {class: "do__row"});
 			tableRow.append($("<td>", {class: "do__table-data box-border do__table-cell_dot", text: order.orderNo}));
 			tableRow.append($("<td>", {class: "do__table-data box-border do__table-cell_dot", text: order.orderName}));
 			tableRow.append($("<td>", {class: "do__table-data box-border do__table-cell_dot", text: order.table}));
-			tableRow.append($("<td>", {class: "do__table-data box-border do__table-cell_dot", text: item.itemName}));
+			tableRow.append($("<td>", {class: "do__table-data box-border do__table-cell_dot", text: order.itemName}));
 			$("#deliveryTable").prepend(tableRow);
 		},
 	};
