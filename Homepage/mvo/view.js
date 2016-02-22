@@ -170,20 +170,27 @@ var orderView = {
 
 var headerView = {
 	init: function(){
-		var notification=document.getElementsByClassName("bell")[0];
+		var notification=document.getElementsByClassName("header-notification")[0];
+		var notiBody = document.getElementsByClassName("notificationBody")[0];
 		notification.onclick=function()
 		{
 			console.log("Yello");
-			var notiBody = document.getElementsByClassName("notificationBody")[0];
-			if (notiBody.style.display == 'block' || notiBody.style.display=='')
+			$("#notification__count").fadeOut("");
+
+			if (notiBody.style.display == 'block')
 			{
 				notiBody.style.display = 'none';
+
 			}
 			else
 			{
 				notiBody.style.display = 'block';
+				event.stopPropagation();
 			}
 		};
+		$(document).click( function(){
+			notiBody.style.display = 'none';
+		});
 	},
 };
 
