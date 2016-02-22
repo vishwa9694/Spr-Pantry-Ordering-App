@@ -78,14 +78,32 @@ position:absolute;
 #notification--Done{
     background-color: #E5F2E5;
     color:black;
+    cursor: pointer;
+}
+
+#notification--Done:hover{
+    background-color: #27ae60;
+    color: white;
 }
 
 #notification--InProgress{
     background-color: #f1c40f;
     color:black;
+    cursor: pointer;
 }
+
+#notification--InProgress:hover{
+    background-color: #f39c12;
+    color: white;
+}
+
 #notification--Cancelled{
     background-color:#FF9999;
+    cursor: pointer;
+}
+
+#notification--Cancelled:hover{
+    background-color: #e74c3c
 }
 
 #notification__cancel__reason{
