@@ -74,11 +74,17 @@ position:absolute;
     font-size: 15px;
 
 }
-#notification__progress{
-    background-color:#E5F2E5;
+
+#notification--Done{
+    background-color: #E5F2E5;
     color:black;
 }
-#notification__cancel{
+
+#notification--InProgress{
+    background-color: #f1c40f;
+    color:black;
+}
+#notification--Cancelled{
     background-color:#FF9999;
 }
 

@@ -24,11 +24,22 @@ var headerController = {
 	}
 }
 
+var notificationsController = {
+	init: function(){
+		console.log("Hello");
+		notificationsView.init();
+	},
+	getNotifications: function(){
+		return notifications;
+	}
+}
+
 var controller = {
 	init: function(){
 		orderQueueController.init();
 		itemListController.init();
 		headerController.init();
+		notificationsController.init();
 	}
 }
 

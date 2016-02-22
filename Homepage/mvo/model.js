@@ -67,3 +67,24 @@ var items = [{
 	}]
 }];
 
+var notifications = [{
+	uid: "113352049485747139246",
+	read: false,
+	item: "Coffee",
+	status: "Done",
+	reason: null
+},
+	{
+		uid: "113352049485747139246",
+		read: false,
+		item: "Tea",
+		status: "InProgress",
+		reason: null
+	},
+	{
+		uid: "113352049485747139246",
+		read: false,
+		item: "Maggi",
+		status: "Cancelled",
+		reason: "Busy"
+	}];
