@@ -117,13 +117,21 @@ ul{
 
 }
 #notification_count
-{
-    position: absolute;
-    right: -15px;
-    top: -10px;
-    z-index: 100;
-    background: #FCB322;
+{   
+    display: inline-block;
+    background-color: red;
+    font-size: small;
+    color: white;
+    border-radius: 50px;
+    height: 15px;
+    width: 15px;
+    margin-left: -2px;
+    position: relative;
+    top: -14px;
+    left: -15px;
+    text-align: center;
 }
+
 .header-notification
 {
     display:inline-block;
@@ -224,7 +232,7 @@ display:inline-block;
  //   border:2px solid red;
 height:100%;
 }
-.base{
+.menu{
     height:100%;
     display: inline-block;
     float: left;

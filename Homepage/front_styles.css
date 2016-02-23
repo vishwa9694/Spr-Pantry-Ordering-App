@@ -5,58 +5,76 @@ body{
 	margin:0;
 // overflow: hidden;
 }
-.menu{
-	postion:relative;
+
+.outer {
+	width: 180px;
+	display: inline-block;
+}
+.available_true {
+	visibility: hidden;
+	text-align: center;
+    color: red;
+    font-size: smaller;
+}
+.available_false {
+	visibility: visible;
+	text-align: center;
+    color: red;
+    font-size: smaller;
+}
+.menu__container{
+	//postion:relative;
 	margin:5px;
-//overflow: scroll;
+	//overflow: scroll;
+	widt
 }
 .category{
 	font-weight:500;
 	font-size: 20px;
 	margin: 10px;
 }
-.sub_list::after{
+.category__itemsList::after{
 	clear:both;
 	display:block;
 	content:" ";
 	height:0px;
 	visibility: none;
 }
-.menu::after{
+.menu__container::after{
 	clear:both;
 	display:block;
 	content:" ";
 	height:0px;
 	visibility: none;
 }
-.items{
+.category__item{
 	position:relative;
 	float:left;
 	width:150px;
-	height:180px;
+	/*height:180px;*/
 	margin:10px;
-	margin-bottom: 20px;
+	/*margin-bottom: 20px;*/
 	box-shadow: 0px 0px 5px #aaa;
-	cursor:pointer;
+	//cursor:pointer;
 	transition: background-color 1s;
 	transition: all 0.2s ease-in-out;
 	border: 1px solid rgba(0,20,40,.1);
 	border-radius: 6px;
 }
-.item_name{
+.category__item__name{
 	/*	box-sizing:border-box;*/
 	margin: 10px 0;
 	text-align: center;
 	font-size: 15px;
 
 }
-img{
+.category__item__image{
 	display:block;
 	width:150px;
 	height:150px;
 	position:relative;
 }
-.items .items_hover{
+.category__item .category__item__hover{
 	width: 150px;
 	height: 150px;
 	position:absolute;
@@ -68,12 +86,12 @@ img{
 	border-radius: 6px;
 	box-sizing:border-box;
 
-}
-div.items:hover{
+} 
+div.category__item:hover{
 	transform: scale(1.1);
 	box-shadow: 3px 3px 1px 0px #ccc;
 }
-div.items:hover .items_hover{
+div.category__item:hover .category__item__hover{
 	display:block;
 	width:100%;
 	height:100%;
@@ -86,10 +104,16 @@ div.items:hover .items_hover{
 fa{
 	color:green;
 }
-.add_item{
-	top: 30%;
+.ci__hover__click{
+	/*top: 30%;
 	left: 35%;
 	position: relative;
+	*/
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    cursor:pointer;
 }
 .order{
 	display:block;
