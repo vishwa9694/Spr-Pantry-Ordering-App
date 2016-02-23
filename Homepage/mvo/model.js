@@ -1,23 +1,35 @@
-var orders = [{
-	name: "Anup",
-	uid: "",
-	tableNo: 11,
-	items: [{
-		iname: "Tea",
-		istatus: "Queued"
-	},
-	{
-		iname: "Coffee",
-		istatus: "InProgress"
-	},
-	{
-		iname: "Corn",
-		istatus: "Cancelled",
-	}]
-},
-];
+var orders =(function() {
+	var xhttp = new XMLHttpRequest();
+//		console.log("Hello");
+	//xhttp.onreadystatechange = function() {
+	xhttp.open("GET", "http://localhost:3000/orders", false);
+	xhttp.send();
+	if (xhttp.readyState == 4 && xhttp.status == 200) {
+		console.log(xhttp.responseText);
+		return JSON.parse(xhttp.responseText);
 
-var items = [{
+	}
+	//};
+
+})();
+
+var items =(function() {
+		var xhttp = new XMLHttpRequest();
+//		console.log("Hello");
+		//xhttp.onreadystatechange = function() {
+			xhttp.open("GET", "http://localhost:3000/menuItem", false);
+			xhttp.send();
+			if (xhttp.readyState == 4 && xhttp.status == 200) {
+				console.log(xhttp.responseText);
+				 	 return JSON.parse(xhttp.responseText);
+
+			}
+		//};
+
+})();
+//console.log("hoho");
+//console.log(items);
+/* [{
 	cname: "Cereals",
 	citems: [{
 		iname: "Cornflakes",
@@ -65,7 +77,9 @@ var items = [{
 		img: "http://1.bp.blogspot.com/_E-KyFEBON7g/SITdxzSDVgI/AAAAAAAAAJo/554faT9jyX0/s400/bournvita.gif",
 		available: true
 	}]
-}];
+
+
+}]*/;
 
 var notifications = [{
 	uid: "113352049485747139246",

@@ -12,7 +12,7 @@ var orders = [
 			itemName: "Cornflakes",
 			quantity: 1,
 			itemDescription: "cold",
-			status: "InQueue",
+			status: "Queued",
 		},
 		{
 			uid: "113352049485747139246",
@@ -23,7 +23,7 @@ var orders = [
 			itemName: "Chocos",
 			quantity: 1,
 			itemDescription: "cold",
-			status: "InQueue",
+			status: "Queued",
 		},
 		{
 			uid: "113352049485747139246",
@@ -34,7 +34,7 @@ var orders = [
 			itemName: "Maggi",
 			quantity: 1,
 			itemDescription: "-",
-			status: "InQueue",
+			status: "Queued",
 		},
 		{
 			uid: "113352049485747139246",
@@ -45,7 +45,7 @@ var orders = [
 			itemName: "Tea",
 			quantity: 1,
 			itemDescription: "cold",
-			status: "InQueue",
+			status: "Queued",
 		},
 		{
 			uid: "113352049485747139246",
@@ -56,7 +56,7 @@ var orders = [
 			itemName: "Cornflakes",
 			quantity: 1,
 			itemDescription: "cold",
-			status: "InQueue",
+			status: "Queued",
 		},
 		{
 			uid: "113352049485747139246",
@@ -67,7 +67,7 @@ var orders = [
 			itemName: "Chocos",
 			quantity: 1,
 			itemDescription: "cold",
-			status: "InQueue",
+			status: "Queued",
 		},
 		
 		];
@@ -165,7 +165,7 @@ http.createServer(function(req, res) {
             res.end(css);
                 });
 	}
-	else if (req.url === "/defaultItem.png" || req.url === "/spr-logo.png") {
+	else if (req.url === "/assets/defaultItem.png" || req.url === "/assets/spr-logo.png") {
 
 		var imgPath = path.join(__dirname, 'AdminPage', req.url);
 		var imgStream = fs.createReadStream(imgPath);
@@ -174,7 +174,7 @@ http.createServer(function(req, res) {
 
 		imgStream.pipe(res);
 
-	} else if (req.url==="app.js") {
+	} else if (req.url==="/app.js") {
 
 		var jsPath = path.join(__dirname, 'AdminPage', req.url);
 		var fileStream = fs.createReadStream(jsPath, "UTF-8");
@@ -308,7 +308,7 @@ http.createServer(function(req, res) {
                         prev=orders.length-1;
                         item.orderId=orders[prev].orderId+1;
                         item.orderNo=pno;
-                        item.status="InQueue";
+                        item.status="Queued";
                         orders.push(item);
                         console.log(item);
 
@@ -320,7 +320,43 @@ http.createServer(function(req, res) {
             });
         }
 	}
-	else {
+	else if(req.url==="/delorder")
+		{
+			var order="";
+        if (req.method == 'POST') {
+           // console.log("[200] " + req.method + " to " + req.url);
+
+            req.on('data', function(chunk) {
+                //console.log("Received body data:");
+               // console.log(chunk.toString());
+                order+=chunk;
+            });
+
+            req.on('end', function() {
+            		console.log(order);
+            		order=JSON.parse(order);
+            		order.del=parseInt(order.del);
+            		orders.forEach(function(item){
+            			console.log(item.orderId);
+            			if(order.del===item.orderId)
+            			{
+            				item.status="Cancelled";
+            				console.log(item);
+            			}
+            		})
+             
+                    });
+            	console.log(orders);
+                res.writeHead(200, "OK", {'Content-Type': 'text/html'});
+
+                res.end();
+            };
+        }
+	
+	
+		
+		else
+		{
 		res.writeHead(404, {"Content-Type": "text/plain"});
 		res.end("404 File Not Found");
 	}

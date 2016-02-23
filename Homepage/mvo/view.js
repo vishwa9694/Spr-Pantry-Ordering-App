@@ -3,27 +3,7 @@ var orderTable, itemList, notificationPanel;
 var orderQueueView = {
 	init: function(){
 		orderTable = document.getElementById("orderTable");
-		this.render();
-	},
 
-	render: function(){
-		var row, nameCell;
-		var orders = orderQueueController.getOrders(); 
-		orders.forEach(function(order){
-			order.items.forEach(function(item){
-				nameCell = order.name;
-				row = document.createElement("tr");
-				row.innerHTML = '<td class="s-q__name">' + nameCell + '</td><td class="s-q__item">' + item.iname + '</td><td class="s-q__status--'+item.istatus+'">'+item.istatus+' </td>';
-				row.setAttribute('class','s-q-e__item');
-				orderTable.appendChild(row);
-			});
-		});
-	},
-};
-
-var itemListView = {
-	init: function(){
-		itemList = document.getElementById("itemList");
 		this.render();
 		var item = document.getElementsByClassName("menu__container")[0];
 		item.onclick = function(e) {
@@ -34,19 +14,47 @@ var itemListView = {
 	},
 
 	render: function(){
+		var row, nameCell;
+		var orders = orderQueueController.getOrders(); 
+		orders.forEach(function(order){
+				nameCell = order.orderName;
+				row = document.createElement("tr");
+				row.innerHTML = '<td class="s-q__name"><i class="fa fa-times-circle fa-lg" id="cancel" ></i><span>'+ nameCell+'<span></td><td class="s-q__item">' + order.itemName + '</td><td class="s-q__status--'+order.status+'">'+order.status+' </td>';
+				row.setAttribute('class','s-q-e__item '+order.uid);
+				row.setAttribute('id',order.orderId);
+
+			orderTable.appendChild(row);
+
+		});
+	},
+};
+
+var itemListView = {
+	init: function(){
+		itemList = document.getElementById("itemList");
+		this.render();
+		var item = document.getElementsByClassName("side__queue")[0];
+		item.onclick = function(e) {
+			e = e || event
+			var target = e.target;
+			cancelOrder(target);
+		}
+	},
+
+	render: function(){
 		var header, subList, citemDiv;
 		var itemIndex = 0;
 		var items = itemListController.getItems();
 		items.forEach(function(item){
 			header = document.createElement("div");
 			header.setAttribute('class', 'category');
-			header.innerHTML = item.cname;
+			header.innerHTML = item.category;
 			itemList.appendChild(header);
 			subList = document.createElement("div");
 			subList.setAttribute('class', 'sub_list');
-			item.citems.forEach(function(citem){
+			item.categoryItems.forEach(function(citem){
 				citemDiv = document.createElement("div");
-				citemDiv.innerHTML = '<img src=' + citem.img + '><div class="items_hover"><i class="fa fa-plus-circle fa-3x add_item" id="addItem_'+itemIndex+'"></i></div><div class="item_name" id="tileName_'+itemIndex+'">' + citem.iname + '</div>';
+				citemDiv.innerHTML = '<img src=' + citem.imgSrc + '><div class="items_hover"><i class="fa fa-plus-circle fa-3x add_item" id="addItem_'+itemIndex+'"></i></div><div class="item_name" id="tileName_'+itemIndex+'">' + citem.itemName + '</div>';
                 citemDiv.setAttribute('class', 'items');
                 subList.appendChild(citemDiv);
 				itemIndex++;
@@ -167,6 +175,19 @@ var orderView = {
 
 
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 var headerView = {
 	init: function(){
