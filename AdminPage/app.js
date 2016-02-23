@@ -1,128 +1,61 @@
 
 $(function() {
 	var model = {
-		orders: [
-		{
-			orderId:1,
-			orderNo:1,
-			orderName: "Vishwa",
-			table: 9,
-			itemName: "Cornflakes",
-			quantity: 1,
-			itemDescription: "cold",
-			status: "InQueue",
-		},
-		{
-			orderId:2,
-			orderNo:1,
-			orderName: "Vishwa",
-			table: 9,
-			itemName: "Chocos",
-			quantity: 1,
-			itemDescription: "cold",
-			status: "InQueue",
-		},
-		{
-			orderId:3,
-			orderNo:2,
-			orderName: "Anup",
-			table: 9,
-			itemName: "Maggi",
-			quantity: 1,
-			itemDescription: "-",
-			status: "InQueue",
-		},
-		{
-			orderId:4,
-			orderNo:2,
-			orderName: "Anup",
-			table: 9,
-			itemName: "Tea",
-			quantity: 1,
-			itemDescription: "cold",
-			status: "InQueue",
-		},
-		{
-			orderId:5,
-			orderNo:3,
-			orderName: "Akshat",
-			table: 9,
-			itemName: "Cornflakes",
-			quantity: 1,
-			itemDescription: "cold",
-			status: "InQueue",
-		},
-		{
-			orderId:6,
-			orderNo:3,
-			orderName: "Akshat",
-			table: 9,
-			itemName: "Chocos",
-			quantity: 1,
-			itemDescription: "cold",
-			status: "InQueue",
-		},
-		
-		],
-		
-		menu: [
-			{
-				category: "Bevarages",
-				categoryItems: [
-					{
-						itemName: "Tea",
-						available: true,
-						imgSrc: "assets/defaultItem.png"
-					},
-					{
-						itemName: "Coffee",
-						available: true,
-						imgSrc: "assets/defaultItem.png"
-
-					},
-					{
-						itemName: "Bournvita",
-						available:true,
-						imgSrc: "assets/defaultItem.png"
-
-					}
-				],
-			},
-			{
-				category: "Snacks",
-				categoryItems: [
-					{
-						itemName: "Maggi",
-						available: true,
-						imgSrc: "assets/defaultItem.png"
-
-					},
-					{
-						itemName: "Chocos",
-						available: true,
-						imgSrc: "assets/defaultItem.png"
-
-					},
-					{
-						itemName: "Cornflakes",
-						available:true,
-						imgSrc: "assets/defaultItem.png"
-
-					}
-				],
-			}
-		],
+		orders: null,		
+		menu: null,
 	};
 	
 	var controller = {
-		clickedItemOrder: null, 
-		getAllOrders: function() {
+		clickedItemOrder: null,
 
+		init: function() {
+			this.requestOrders();
+			this.requestMenu();
+			// orderQueueView.init();
+			cancelDialogView.init();
+			addNewItemDialogView.init();
+			// leftSidePanelView.init();
+		} ,
+
+		requestOrders: function(){
+			var xhttp = new XMLHttpRequest();
+			xhttp.open("GET", "http://localhost:3000/orders", true);
+			//xhttp.setRequestHeader('X-REquested-With', 'XMLHttpRequest');
+			xhttp.onreadystatechange = function() {
+			    if (xhttp.readyState == 4 && xhttp.status == 200) {
+			    	model.orders = JSON.parse(xhttp.responseText);
+			      	//model.orders = receivedOrders;
+			      	orderQueueView.init();
+					//cancelDialogView.init();
+					//addNewItemDialogView.init();
+					
+			    }
+			};
+			xhttp.send();
+		},
+
+		requestMenu: function(){
+			var xhttp = new XMLHttpRequest();
+			xhttp.open("GET", "http://localhost:3000/menu", true);
+			//xhttp.setRequestHeader('X-REquested-With', 'XMLHttpRequest');
+			xhttp.onreadystatechange = function() {
+			    if (xhttp.readyState == 4 && xhttp.status == 200) {
+			    	model.menu = JSON.parse(xhttp.responseText);
+			      	// orderQueueView.init();
+					//cancelDialogView.init();
+					//addNewItemDialogView.init();
+					leftSidePanelView.init();
+			    }
+			};
+			xhttp.send();
+		},
+
+
+		getAllOrders: function() {
 			return model.orders;
 		},
 
 		getAllSortedOrders: function() {
-
 			return model.orders.sort(controller.compareOrders);
 		},
 
@@ -174,23 +107,46 @@ $(function() {
 				menu.push(menuCategory);
 				leftSidePanelView.addCategoryInSidePanel(menuCategory);
 			}
+			var itemDetails = {
+				categoryName: categoryName,
+				itemName: itemName,
+				itemImg: itemImg
+			};
+			this.updateServer(itemDetails, 'addItemInMenu');
 			//console.log(menu);
 		},
-		cancelOrder: function() {
+
+		updateServer: function(object, url) {
+			var xhttp = new XMLHttpRequest();
+			xhttp.open("POST", "http://localhost:3000/"+url, true);
+			//xhttp.setRequestHeader('X-REquested-With', 'XMLHttpRequest');
+			xhttp.onreadystatechange = function() {
+			    if (xhttp.readyState == 4 && xhttp.status == 200) {
+			      console.log(xhttp.responseText);
+			    }
+			};
+			xhttp.send(JSON.stringify(object));
+
+		},
+		cancelOrder: function(reason) {
 			
 			this.clickedItemOrder.status = "Cancelled";
+			this.updateServer({reason:1, status:"Cancelled", orderId: this.clickedItemOrder.orderId},'changeOrderStatus');
 			//console.log(model.orders);
 			//cancelDialogView.viewCancelDialog(orderId);
 		},
 
 		orderCompleted: function() {
 			this.clickedItemOrder.status = "Completed";
+			this.updateServer({status:"Completed", orderId: this.clickedItemOrder.orderId},'changeOrderStatus');
 			deliveredOrdersView.addDeliveredOrder(this.clickedItemOrder);
+
 			//console.log(model.orders);
 		},
 
 		orderInProgress: function() {
 			this.clickedItemOrder.status = "InProgress";
+			this.updateServer({status:"InProgress", orderId: this.clickedItemOrder.orderId},'changeOrderStatus');
 			//console.log(model.orders);
 		},
 
@@ -208,15 +164,36 @@ $(function() {
 				}
 			});
 			selectedItem.available = false;
+			this.updateServer({category: categoryName, item:itemName, status: false},'changeItemStatus');
 			var orders = this.getAllOrders();
 			orders.forEach(function(order){
 				if(order.itemName === itemName) {
 					order.status = "Cancelled";
+					controller.updateServer({reason:1, status:"Cancelled", orderId: order.orderId},'changeOrderStatus')
 				}
 			});
 			//console.log(menu);
+
 			orderQueueView.removeUnavailableOrders(selectedItem.itemName);
 
+		},
+
+		onItemAvailable: function(categoryName, itemName) {
+			var menu = this.getmenu();
+			var selectedCategory = menu.find(function(category) {
+				if(category.category === categoryName) {
+					return category;
+				}
+			});
+
+			var selectedItem = selectedCategory.categoryItems.find(function(item) {
+				if(item.itemName === itemName) {
+					return item;
+				}
+			});
+			selectedItem.available = true;
+			this.updateServer({category: categoryName, item:itemName, status: true},'changeItemStatus');
+			
 		},
 	};
 
@@ -324,10 +301,11 @@ $(function() {
 		},
 
 		cancelOrder: function() {
-			console.log($("input:radio[name='reasons']:checked").val());
+			var reason = $("input:radio[name='reasons']:checked").val();
+			console.log(reason);
 			cancelDialogView.closeCancelDialog();
 			$("#"+controller.clickedItemOrder.orderId).remove();
-			controller.cancelOrder();
+			controller.cancelOrder(reason);
 		},
 	};
 
@@ -429,10 +407,14 @@ $(function() {
 				
 			});
 			$(document).on('change', '#c-menu--slide-left input:checkbox',(function() {
+				var categoryName = $(this).parent().parent().attr('id');
 				if(!$(this).is(":checked")) {
 					//console.log("inIF");
-					var categoryName = $(this).parent().parent().attr('id');
+					
 					controller.onItemUnavailable(categoryName, $(this).val());
+				}
+				else {
+					controller.onItemAvailable(categoryName, $(this).val());
 				}
 			}));
 		},
@@ -487,11 +469,8 @@ $(function() {
 		},
 	};
 
+	controller.init();
 	
-	orderQueueView.init();
-	cancelDialogView.init();
-	addNewItemDialogView.init();
-	leftSidePanelView.init();
 	
 });
 
