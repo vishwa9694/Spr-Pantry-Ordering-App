@@ -352,7 +352,27 @@ http.createServer(function(req, res) {
                 res.end();
             };
         }
-	
+	else if(req.url==="/getNotifications") {			
+			var user = "";		
+			req.on('data', function(chunk) {		
+                //console.log("Received body data:");		
+               // console.log(chunk.toString());		
+                user+=chunk;		
+            });		
+            req.on("end", function() {		
+            	console.log(user);		
+            	user = JSON.parse(user);		
+            	var filter=notifications.filter(function(notification) {		
+            		return (notification.uid === user.userId && notification.read === false);		
+            	});		
+            	filter.forEach(function(notification) {		
+            		console.log(notification.item);		
+            	});		
+            	console.log()		
+            	res.writeHead(200, "OK", {'Content-Type': 'text/json'});		
+                res.end(JSON.stringify(filter));		
+            });		
+		}
 	
 		
 		else

@@ -18,6 +18,7 @@
         user.img=profile.getImageUrl();
         console.log('Email: ' + profile.getEmail());
         user.email=profile.getEmail();
+        controller.init();
         //document.getElementById("connectedcidntfuxpsev").innerHTML="Sign-out";
         //console.log(document.getElementById("signin-but")[0].style.background);
 

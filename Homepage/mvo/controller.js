@@ -28,10 +28,23 @@ var headerController = {
 var notificationsController = {
 	init: function(){
 		console.log("Hello");
+        this.getNotificationsFromServer();
 		notificationsView.init();
 	},
 	getNotifications: function(){
 		return notifications;
+	},
+    getNotificationsFromServer: function() {		
+		var xhttp = new XMLHttpRequest();		
+//		console.log("Hello");		
+		//xhttp.onreadystatechange = function() {		
+			console.log("USERID:",user);		
+			xhttp.open("POST", "http://localhost:3000/getNotifications", false);		
+			xhttp.send(JSON.stringify({userId: user.id}));		
+			if (xhttp.readyState == 4 && xhttp.status == 200) {		
+				console.log(xhttp.responseText);		
+				 	 notifications = JSON.parse(xhttp.responseText);		
+			}		
 	},
 	setTrue: function(){
 		notifications.forEach(function(noti){
@@ -134,4 +147,4 @@ var controller = {
 	}
 };
 
-controller.init();
+//controller.init();
