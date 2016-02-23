@@ -4,6 +4,7 @@ var fs = require("fs");
 var path = require("path");
 var orders = [
 		{
+			uid: "113352049485747139246",
 			orderId:1,
 			orderNo:1,
 			orderName: "Vishwa",
@@ -14,6 +15,7 @@ var orders = [
 			status: "InQueue",
 		},
 		{
+			uid: "113352049485747139246",
 			orderId:2,
 			orderNo:1,
 			orderName: "Vishwa",
@@ -24,6 +26,7 @@ var orders = [
 			status: "InQueue",
 		},
 		{
+			uid: "113352049485747139246",
 			orderId:3,
 			orderNo:2,
 			orderName: "Anup",
@@ -34,6 +37,7 @@ var orders = [
 			status: "InQueue",
 		},
 		{
+			uid: "113352049485747139246",
 			orderId:4,
 			orderNo:2,
 			orderName: "Anup",
@@ -44,6 +48,7 @@ var orders = [
 			status: "InQueue",
 		},
 		{
+			uid: "113352049485747139246",
 			orderId:5,
 			orderNo:3,
 			orderName: "Akshat",
@@ -54,6 +59,7 @@ var orders = [
 			status: "InQueue",
 		},
 		{
+			uid: "113352049485747139246",
 			orderId:6,
 			orderNo:3,
 			orderName: "Akshat",
@@ -114,6 +120,7 @@ var menu = [
 				]
 			}
 		];
+var notifications = [];
 http.createServer(function(req, res) {
 
 	//console.log(${req.method} request for ${req.url});
@@ -197,6 +204,17 @@ http.createServer(function(req, res) {
 			filteredOrders[0].status = orderData.status;
 			orders.forEach(function(order){
 				console.log(order.orderId, order.status);
+			});
+			var notification = {
+				uid: filteredOrders[0].uid,
+				read: false,
+				item: filteredOrders[0].itemName,
+				status: orderData.ntStatus,
+				reason: orderData.reason
+			};
+			notifications.push(notification);
+			notifications.forEach(function(notification){
+				console.log(notification.status);
 			});
 			res.writeHead(200, {"Content-Type": "text/plain"});
 			res.end("Order Updated.");

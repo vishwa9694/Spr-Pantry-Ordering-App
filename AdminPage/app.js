@@ -131,14 +131,14 @@ $(function() {
 		cancelOrder: function(reason) {
 			
 			this.clickedItemOrder.status = "Cancelled";
-			this.updateServer({reason:1, status:"Cancelled", orderId: this.clickedItemOrder.orderId},'changeOrderStatus');
+			this.updateServer({reason: reason, status:"Cancelled", orderId: this.clickedItemOrder.orderId, ntStatus: 'Cancelled'},'changeOrderStatus');
 			//console.log(model.orders);
 			//cancelDialogView.viewCancelDialog(orderId);
 		},
 
 		orderCompleted: function() {
 			this.clickedItemOrder.status = "Completed";
-			this.updateServer({status:"Completed", orderId: this.clickedItemOrder.orderId},'changeOrderStatus');
+			this.updateServer({reason: null, status:"Completed", orderId: this.clickedItemOrder.orderId, ntStatus: 'Done'},'changeOrderStatus');
 			deliveredOrdersView.addDeliveredOrder(this.clickedItemOrder);
 
 			//console.log(model.orders);
@@ -146,7 +146,7 @@ $(function() {
 
 		orderInProgress: function() {
 			this.clickedItemOrder.status = "InProgress";
-			this.updateServer({status:"InProgress", orderId: this.clickedItemOrder.orderId},'changeOrderStatus');
+			this.updateServer({reason: null,status:"InProgress", orderId: this.clickedItemOrder.orderId, ntStatus: 'InProgress'},'changeOrderStatus');
 			//console.log(model.orders);
 		},
 
@@ -169,7 +169,7 @@ $(function() {
 			orders.forEach(function(order){
 				if(order.itemName === itemName) {
 					order.status = "Cancelled";
-					controller.updateServer({reason:1, status:"Cancelled", orderId: order.orderId},'changeOrderStatus')
+					controller.updateServer({reason:"Item not available", status:"Cancelled", orderId: order.orderId, ntStatus: 'Cancelled'},'changeOrderStatus')
 				}
 			});
 			//console.log(menu);
