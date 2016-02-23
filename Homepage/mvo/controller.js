@@ -31,6 +31,13 @@ var notificationsController = {
 	},
 	getNotifications: function(){
 		return notifications;
+	},
+	setTrue: function(){
+		notifications.forEach(function(noti){
+			if(!noti.read){
+				noti.read = true;
+			}
+		});
 	}
 }
 
