@@ -49,7 +49,7 @@ Graph.prototype.addText=function(text,color,font,xcord,ycord){
 //child class of Graph
 function BarGraph(divName){
 	Graph.call(this,divName);
-	this.barLengthsArr=[10,10,10,10,10,10,10];
+	this.barLengthsArr=[10,10,10,10];
 	this.maxValue=100;//scaled to max 100
   	this.barMargin = 20;//distance between bars deafult value
   	this.colors = "blue";
@@ -59,16 +59,38 @@ BarGraph.prototype=Object.create(Graph.prototype); //works everywhere
 BarGraph.prototype.constructor=BarGraph;
 
 BarGraph.prototype.animateBarGraph=function(newArr){
-	var animationSteps;
 	//.....
+	var animationsteps=20,animationinterval=100;
+	var delta=[];
+	for(var i=0;i<newArr.length;i+=1){
+		delta.push((newArr[i]-this.barLengthsArr[i])/animationsteps);
+	}
+	var that=this;
+	loop.i=0;
+	function loop(){
+		console.log(that.barLengthsArr)
+		if(loop.i==animationsteps){
+				clearInterval(timeoutId);
+				return ;
+			}
+		for(var i=0;i<newArr.length;i+=1){
+			that.barLengthsArr[i]=that.barLengthsArr[i]+delta[i];
+		}
+		that.draw();
+		loop.i=loop.i+1;
+	}
+	var timeoutId=setInterval(loop,animationinterval);
+
 }
 
 BarGraph.prototype.update=function(newArr){	
-    if(newArr.length===this.barLengthsArr){
-    	this.animateBarGraph(newArr)();
+    if(newArr.length===this.barLengthsArr.length){
+    	this.animateBarGraph(newArr);
     }
+    else{
 	this.barLengthsArr=newArr;
 	this.draw();
+}
 }
 
 BarGraph.prototype.draw=function(){
@@ -132,20 +154,23 @@ BarGraph.prototype.draw=function(){
 
 function CompareBarGraph(divName){
 	BarGraph.call(this,divName);
-	this.secondBarLengthArr=["10,10,10,10,10,10,10"];
+	this.secondBarLengthArr=["10,10,10,10,10"];
 	this.secondBarColor="violet";
 }
 CompareBarGraph.prototype=Object.create(BarGraph.prototype); //works everywhere
 CompareBarGraph.prototype.constructor=CompareBarGraph;
 
 CompareBarGraph.prototype.update=function(newArr1,newArr2){	
-    
+	
+	if(newArr1.length==this.barLengthsArr.length && newArr2.length===this.secondBarLengthArr.length){
+		this.animateCompareBarGraph(newArr1,newArr2);
+	}else{
 	this.barLengthsArr=newArr1;
-	console.log("shit")
 	this.secondBarLengthArr=newArr2;
-	this.doubleDraw();
+	this.draw();
+	}
 }
-CompareBarGraph.prototype.doubleDraw=function(){
+CompareBarGraph.prototype.draw=function(){
 //clear everything on canvas (need to change this to only graph)
 	  this.context.clearRect(0,0,this.canvasWidth,this.canvasHeight);//clear everything
 	 //Assign dimesnsions to canvas
@@ -177,8 +202,7 @@ CompareBarGraph.prototype.doubleDraw=function(){
 	  },arr[0]);
 	 
 	 var i,scale,ratio;
-	 //Draw each bar 
-	 
+	 //Draw each bar 	 
 	for (i=0;i<arr.length;i+=1){
 	 	ratio=arr[i]/largestValue;
 	 	scaledBarHeight=arr[i]/largestValue * maxBarHeight;
@@ -199,27 +223,48 @@ CompareBarGraph.prototype.doubleDraw=function(){
 	 	this.context.fillRect(xcord2,ycord2,this.barWidth,scaledBarHeight2);
 
 	 	this.controlShadow(this.context,0,0,0,"#999");
-	 	this.border=3;
+	 	this.border=1;
 	 	//adding only if it is visible
-	if (scaledBarHeight > this.border * 2) {
-	// apply gradient colors to 
-		this.gradientForBar(ratio,xcord,ycord,scaledBarHeight,"white","red");
-		this.gradientForBar(ratio,xcord2,ycord2,scaledBarHeight2,"white","red");
+		if (scaledBarHeight > this.border * 2) {
+		// apply gradient colors to 
+			this.gradientForBar(ratio,xcord,ycord,scaledBarHeight,"white","red");
+			this.gradientForBar(ratio,xcord2,ycord2,scaledBarHeight2,"white","blue");
+		};	
+		//Draw text above
+		this.addText(parseInt(arr[i],10),"black","bold 12px sans-serif",xcord+this.barWidth*(1/3),ycord-20);
+		this.addText(parseInt(arr2[i],10),"black","bold 12px sans-serif",xcord2+this.barWidth*(1/3),ycord2-20);
+		// Draw bar label if it exists
+		if (this.xAxisLabelArr[i]) {					
+		this.addText(this.xAxisLabelArr[i],"violet","bold 12px sans-serif",xcord+this.barWidth*(1/3),ycord +scaledBarHeight+20);
+		//this.addText(this.xAxisLabelArr[i],"violet","bold 12px sans-serif",xcord+this.barWidth*(1/3),ycord +scaledBarHeight+20);		
+		};
 
-
-	};	
-	//Draw text above
-	this.addText(parseInt(arr[i],10),"black","bold 12px sans-serif",xcord+this.barWidth*(1/3),ycord-20);
-	this.addText(parseInt(arr2[i],10),"black","bold 12px sans-serif",xcord2+this.barWidth*(1/3),ycord2-20);
-
-	// Draw bar label if it exists
-	if (this.xAxisLabelArr[i]) {					
-	this.addText(this.xAxisLabelArr[i],"violet","bold 12px sans-serif",xcord+this.barWidth*(1/3),ycord +scaledBarHeight+20);
-	//this.addText(this.xAxisLabelArr[i],"violet","bold 12px sans-serif",xcord+this.barWidth*(1/3),ycord +scaledBarHeight+20);	
-	
-	};
-
-	 }
+	}
+}
+CompareBarGraph.prototype.animateCompareBarGraph=function(newArr1,newArr2){
+	var animationsteps=20,animationinterval=100;
+	var delta1=[];
+	var delta2=[];
+	for(var i=0;i<newArr1.length;i+=1){
+		delta1.push((newArr1[i]-this.barLengthsArr[i])/animationsteps);
+		delta2.push((newArr2[i]-this.secondBarLengthArr[i])/animationsteps);
+	}
+	var that=this;
+	loop.i=0;
+	function loop(){
+		//console.log(that.barLengthsArr)
+		if(loop.i==animationsteps){
+				clearInterval(timeoutId);
+				return ;
+			}
+		for(var i=0;i<newArr1.length;i+=1){
+			that.barLengthsArr[i]=that.barLengthsArr[i]+delta1[i];
+			that.secondBarLengthArr[i]=that.secondBarLengthArr[i]+delta2[i];
+		}
+		that.draw();
+		loop.i=loop.i+1;
+	}
+	var timeoutId=setInterval(loop,animationinterval);
 }
 
 
@@ -228,13 +273,19 @@ function renderGraphs(){
 	bgraph.xAxisLabelArr=["Mon", "Tue", "Wed", "Thu","Fri","Sat","Sun"];
 	bgraph.update([10,20,30,40,50,60,70]);
 
+	//bgraph.update([70,60]);
+
 	setInterval(function(){
-		bgraph.update([100*Math.random(),100*Math.random(),100*Math.random(),100*Math.random(),100*Math.random(),])
-	},2000)
+		bgraph.update([100*Math.random(),100*Math.random(),100*Math.random(),100*Math.random(),100*Math.random()])
+	},3000)
 
 	var bgraph2=new CompareBarGraph("BarGraph2");
-	bgraph2.xAxisLabelArr=["Mon", "Tue", "Wed", "Thu","Fri","Sat","Sun"];
-	bgraph2.update([10,20,30,40,50,60,70],[10,10,10,10,10,10,10]);
+	bgraph2.xAxisLabelArr=["Mon", "Tue", "Wed", "Thu","Fri"];
+	bgraph2.update([10,20,30,40,50],[10,10,10,10,10]);
+
+	setInterval(function(){
+		bgraph2.update([100*Math.random(),100*Math.random(),100*Math.random(),100*Math.random(),100*Math.random()],[100*Math.random(),100*Math.random(),100*Math.random(),100*Math.random(),100*Math.random()])
+	},3000)
 
 }
 renderGraphs();
