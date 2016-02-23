@@ -131,16 +131,41 @@ http.createServer(function(req, res) {
 			res.end(html);
 		});
 
-	} else if (req.url.match(/.css$/)) {
+	} else if (req.url === "/") {
+		fs.readFile("./Homepage/index.html", "UTF-8", function(err, html) {
+            res.writeHead(200, {"Content-Type": "text/html"});
+            res.end(html);
+        });
 
-		var cssPath = path.join(__dirname, 'AdminPage', req.url);
-		var fileStream = fs.createReadStream(cssPath, "UTF-8");
+	}
+
+	else if (req.url === '/styles.css') {
+
+		//var cssPath = path.join(__dirname, 'AdminPage', req.url);
+		var fileStream = fs.createReadStream("./AdminPage/styles.css", "UTF-8");
 
 		res.writeHead(200, {"Content-Type": "text/css"});
 
 		fileStream.pipe(res);
 
-	} else if (req.url.match(/.png$/)) {
+	} 
+	else if (req.url === '/style.css') {
+
+		//var cssPath = path.join(__dirname, 'AdminPage', req.url);
+		fs.readFile("./Homepage/style.css", "UTF-8", function(err, css) {
+            res.writeHead(200, {"Content-Type": "text/css"});
+            
+                res.end(css);
+                });
+
+	} 
+	else if(req.url === "/front_styles.css") {
+		fs.readFile("./Homepage/front_styles.css", "UTF-8", function(err, css) {
+            res.writeHead(200, {"Content-Type": "text/css"});
+            res.end(css);
+                });
+	}
+	else if (req.url === "/defaultItem.png" || req.url === "/spr-logo.png") {
 
 		var imgPath = path.join(__dirname, 'AdminPage', req.url);
 		var imgStream = fs.createReadStream(imgPath);
@@ -149,7 +174,7 @@ http.createServer(function(req, res) {
 
 		imgStream.pipe(res);
 
-	} else if (req.url.match(/.js$/)) {
+	} else if (req.url==="app.js") {
 
 		var jsPath = path.join(__dirname, 'AdminPage', req.url);
 		var fileStream = fs.createReadStream(jsPath, "UTF-8");
@@ -157,13 +182,28 @@ http.createServer(function(req, res) {
 		res.writeHead(200, {"Content-Type": "text/js"});
 
 		fileStream.pipe(res);
-	} else if(req.url === '/orders') {
+	} 
+		else if (req.url==="/login.js" || req.url==="/items_tiles.js" || req.url === "/mvo/controller.js" || req.url === "/mvo/view.js" || req.url === "/mvo/model.js") {
+			console.log(req.url);
+		var jsPath = path.join(__dirname, 'Homepage', req.url);
+		var fileStream = fs.createReadStream(jsPath, "UTF-8");
+
+		res.writeHead(200, {"Content-Type": "text/js"});
+
+		fileStream.pipe(res);
+	} 
+	else if(req.url === '/orders') {
 		res.writeHead(200, {"Content-Type": "text/json"});
 	    res.end(JSON.stringify(orders));	
 	} else if(req.url === '/menu') {
 		res.writeHead(200, {"Content-Type": "text/json"});
 	    res.end(JSON.stringify(menu));
-	} else if(req.url === '/addItemInMenu') {
+	}
+	else if(req.url === '/menuItem') {
+		res.writeHead(200, {"Content-Type": "text/json"});
+	    res.end(JSON.stringify(menu));
+	}
+	 else if(req.url === '/addItemInMenu') {
 		var body = "";
 		req.on('data',function(data) {
 			body += data;
@@ -244,6 +284,41 @@ http.createServer(function(req, res) {
 			res.writeHead(200, {"Content-Type": "text/plain"});
 			res.end("Item Updated.");
 		});
+	}
+	else if(req.url === '/yoyo') {
+		var order="";
+        console.log("Yello");
+        if (req.method == 'POST') {
+           // console.log("[200] " + req.method + " to " + req.url);
+
+            req.on('data', function(chunk) {
+                //console.log("Received body data:");
+               // console.log(chunk.toString());
+                order+=chunk;
+            });
+
+            req.on('end', function() {
+
+                    order=JSON.parse(order);
+
+                    var pno=orders[orders.length-1].orderNo;
+
+                    order.forEach(function (item,i,order){
+
+                        prev=orders.length-1;
+                        item.orderId=orders[prev].orderId+1;
+                        item.orderNo=pno;
+                        item.status="InQueue";
+                        orders.push(item);
+                        console.log(item);
+
+                    });
+                console.log(orders);
+                res.writeHead(200, "OK", {'Content-Type': 'text/html'});
+
+                res.end();
+            });
+        }
 	}
 	else {
 		res.writeHead(404, {"Content-Type": "text/plain"});

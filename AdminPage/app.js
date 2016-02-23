@@ -227,12 +227,14 @@ $(function() {
 			// console.log(this);
 			if(!(order.status === "Completed" || order.status === "Cancelled")) {
 				var tableRow = $("<tr>", {class: "do__row", id: order.orderId});
-				tableRow.append($("<td>", {class: "do__table-data box-border do__table-cell_id", text: order.orderNo}));
-				tableRow.append($("<td>", {class: "do__table-data box-border do__table-cell_name", text: order.orderName}));
-				tableRow.append($("<td>", {class: "do__table-data box-border do__table-cell_order", text: order.itemName}));
-				tableRow.append($("<td>", {class: "do__table-data box-border do__table-cell_description", text: order.itemDescription}));
-				tableRow.append($("<td>", {class: "do__table-data box-border do__table-cell_table", text: order.table}));
-				tableRow.append($("<td>", {class: "do__table-data box-border do__table-cell_quantity", text: order.quantity}));
+				var tdString = '<td class="do__table-data box-border do__table-cell_id">'+order.orderNo+'</td>'+'<td class="do__table-data box-border do__table-cell_name">'+order.orderName+'</td>'+'<td class="do__table-data box-border do__table-cell_order">'+order.itemName+'</td>'+'<td class="do__table-data box-border do__table-cell_description">'+order.itemDescription+'</td>'+'<td class="do__table-data box-border do__table-cell_table">'+order.table+'</td>'+'<td class="do__table-data box-border do__table-cell_quantity">'+order.quantity+'</td>';
+				// tableRow.append($("<td>", {class: "do__table-data box-border do__table-cell_id", text: order.orderNo}));
+				// tableRow.append($("<td>", {class: "do__table-data box-border do__table-cell_name", text: order.orderName}));
+				// tableRow.append($("<td>", {class: "do__table-data box-border do__table-cell_order", text: order.itemName}));
+				// tableRow.append($("<td>", {class: "do__table-data box-border do__table-cell_description", text: order.itemDescription}));
+				// tableRow.append($("<td>", {class: "do__table-data box-border do__table-cell_table", text: order.table}));
+				// tableRow.append($("<td>", {class: "do__table-data box-border do__table-cell_quantity", text: order.quantity}));
+				$(tableRow).html(tdString);
 				var actionsCell = $("<td>", {class: "do__table-data box-border do__table-cell_actions"});
 				var inProgressIcon = $("<i>", {class: "fa fa-clock-o fa-2x"});
 				var doneIcon = $("<i>", {class: "fa fa-check-circle-o fa-2x"});
