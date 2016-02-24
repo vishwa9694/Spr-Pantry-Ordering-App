@@ -1,66 +1,18 @@
 
 $(function() {
-	var model = {
-		orders: null,		
-		menu: null,
-	};
-	
-	var controller = {
-		clickedItemOrder: null,
-
-		init: function() {
-			this.requestOrders();
-			this.requestMenu();
-			// orderQueueView.init();
-			cancelDialogView.init();
-			addNewItemDialogView.init();
-			// leftSidePanelView.init();
-		} ,
-
-		requestOrders: function(){
-			var xhttp = new XMLHttpRequest();
-			xhttp.open("GET", "http://localhost:3000/orders", true);
-			//xhttp.setRequestHeader('X-REquested-With', 'XMLHttpRequest');
-			xhttp.onreadystatechange = function() {
-			    if (xhttp.readyState == 4 && xhttp.status == 200) {
-			    	model.orders = JSON.parse(xhttp.responseText);
-			      	//model.orders = receivedOrders;
-			      	orderQueueView.init();
-					//cancelDialogView.init();
-					//addNewItemDialogView.init();
-					
-			    }
-			};
-			xhttp.send();
-		},
-
-		requestMenu: function(){
-			var xhttp = new XMLHttpRequest();
-			xhttp.open("GET", "http://localhost:3000/menu", true);
-			//xhttp.setRequestHeader('X-REquested-With', 'XMLHttpRequest');
-			xhttp.onreadystatechange = function() {
-			    if (xhttp.readyState == 4 && xhttp.status == 200) {
-			    	model.menu = JSON.parse(xhttp.responseText);
-			      	// orderQueueView.init();
-					//cancelDialogView.init();
-					//addNewItemDialogView.init();
-					leftSidePanelView.init();
-			    }
-			};
-			xhttp.send();
-		},
-
-
+	var orderModel = {
+		orders: null,
 		getAllOrders: function() {
-			return model.orders;
+			return this.orders;
 		},
-
 		getAllSortedOrders: function() {
-			return model.orders.sort(controller.compareOrders);
+			return this.orders.sort(this.compareOrders);
 		},
-
+		compareOrders: function(order1, order2) {
+			return (order1.orderNo - order2.orderNo);
+		},
 		getClubbedOrders: function() {
-			if(!("clubbedOrders" in model)) {
+			if(!("clubbedOrders" in orderModel)) {
 				var orders = this.getAllSortedOrders();
 				var tempOrders = orders.map(function(order) {
 					return order;
@@ -75,116 +27,294 @@ $(function() {
 						}
 					});	
 				}
-				model.clubbedOrders = clubbedOrders;
+				orderModel.clubbedOrders = clubbedOrders;
 			}
-			return model.clubbedOrders;	
-			
-
+			return orderModel.clubbedOrders;	
 		},
-
-		compareOrders: function(order1, order2) {
-			return (order1.orderNo - order2.orderNo);
-		},
-
+	};
+	var menuModel = {
+		menu:null,
 		getmenu: function() {
-			return model.menu;
+			return this.menu;
 		},
-
-		addNewItem: function(categoryName, itemName, itemImg) {
-			var menu = this.getmenu();
-			var selectedCategory = menu.find(function(category) {
+		findCategoryByName: function(categoryName) {
+			var requiredCategory = this.menu.find(function(category) {
 				if(category.category === categoryName) {
 					return category;
 				}
 			});
-			if(selectedCategory) {
-				var item = {itemName: itemName, available: true, imgSrc: itemImg};
-				selectedCategory.categoryItems.push({itemName: itemName, available: true, imgSrc: itemImg});
-				leftSidePanelView.addItemInCategory(item, selectedCategory.category);
-			}
-			else {
-				var menuCategory = {category: categoryName, categoryItems:[{itemName: itemName, available: true, imgSrc: itemImg}]};
-				menu.push(menuCategory);
-				leftSidePanelView.addCategoryInSidePanel(menuCategory);
-			}
+			return requiredCategory;
+		},
+
+		getCategoryNames: function() {
+			var categoryNames = this.menu.map(function(category) {
+				return category.category;
+			});
+			return categoryNames;
+		},
+	};
+	var services = {
+		createGETRequest: function(url) {
+			var xhttp = new XMLHttpRequest();
+			xhttp.open("GET", url, true);
+			return xhttp;
+		},
+
+		createPOSTRequest: function(url) {
+			var xhttp = new XMLHttpRequest();
+			xhttp.open("POST", url, true);
+			return xhttp;
+		},
+
+		requestOrders: function() {
+			var xhr = this.createGETRequest("/orders");
+			xhr.onreadystatechange = function() {
+			    if (xhr.readyState == 4 && xhr.status == 200) {
+			    	orderModel.orders = JSON.parse(xhr.responseText);
+			      	//model.orders = receivedOrders;
+			      	orderQueueView.init();
+					//cancelDialogView.init();
+					//addNewItemDialogView.init();
+					
+			    }
+			};
+			xhr.send();
+		},
+
+		requestMenu: function() {
+			var xhr = this.createGETRequest("/menu");
+			xhr.onreadystatechange = function() {
+			    if (xhr.readyState == 4 && xhr.status == 200) {
+			    	menuModel.menu = JSON.parse(xhr.responseText);
+			      	// orderQueueView.init();
+					//cancelDialogView.init();
+					//addNewItemDialogView.init();
+					leftSidePanelView.init();
+					
+			    }
+			};
+			xhr.send();
+		},
+
+		addNewItem: function(itemDetails) {
+			var xhr = this.createPOSTRequest("/addItemInMenu");
+			xhr.onreadystatechange = function() {
+			    if (xhr.readyState == 4 && xhr.status == 200) {
+			    	controller.addNewItemUtil(itemDetails);					
+			    }
+			};
+			xhr.send(JSON.stringify(itemDetails));
+		},
+
+		cancelOrder: function(orderDetails, currentOrder) {
+			var xhr = this.createPOSTRequest("/changeOrderStatus");
+			xhr.onreadystatechange = function() {
+			    if (xhr.readyState == 4 && xhr.status == 200) {
+			    	currentOrder.status = "Cancelled";
+			    	orderQueueView.removeOrderFromOrderQueue(currentOrder.orderId);					
+			    }
+			};
+			xhr.send(JSON.stringify(orderDetails));
+		},
+
+		onOrderComplete: function(orderDetails) {
+			var xhr = this.createPOSTRequest("/changeOrderStatus");
+			xhr.onreadystatechange = function() {
+			    if (xhr.readyState == 4 && xhr.status == 200) {
+			    	controller.clickedItemOrder.status = "Completed";
+			    	orderQueueView.removeOrderFromOrderQueue(controller.clickedItemOrder.orderId);
+			    	deliveredOrdersView.addDeliveredOrder(controller.clickedItemOrder);					
+			    }
+			};
+			xhr.send(JSON.stringify(orderDetails));
+		},
+		onOrderInProgress: function(orderDetails) {
+			var xhr = this.createPOSTRequest("/changeOrderStatus");
+			xhr.onreadystatechange = function() {
+			    if (xhr.readyState == 4 && xhr.status == 200) {
+			    	controller.clickedItemOrder.status = "InProgress";
+			    	orderQueueView.changeRowBackgroundColor();			
+			    }
+			};
+			xhr.send(JSON.stringify(orderDetails));
+		},
+
+		changeItemStatus: function(itemDetails) {
+			var xhr = this.createPOSTRequest("/changeItemStatus");
+			xhr.onreadystatechange = function() {
+			    if (xhr.readyState == 4 && xhr.status == 200) {
+			    	controller.changeItemStatus(itemDetails);		
+			    }
+			};
+			xhr.send(JSON.stringify(itemDetails));
+
+		},
+		onItemAvailable: function(itemDetails) {
+			var xhr = this.createPOSTRequest("/changeItemStatus");
+			xhr.onreadystatechange = function() {
+			    if (xhr.readyState == 4 && xhr.status == 200) {
+			    	controller.onItemAvailableUtil(itemDetails);		
+			    }
+			};
+			xhr.send(JSON.stringify(itemDetails));
+		},
+	};
+	var controller = {
+		clickedItemOrder: null,
+
+		init: function() {
+			//services.temp();
+			services.requestOrders();
+			services.requestMenu();
+			// orderQueueView.init();
+			cancelDialogView.init();
+			addNewItemDialogView.init();
+			// leftSidePanelView.init();
+		},
+
+
+		getAllOrders: function() {
+			return orderModel.getAllOrders();
+		},
+		getOrdersForQueue: function() {
+			var orders = this.getAllOrders();
+			var queueOrders = orders.map(function(order){
+				var mappedOrder = {
+					uid: order.uid,
+					orderId:order.orderId,
+					orderNo:order.orderNo,
+					orderName: order.orderName,
+					table: order.table,
+					itemName: order.itemName,
+					quantity: order.quantity,
+					itemDescription: order.itemDescription,
+					status: order.status
+				}
+				return mappedOrder;
+			});
+			return queueOrders;
+		},
+		setcurrentOrder: function(index) {
+			this.clickedItemOrder = orderModel.orders[index];
+		},
+		getAllSortedOrders: function() {
+			return orderModel.getAllSortedOrders();
+		},
+
+		getClubbedOrders: function() {	
+			return orderModel.getClubbedOrders();	
+		},
+
+		getmenu: function() {
+			return menuModel.menu;
+		},
+
+		getmenuCategories: function() {
+			return menuModel.getCategoryNames();
+		},
+		addNewItem: function(categoryName, itemName, itemImg) {
 			var itemDetails = {
 				categoryName: categoryName,
 				itemName: itemName,
 				itemImg: itemImg
 			};
-			this.updateServer(itemDetails, 'addItemInMenu');
-			//console.log(menu);
+			services.addNewItem(itemDetails);
 		},
-
-		updateServer: function(object, url) {
-			var xhttp = new XMLHttpRequest();
-			xhttp.open("POST", "http://localhost:3000/"+url, true);
-			//xhttp.setRequestHeader('X-REquested-With', 'XMLHttpRequest');
-			xhttp.onreadystatechange = function() {
-			    if (xhttp.readyState == 4 && xhttp.status == 200) {
-			      console.log(xhttp.responseText);
-			    }
-			};
-			xhttp.send(JSON.stringify(object));
-
+		getCategoryItemsForCategory: function(category) {
+			var reqCategory =  menuModel.findCategoryByName(category);
+			var items = reqCategory.categoryItems.map(function(item) {
+				var itemObject = {
+					itemName: item.itemName,
+					available: item.available
+				}
+				return itemObject;
+			});
+			return items;
 		},
-		cancelOrder: function(reason) {
+		addNewItemUtil: function(itemDetails) {
+			var categoryName = itemDetails.categoryName;
+			var itemName = itemName;
+			var itemImg = itemImg;
+			var menu = menuModel.getmenu();
+			var selectedCategory = menuModel.findCategoryByName(categoryName);
+			if(selectedCategory) {
+				var item = {itemName: itemName, available: true, imgSrc: itemImg};					
+				selectedCategory.categoryItems.push(item);
+				leftSidePanelView.addItemInCategory(item.itemName, item.available, selectedCategory.category);
+			}
+			else {
+				var menuCategory = {category: categoryName, categoryItems:[{itemName: itemName, available: true, imgSrc: itemImg}]};
+				menu.push(menuCategory);
+				var categoryItems = this.getCategoryItemsForCategory(menuCategory.category);
+				leftSidePanelView.addCategoryInSidePanel(menuCategory.category, categoryItems);
+			}
 			
-			this.clickedItemOrder.status = "Cancelled";
-			this.updateServer({reason: reason, status:"Cancelled", orderId: this.clickedItemOrder.orderId, ntStatus: 'Cancelled'},'changeOrderStatus');
-			//console.log(model.orders);
-			//cancelDialogView.viewCancelDialog(orderId);
+		},
+
+		// updateServer: function(object, url) {
+		// 	var xhttp = new XMLHttpRequest();
+		// 	xhttp.open("POST", "http://localhost:3000/"+url, true);
+		// 	//xhttp.setRequestHeader('X-REquested-With', 'XMLHttpRequest');
+		// 	xhttp.onreadystatechange = function() {
+		// 	    if (xhttp.readyState == 4 && xhttp.status == 200) {
+		// 	      console.log(xhttp.responseText);
+		// 	    }
+		// 	};
+		// 	xhttp.send(JSON.stringify(object));
+
+		// },
+		cancelOrder: function(reason) {
+			services.cancelOrder({reason: reason, status:"Cancelled", orderId: this.clickedItemOrder.orderId, ntStatus: 'Cancelled'}, this.clickedItemOrder);
 		},
 
 		orderCompleted: function() {
-			this.clickedItemOrder.status = "Completed";
-			this.updateServer({reason: null, status:"Completed", orderId: this.clickedItemOrder.orderId, ntStatus: 'Done'},'changeOrderStatus');
-			deliveredOrdersView.addDeliveredOrder(this.clickedItemOrder);
+			//this.clickedItemOrder.status = "Completed";
+			services.onOrderComplete({reason: null, status:"Completed", orderId: this.clickedItemOrder.orderId, ntStatus: 'Done'});
+			
 
 			//console.log(model.orders);
 		},
 
 		orderInProgress: function() {
-			this.clickedItemOrder.status = "InProgress";
-			this.updateServer({reason: null,status:"InProgress", orderId: this.clickedItemOrder.orderId, ntStatus: 'InProgress'},'changeOrderStatus');
+			//this.clickedItemOrder.status = "InProgress";
+			services.onOrderInProgress({reason: null,status:"InProgress", orderId: this.clickedItemOrder.orderId, ntStatus: 'InProgress'});
 			//console.log(model.orders);
 		},
 
 		onItemUnavailable: function(categoryName, itemName) {
-			var menu = this.getmenu();
-			var selectedCategory = menu.find(function(category) {
-				if(category.category === categoryName) {
-					return category;
-				}
-			});
+			services.changeItemStatus({category: categoryName, item:itemName, status: false});
+		},
 
+		changeItemStatus: function(itemDetails) {
+			var categoryName = itemDetails.category;
+			var itemName = itemDetails.item;
+			var selectedCategory = menuModel.findCategoryByName(categoryName);
 			var selectedItem = selectedCategory.categoryItems.find(function(item) {
 				if(item.itemName === itemName) {
 					return item;
 				}
 			});
 			selectedItem.available = false;
-			this.updateServer({category: categoryName, item:itemName, status: false},'changeItemStatus');
+			
 			var orders = this.getAllOrders();
 			orders.forEach(function(order){
 				if(order.itemName === itemName) {
-					order.status = "Cancelled";
-					controller.updateServer({reason:"Item not available", status:"Cancelled", orderId: order.orderId, ntStatus: 'Cancelled'},'changeOrderStatus')
+					services.cancelOrder({reason: "Item not available", status:"Cancelled", orderId: order.orderId, ntStatus: 'Cancelled'},order);
 				}
 			});
 			//console.log(menu);
 
-			orderQueueView.removeUnavailableOrders(selectedItem.itemName);
-
+			//orderQueueView.removeUnavailableOrders(selectedItem.itemName);
 		},
 
 		onItemAvailable: function(categoryName, itemName) {
-			var menu = this.getmenu();
-			var selectedCategory = menu.find(function(category) {
-				if(category.category === categoryName) {
-					return category;
-				}
-			});
+			services.onItemAvailable({category: categoryName, item:itemName, status: true});
+		},
+		onItemAvailableUtil: function(itemDetails) {
+			var categoryName = itemDetails.category;
+			var itemName = itemDetails.item;
+			//var menu = this.getmenu();
+			var selectedCategory = menuModel.findCategoryByName(categoryName);
 
 			var selectedItem = selectedCategory.categoryItems.find(function(item) {
 				if(item.itemName === itemName) {
@@ -192,8 +322,6 @@ $(function() {
 				}
 			});
 			selectedItem.available = true;
-			this.updateServer({category: categoryName, item:itemName, status: true},'changeItemStatus');
-			
 		},
 	};
 
@@ -204,7 +332,7 @@ $(function() {
 	var orderQueueView = {
 		init: function() {
 			// console.log(this);
-			var orders = controller.getAllOrders();
+			var orders = controller.getOrdersForQueue();
 			orders.forEach(this.addOrderInQueue);
 			$("#clubOrdersCheck").change(function(){
 				if($(this).is(":checked")) {
@@ -220,9 +348,48 @@ $(function() {
 					//orderQueueView.showInProgressOrders(orders);
 				}
 			});
+			$("#queueTable").click(function(e){
+				if(e.target.id.indexOf("cancel")===0) {
+					var index = Number(e.target.id.split("_")[1]);
+					controller.setcurrentOrder(index);
+					cancelDialogView.viewCancelDialog();
+				}
+				else if(e.target.id.indexOf("done")===0) {
+					var index = Number(e.target.id.split("_")[1]);
+					controller.setcurrentOrder(index);
+					controller.orderCompleted();
+				}
+				else if(e.target.id.indexOf("progress")===0) {
+					var index = Number(e.target.id.split("_")[1]);
+					controller.setcurrentOrder(index);
+					controller.orderInProgress();
+				}
+				// $(cancelIcon).click(function(currenttableRow, order) {
+				// 	return function() {
+				// 		controller.clickedItemOrder = order;
+				// 		controller.orderInProgress();
+						
+				// 	}
+				// }(tableRow,order));
+				// $(doneIcon).click(function(currenttableRow, order) {
+				// 	return function() {
+				// 		controller.clickedItemOrder = order;
+						
+				// 		//$("#"+controller.clickedItemOrder.orderId).remove();
+				// 	}
+				// }(tableRow, order));
+				// $(inProgressIcon).click(function(tableRow, order){
+				// 	return function() {
+				// 		controller.clickedItemOrder = order;
+				// 		controller.orderInProgress();
+						
+						
+				// 	}
+				// }(tableRow, order));	
+			});
 		},
 
-		addOrderInQueue: function(order) {
+		addOrderInQueue: function(order,index) {
 			// var that = this;
 			// console.log(this);
 			if(!(order.status === "Completed" || order.status === "Cancelled")) {
@@ -236,46 +403,31 @@ $(function() {
 				// tableRow.append($("<td>", {class: "do__table-data box-border do__table-cell_quantity", text: order.quantity}));
 				$(tableRow).html(tdString);
 				var actionsCell = $("<td>", {class: "do__table-data box-border do__table-cell_actions"});
-				var inProgressIcon = $("<i>", {class: "fa fa-clock-o fa-2x"});
-				var doneIcon = $("<i>", {class: "fa fa-check-circle-o fa-2x"});
-				var cancelIcon = $("<i>", {class: "fa fa-times fa-2x"});
+				var inProgressIcon = $("<i>", {class: "fa fa-clock-o fa-2x",id: "progress_"+index});
+				var doneIcon = $("<i>", {class: "fa fa-check-circle-o fa-2x", id: "done_"+index});
+				var cancelIcon = $("<i>", {class: "fa fa-times fa-2x", id: "cancel_"+index});
 				tableRow.append(actionsCell.append(inProgressIcon, doneIcon, cancelIcon));
 				$("#queueTable").append(tableRow);
 				if(order.status === "InProgress") {
 					$(tableRow).css('background-color', "#dff0d8");
 				}
-				$(cancelIcon).click(function(currenttableRow, order) {
-					return function() {
-						controller.clickedItemOrder = order;
-						cancelDialogView.viewCancelDialog();
-						
-					}
-				}(tableRow,order));
-				$(doneIcon).click(function(currenttableRow, order) {
-					return function() {
-						controller.clickedItemOrder = order;
-						$("#"+controller.clickedItemOrder.orderId).remove();
-						controller.orderCompleted();
-						
-
-					}
-				}(tableRow, order));
-				$(inProgressIcon).click(function(tableRow, order){
-					return function() {
-						controller.clickedItemOrder = order;
-						tableRow.css('background-color', "#dff0d8");
-						controller.orderInProgress();
-					}
-				}(tableRow, order));
+				
 			}
 			
 		
 		},
 
-		removeUnavailableOrders: function(itemName) {
-			$("#queueTable :contains('"+itemName+"')").remove();
+		removeOrderFromOrderQueue: function(orderId) {
+			$("#"+orderId).remove();
+			cancelDialogView.closeCancelDialog();			
 		},
 
+		// removeUnavailableOrders: function(itemName) {
+		// 	$("#queueTable :contains('"+itemName+"')").remove();
+		// },
+		changeRowBackgroundColor: function() {
+			$("#"+controller.clickedItemOrder.orderId).css('background-color', "#dff0d8");
+		},
 		// showInProgressOrders: function(orders) {
 		// 	orders.forEach(function(order){
 		// 		if(order.status === "InProgress") {
@@ -305,10 +457,9 @@ $(function() {
 		cancelOrder: function() {
 			var reason = $("input:radio[name='reasons']:checked").val();
 			console.log(reason);
-			cancelDialogView.closeCancelDialog();
-			$("#"+controller.clickedItemOrder.orderId).remove();
-			controller.cancelOrder(reason);
+			controller.cancelOrder(reason);	
 		},
+		
 	};
 
 	var addNewItemDialogView = {
@@ -403,9 +554,10 @@ $(function() {
 			$("#c-button--slide-left").click(this.openSidePanel);
 			$("#c-mask").click(this.closeSidePanel);
 			$("#cancelButton").click(this.closeSidePanel);
-			var menu = controller.getmenu();
-			menu.forEach(function(menuCategory) {
-				leftSidePanelView.addCategoryInSidePanel(menuCategory);
+			var menuCategories = controller.getmenuCategories();
+			menuCategories.forEach(function(menuCategory) {
+				var items = controller.getCategoryItemsForCategory(menuCategory);
+				leftSidePanelView.addCategoryInSidePanel(menuCategory, items);
 				
 			});
 			$(document).on('change', '#c-menu--slide-left input:checkbox',(function() {
@@ -420,10 +572,10 @@ $(function() {
 				}
 			}));
 		},
-		addCategoryInSidePanel: function(menuCategory) {
-			$("#categoryList").append($("<li>", {class:"c-menu__item", text: menuCategory.category}));
-			var categoryItemsList = ($("<ul>",{id: menuCategory.category}));
-			menuCategory.categoryItems.forEach(function(item) {
+		addCategoryInSidePanel: function(category, categoryItems) {
+			$("#categoryList").append($("<li>", {class:"c-menu__item", text: category}));
+			var categoryItemsList = ($("<ul>",{id: category}));
+			categoryItems.forEach(function(item) {
 				var categoryItem = $("<li>",{class:"c-menu__product"});
 				var checkboxItem = $("<input>",{class: "c-menu__product__check", type:"checkbox", value: item.itemName, checked: item.available});
 				categoryItem.append(checkboxItem);
@@ -434,10 +586,10 @@ $(function() {
 			$("#categoryList").append(categoryItemsList);
 		},
 
-		addItemInCategory: function(item, selectedCategory) {
+		addItemInCategory: function(itemName, available, selectedCategory) {
 			var categoryItem = $("<li>",{class:"c-menu__product"});
-			categoryItem.append($("<input>",{class: "c-menu__product__check", type:"checkbox", value: item.itemName, checked: item.available}));
-			categoryItem.append(document.createTextNode(item.itemName));
+			categoryItem.append($("<input>",{class: "c-menu__product__check", type:"checkbox", value: itemName, checked: available}));
+			categoryItem.append(document.createTextNode(itemName));
 			$("#"+selectedCategory).append(categoryItem);
 		},
 
