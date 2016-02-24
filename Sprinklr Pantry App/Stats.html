@@ -2,14 +2,27 @@
 <head>
 	<title>Statistics</title>
 	<script type="text/javascript" src="Graph.js" async ></script>
+    <link rel="stylesheet" href="graphStyles.css">
 </head>
 <body>
-	<h2 id="bargraph1 heading">Consumption of Maggi</h2>
-	<div id="BarGraph1"></div>
-	<!-- <h2 id="bargraph1 heading"> -->
-	<h2>
-		Eggs
-	</h2>
-	<div id ="BarGraph2"></div>
-</body>
+    <div id="wrap">
+      <ul class="navbar" id="categories">
+         <li><a href="#">StasHome</a></li>
+         <li><a href="#">Bevarages</a>
+            <ul id="Bevarages">
+            </ul>         
+        </li>
+        <li><a href="#">Snacks</a>
+            <ul id="Snacks">
+            </ul>         
+         </li>
+      </ul>
+    </div>
+    <h2  id="head">Consumption </h2>
+    <div id="BarGraph1">
+    </div>
+    <h2> CompareConsumptionGraph</h2>
+    <div id ="BarGraph2">
+    </div>
+    </body>
 </html>
