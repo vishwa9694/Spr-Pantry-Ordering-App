@@ -340,16 +340,16 @@ s-q-e__img{
     
 }
 .s-q__status--Queued{
-    background-color: yellow;
-    color:black;
+    background-color: #FCB322;
+    color:white;
 }
 
 .s-q__status--InProgress{
-    background-color: green;
+    background-color: #A9D86E;
     color:white;
 }
 .s-q__status--Cancelled{
-    background-color: red;
+    background-color: #FF6C60;
     color:white;
 }
 
