@@ -234,7 +234,7 @@ display:inline-block;
  //   border:2px solid red;
 height:100%;
 }
-.menu{
+.menu_container{
     height:100%;
     display: inline-block;
     float: left;
@@ -533,7 +533,7 @@ box-sizing: border-box;
     display: block;
     width:100%;
   }
-  .menu{
+  .menu_container{
     
     display: block;
     width:100%;

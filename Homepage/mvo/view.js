@@ -1,80 +1,223 @@
-var orderTable, itemList, notificationPanel;
+var orderTableDivel, orderTableel, itemList, notificationPanel;
 
-var orderQueueView = {
+var viewQueue = {
 	init: function(){
-		orderTable = document.getElementById("orderTable");
+		orderTableDivel = document.getElementById("orderTableDiv");
+		orderTableel = document.getElementById("orderTable");
+	},
 
-		this.render();
-		var item = document.getElementsByClassName("s-q__table")[0];
-		item.onclick = function(e) {
-			e = e || event
+	addEventListener: function(){
+		var tableel = document.getElementById("orderTable");
+		tableel.onclick = function(e){
+			e = e || event;
 			var target = e.target;
-			orderView.addItem(target);
+			controllerQueue.deleteOrder(target.id.split("_")[1]);
 		}
 	},
 
-	render: function(){
-		var row, nameCell;
-		var orders = orderQueueController.getOrders(); 
-		orders.forEach(function(order){
-				nameCell = order.orderName;
-				row = document.createElement("tr");
-				row.innerHTML = '<td class="s-q__name"><i class="fa fa-times-circle fa-lg" id="cancel" ></i><span>'+ nameCell+'<span></td><td class="s-q__item">' + order.itemName + '</td><td class="s-q__status--'+order.status+'">'+order.status+' </td>';
-				row.setAttribute('class','s-q-e__item '+order.uid);
-				row.setAttribute('id',order.orderId);
-
-			orderTable.appendChild(row);
-
-		});
-	},
-};
-
-var itemListView = {
-	init: function(){
-		itemList = document.getElementById("itemList");
-		this.render();
-		var item = document.getElementsByClassName("menu__container")[0];
-		item.onclick = function(e) {
-			e = e || event
-			var target = e.target;
-			if(e.target.id.indexOf("addItem")>=0)
-				orderView.addItem(target);
-		}
+	orderRowInnerHTML: function(personName, itemName, status, orderID){
+		return '<td class="s-q__name"><i class="fa fa-times-circle fa-lg" id="cancel_'+orderID+'" ></i><span>'+ personName+'<span></td><td class="s-q__item">' + itemName + '</td><td class="s-q__status--'+status+'">'+status+' </td>';
 	},
 
-	render: function(){
-		var header, subList, citemDiv;
-		var itemIndex = 0;
-		var items = itemListController.getItems();
-		items.forEach(function(item){
-			header = document.createElement("div");
-			header.setAttribute('class', 'category');
-			header.innerHTML = item.category;
-			itemList.appendChild(header);
-			subList = document.createElement("div");
-			subList.setAttribute('class', 'category__itemsList');
-			item.categoryItems.forEach(function(citem){
-				var outer = document.createElement("div");
-				outer.setAttribute('class', 'outer');
-				var available = document.createElement("div");
-				available.innerHTML = "Not available";
-				
-				citemDiv = document.createElement("div");
+	addOrder: function(personName, itemName, status, orderID, userID){
+		rowel = document.createElement("tr");
+		rowel.innerHTML = viewQueue.orderRowInnerHTML(personName, itemName, status);
+		rowel.setAttribute('class', 's-q-e__item '+userID);
+		rowel.setAttribute('id', orderID);
+		orderTableel.appendChild(rowel);
+	},
 
-				citemDiv.innerHTML = '<img src=' + citem.imgSrc + ' class="category__item__image"><div class="category__item__hover"><i class="fa fa-plus-circle fa-3x ci__hover__click" id="addItem_'+itemIndex+'"></i></div><div class="category__item__name" data-type=' +citem.available+ ' id="tileName_'+itemIndex+'">' + citem.itemName + '</div>';
-                citemDiv.setAttribute('class', 'category__item');
-                outer.appendChild(citemDiv);
-                outer.appendChild(available);
-                available.setAttribute('class','available_'+citem.available);
-                subList.appendChild(outer);
-
-                //outer.appendChild(citemDiv);
-				itemIndex++;
-			});
-			itemList.appendChild(subList);
-		});
+	ordertableReset: function(){
+		orderTableDivel.innerHTML = " ";
+		orderTableel = document.createElement("table");
+		orderTableel.innerHTML = '<tr class="s-q-e__heading"><th>Name</th><th>Order</th><th>Status</th></tr>';
+		orderTableel.setAttribute('class','s-q__table');
+		orderTableel.setAttribute('id', 'orderTable');
+		orderTableDivel.appendChild(orderTableel);	
 	}
 };
+
+
+
+
+var itemListView = {
+    init: function(){
+        var menu;
+        this.menuList = document.getElementById("menuList");
+        console.log("   asfa:"+this.menuList);
+        //this.render();
+        menu = document.getElementsByClassName("menu")[0];
+        menu.onclick = function(e) {
+            e = e || event
+            var target = e.target;
+            if(e.target.id.indexOf("addItem")>=0)
+                orderView.addItem(target);
+        }
+    },
+ 
+    addCategory: function(categoryName){
+        this.category=document.createElement("div");
+        this.category.className="category";
+        this.category.id=categoryName;
+        this.header = document.createElement("div");
+        this.header.className="category__header";
+        this.header.id=categoryName+"__header"
+        this.header.innerHTML = categoryName;
+        console.log("category header id "+this.header.id);
+        this.categoryContainer = document.createElement("div");
+        this.categoryContainer.className="category__container";
+        this.categoryContainer.id=categoryName+"__container";
+        this.menuList.appendChild(this.category);
+        this.category.appendChild(this.header);
+        this.category.appendChild(this.categoryContainer);
+    },
+    addItem:function(iName,iAvailable,iImg,categoryHeader,catIndex,iIndex){
+        itemDiv=document.createElement("div");
+        itemDiv.className="category__item";
+        itemDiv.innerHTML = '<img src=' + iImg + ' class="category__item__image">' +
+            '<div class="category__item__hover">' +
+            '<i class="fa fa-plus-circle fa-3x ci__hover__click" id="addItem_'+iIndex+'"></i>' +
+            '</div>' +
+            '<div class="category__item__name" data-type=' +iAvailable+ ' id="tileName_'+iIndex+'">' + iName + '</div>';
+        console.log("Cat header "+categoryHeader);
+        var categoryDiv=document.getElementById(categoryHeader+"__container");
+        console.log("categoryheader id is "+categoryDiv.id);
+        categoryDiv.appendChild(itemDiv);
+      
+       
+    }
+};
+var viewMenuOrder = {
+    
+    init: function(){
+        menuOrderTableel = document.getElementById("menuOrder");
+    },
+    addEventListener: function(){
+        menuOrderTableel.onclick = function(e){
+            e = e || event;
+            var target = e.target;
+            controllerMenuOrder.deleteItem(target.id.split("_")[1]);
+        }
+    },
+    itemNameInnerHTML: function(name){
+        return '<i class="fa fa-times-circle fa-lg" id="cancel_'+name+'"></i><span>' + name + '</span>';
+    },
+    addButtonInnerHTML: function(name){
+        return '<button classs="add-but" id="add_'+name+'"></button>';
+    },  
+    removeButtonInnerHTML: function(name){
+        return '<button classs="add-but" id="sub_'+name+'"></button>';
+    },
+    specialInstructionsInnerHTML: function(name){
+        return '<input class="in_comment" placeholder="Special Instructions" id="special_"'+name+'/>';
+    },
+    addItem: function(name){
+        var menuOrderRowel = document.createElement("tr");
+        menuOrderRowel.setAttribute('class', 's-o-e__item');
+        
+        // Name Adder
+        var menuOrderItemNameel = document.createElement("td");
+        menuOrderItemNameel.setAttribute('class', 'item__name');
+        menuOrderItemNameel.innerHTML = viewMenuOrder.itemNameInnerHTML(name);
+        menuOrderRowel.appendChild(menuOrderItemName);
+        //Add button adder
+        var menuOrderAddel = document.createElement("td");
+        menuOrderAddel.innerHTML = viewMenuOrder.addButtonInnerHTML(name);
+        menuOrderRowel.appendChild(menuOrderAddel);
+        //Add the quantity
+        var menuOrderQtyel = document.createElement("td");
+        menuOrderQtyel.setAttribute('class', 'item-qty');
+        menuOrderQtyel.setAttribute('id', 'qty_'+name);
+        menuOrderQtyel.innerHTML = "1";
+        menuOrderRowel.appendChild(menuOrderQtyel);
+        //Remove an item (Subtract the quantity)
+        var menuOrderRemel = document.createElement("td");
+        menuOrderRemel.innerHTML = viewMenuOrder.removeButtonInnerHTML(name);
+        menuOrderRowel.appendChild(menuOrderRemel);
+        //Special Instructions
+        var menuOrderSplInsel = document.createElement("td");
+        menuOrderSplInsel.setAttribute('class', 'item-comment');
+        menuOrderSplInsel.innerHTML = viewMenuOrder.specialInstructionsInnerHTML(name);
+        menuOrderRowel.appendChild(menuOrderSplInsel);
+        //Finally adding the row to the table
+        menuOrderTableel.appendChild(menuOrderRowel);
+    },
+    showQuantity: function(itemName, quantity){
+        var quantityel = document.getElementById("qty_"+itemName);
+        quantityel.innerHTML = quantity;
+    },
+    menuOrderReset: function(){
+    }
+};
+
+
+
+
+
+
+
+
+var headerView = {
+	init: function(){
+		var notification=document.getElementsByClassName("header-notification")[0];
+		var notiBody = document.getElementsByClassName("notificationBody")[0];
+		notification.onclick=function()
+		{
+			console.log("Yello");
+			document.getElementById("notification_count").style="visibility:hidden";
+
+			if (notiBody.style.display == 'block')
+			{
+				notiBody.style.display = 'none';
+
+			}
+			else
+			{
+				notiBody.style.display = 'block';
+				event.stopPropagation();
+			}
+		};
+		$(document).click( function(){
+			notiBody.style.display = 'none';
+			notificationsController.setTrue();
+			document.getElementById("notificationBody").innerHTML = " ";
+			notificationsView.init();
+		});
+	},
+};
+
+var notificationsView = {
+	init: function(){
+		notificationPanel = document.getElementById("notificationBody");
+		this.render();
+	},
+
+	render: function(){
+		var notifications, nli, nreason;
+		notifications =  notificationsController.getNotifications();
+		notifications.forEach(function(nitem){
+			if(!nitem.read) {
+				nli = document.createElement("li");
+				nli.setAttribute('id', 'notification--' + nitem.status);
+				nli.innerHTML = "Your Item : " + nitem.item + " is " + nitem.status + ". "
+				if (nitem.reason) {
+					nreason = document.createElement("div");
+					nreason.setAttribute('id', 'notification__cancel__reason');
+					nreason.innerHTML = nitem.reason;
+					nli.appendChild(nreason);
+				}
+				notificationPanel.appendChild(nli);
+			}
+		});
+
+	}
+};
+
+
+
+
+
+/*
 
 var orderView = {
 	addItem: function(target){
@@ -205,71 +348,8 @@ var orderView = {
 
 };
 
+*/
 
 
 
 
-
-
-
-
-
-
-
-
-
-var headerView = {
-	init: function(){
-		var notification=document.getElementsByClassName("header-notification")[0];
-		var notiBody = document.getElementsByClassName("notificationBody")[0];
-		notification.onclick=function()
-		{
-			console.log("Yello");
-			document.getElementById("notification_count").style="visibility:hidden";
-
-			if (notiBody.style.display == 'block')
-			{
-				notiBody.style.display = 'none';
-
-			}
-			else
-			{
-				notiBody.style.display = 'block';
-				event.stopPropagation();
-			}
-		};
-		$(document).click( function(){
-			notiBody.style.display = 'none';
-			notificationsController.setTrue();
-			document.getElementById("notificationBody").innerHTML = " ";
-			notificationsView.init();
-		});
-	},
-};
-
-var notificationsView = {
-	init: function(){
-		notificationPanel = document.getElementById("notificationBody");
-		this.render();
-	},
-
-	render: function(){
-		var notifications, nli, nreason;
-		notifications =  notificationsController.getNotifications();
-		notifications.forEach(function(nitem){
-			if(!nitem.read) {
-				nli = document.createElement("li");
-				nli.setAttribute('id', 'notification--' + nitem.status);
-				nli.innerHTML = "Your Item : " + nitem.item + " is " + nitem.status + ". "
-				if (nitem.reason) {
-					nreason = document.createElement("div");
-					nreason.setAttribute('id', 'notification__cancel__reason');
-					nreason.innerHTML = nitem.reason;
-					nli.appendChild(nreason);
-				}
-				notificationPanel.appendChild(nli);
-			}
-		});
-
-	}
-};

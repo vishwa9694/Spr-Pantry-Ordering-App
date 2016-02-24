@@ -66,16 +66,30 @@
         <div class="menu_container">
 
             <div class="menu" id="menuList">
+                 <div class="category">
+                    <div class="category__header">Cereals</div>
+                        <div class="category__container">
+                            <div class="category__item">
+                                <img src="https://media.licdn.com/mpr/mpr/p/6/005/074/33e/3952002.jpg" class="category__item__image">
+                                <div class="category__item__hover">
+                                    <i class="fa fa-plus-circle fa-3x ci__hover__click" id="addItem_0" data-available="true"></i>
+                                </div>
+                                <div class="category__item__name" id="tileName_0">
+                                    Corn Flakes
+                                </div>
+                            </div>
+                        </div>
+                </div>
 
             </div>
-        </div>
+</div>
             <div class="side_element">
         <div class="side__queue">
         <div class="s-q__heading">
                Food Queue
         </div>
         <div class="s-q__element">
-        <div class="s-q__div" id="orderTableDiv">
+        <div class="s-q__div">
             <table class="s-q__table" id="orderTable">
 
                 <tr class="s-q-e__heading">
@@ -99,8 +113,8 @@
                     Your Orders
                 </div>
                 <div class="s-o__element">
-                    <div class="s-o__table"id="menuOrderDiv">
-                        <table class="s-o-e__table" id="menuOrder"><!--  table -->
+                    <div class="s-o__table">
+                        <table class="s-o-e__table"><!--  table -->
                         </table>
                     </div>
 
@@ -120,7 +134,7 @@
             </div>
     </div>
         
-        <script src="https://apis.google.com/js/platform.js?onload='login.renderButton' async defer></script>
+        <script src="https://apis.google.com/js/platform.js?onload=renderButton" async defer></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
         
         <script type="text/javascript" src="services.js"></script>
