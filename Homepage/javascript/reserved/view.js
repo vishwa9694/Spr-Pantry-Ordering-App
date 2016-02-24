@@ -1,9 +1,11 @@
-var orderTableDivel, orderTableel, itemList, notificationPanel;
+
+var orderTableDivel, orderTableel, menuOrderTableel, menuTableDivel, tableNoel, itemList, notificationPanel;
 
 var viewQueue = {
 	init: function(){
 		orderTableDivel = document.getElementById("orderTableDiv");
 		orderTableel = document.getElementById("orderTable");
+		this.addEventListener();
 	},
 
 	addEventListener: function(){
@@ -11,6 +13,7 @@ var viewQueue = {
 		tableel.onclick = function(e){
 			e = e || event;
 			var target = e.target;
+			console.log("delete:"+target.id.split("_")[1]);
 			controllerQueue.deleteOrder(target.id.split("_")[1]);
 		}
 	},
@@ -21,7 +24,7 @@ var viewQueue = {
 
 	addOrder: function(personName, itemName, status, orderID, userID){
 		rowel = document.createElement("tr");
-		rowel.innerHTML = viewQueue.orderRowInnerHTML(personName, itemName, status);
+		rowel.innerHTML = viewQueue.orderRowInnerHTML(personName, itemName, status,orderID);
 		rowel.setAttribute('class', 's-q-e__item '+userID);
 		rowel.setAttribute('id', orderID);
 		orderTableel.appendChild(rowel);
@@ -50,8 +53,11 @@ var itemListView = {
         menu.onclick = function(e) {
             e = e || event
             var target = e.target;
-            if(e.target.id.indexOf("addItem")>=0)
-                orderView.addItem(target);
+            var itemName=target.id.split("_")[1];
+            if(e.target.id.indexOf("Click")>=0)
+            {
+                controllerMenuOrder.updateItem(itemName);
+            }
         }
     },
  
@@ -76,7 +82,7 @@ var itemListView = {
         itemDiv.className="category__item";
         itemDiv.innerHTML = '<img src=' + iImg + ' class="category__item__image">' +
             '<div class="category__item__hover">' +
-            '<i class="fa fa-plus-circle fa-3x ci__hover__click" id="addItem_'+iIndex+'"></i>' +
+            '<i class="fa fa-plus-circle fa-3x ci__hover__click" id="Click_'+iName+'"></i>' +
             '</div>' +
             '<div class="category__item__name" data-type=' +iAvailable+ ' id="tileName_'+iIndex+'">' + iName + '</div>';
         console.log("Cat header "+categoryHeader);
@@ -85,31 +91,47 @@ var itemListView = {
         categoryDiv.appendChild(itemDiv);
       
        
-    }
-};
+    }  
+       
+    };
 var viewMenuOrder = {
     
     init: function(){
         menuOrderTableel = document.getElementById("menuOrder");
+        tableNoel = document.getElementById("user-table");
+        menuTableDivel = document.getElementById("menuOrderDiv");
+     	this.addEventListener();   
     },
     addEventListener: function(){
         menuOrderTableel.onclick = function(e){
             e = e || event;
             var target = e.target;
-            controllerMenuOrder.deleteItem(target.id.split("_")[1]);
+            console.log(target.id.split("_")[1]);
+            console.log("classname"+target.className);
+            if (target.className == "fa fa-times-circle fa-lg itemcancel"){
+                controllerMenuOrder.deleteItem(target.id.split("_")[1]);
+            }
+            else if (target.id.split("_")[0] == "add"){
+                controllerMenuOrder.increaseQuant(target.id.split("_")[1]);
+            	
+            }
+            else if (target.id.split("_")[0] == "sub"){
+                controllerMenuOrder.decreaseQuant(target.id.split("_")[1]);
+            }
+            
         }
     },
     itemNameInnerHTML: function(name){
-        return '<i class="fa fa-times-circle fa-lg" id="cancel_'+name+'"></i><span>' + name + '</span>';
+        return '<i class="fa fa-times-circle fa-lg itemcancel" id="cancel_'+name+'"></i><span>' + name + '</span>';
     },
     addButtonInnerHTML: function(name){
-        return '<button classs="add-but" id="add_'+name+'"></button>';
+        return '<button classs="add-but adder" id="add_'+name+'">+</button>';
     },  
     removeButtonInnerHTML: function(name){
-        return '<button classs="add-but" id="sub_'+name+'"></button>';
+        return '<button classs="add-but sub" id="sub_'+name+'">-</button>';
     },
     specialInstructionsInnerHTML: function(name){
-        return '<input class="in_comment" placeholder="Special Instructions" id="special_"'+name+'/>';
+        return '<input class="in_comment" placeholder="Special Instructions" id="special_'+name+'"/>';
     },
     addItem: function(name){
         var menuOrderRowel = document.createElement("tr");
@@ -119,7 +141,7 @@ var viewMenuOrder = {
         var menuOrderItemNameel = document.createElement("td");
         menuOrderItemNameel.setAttribute('class', 'item__name');
         menuOrderItemNameel.innerHTML = viewMenuOrder.itemNameInnerHTML(name);
-        menuOrderRowel.appendChild(menuOrderItemName);
+        menuOrderRowel.appendChild(menuOrderItemNameel);
         //Add button adder
         var menuOrderAddel = document.createElement("td");
         menuOrderAddel.innerHTML = viewMenuOrder.addButtonInnerHTML(name);
@@ -146,7 +168,22 @@ var viewMenuOrder = {
         var quantityel = document.getElementById("qty_"+itemName);
         quantityel.innerHTML = quantity;
     },
-    menuOrderReset: function(){
+   menuOrderReset: function(){
+        menuTableDivel.innerHTML = " ";
+        menuOrderTableel = document.createElement("table");
+        menuOrderTableel.setAttribute('class', 's-o-e__table');
+        menuOrderTableel.setAttribute('id', 'menuOrder');
+        menuTableDivel.appendChild(menuOrderTableel);
+    	this.addEventListener();
+    },
+    getTable: function(){
+    	console.log("Table"+tableNoel.value);
+        return tableNoel.value;
+    },
+	getDescription: function(name){
+		console.log("special_"+name);
+		console.log("domelement: "+document.getElementById("special_"+name));
+        return document.getElementById("special_"+name).value;
     }
 };
 
@@ -212,144 +249,5 @@ var notificationsView = {
 
 	}
 };
-
-
-
-
-
-/*
-
-var orderView = {
-	addItem: function(target){
-		console.log("target is"+target);
-		var getID=target.id.split("_");
-		console.log(getID);
-		getID=getID[1];
-		console.log("idddd__"+getID);
-
-		var iName=document.getElementById("tileName_"+getID);
-		console.log(iName);
-		var flag=iName.getAttribute("data-type");
-		console.log("data-type"+flag);
-		if(flag==="true")
-		{
-			if(!document.getElementById("s-o-e__item_"+getID))
-			{	
-				var order_table=document.getElementsByClassName("s-o-e__table")[0]; // get table class
-				var order_row=document.createElement("tr");	// create row
-				order_row.id="s-o-e__item_"+getID; // row id
-				order_row.className="s-o-e__item" // row class
-				order_table.appendChild(order_row); // add row to table
-
-				/// row col1 itemName
-
-				var itemName =document.createElement("td"); //col1
-				itemName.className="item__name";
-				itemName.id="item__name_"+getID;
-				console.log(target.parentNode.parentNode);
-				var tName=document.getElementById("tileName_"+getID);// get name of the tile
-				//console.log("chudu "+tName);
-				var cross=document.createElement("i");
-				cross.className="fa fa-times-circle fa-lg";
-				itemName.appendChild(cross);
-				cross.id="delete_"+getID;
-				var s = document.createElement("span");
-				//console.log("tile name "+tName.innerHTML);
-				s.innerHTML = tName.innerHTML;
-				//console.log("peru "+s.innerHTML);
-				itemName.appendChild(s);
-
-				// row col2 add button
-				var itemAdd =document.createElement("td");//col2
-				itemAdd.className="add";
-				var increase=document.createElement("button");
-				increase.innerHTML="+";
-				increase.className="add-but";
-				increase.id="add_"+getID;
-				itemAdd.appendChild(increase) ;// add Add button to the col
-
-				// row col3  quantity
-				var qty =document.createElement("td");//col3
-				qty.className="item-qty";
-				qty.id="item-qty_"+getID;
-				qty.innerHTML=1;
-
-				// row col4 minus button
-				var itemMinus =document.createElement("td"); //col4
-				itemMinus.className="decre";
-				var decrease=document.createElement("button");
-				decrease.innerHTML="-";
-				decrease.className="add-but";
-				decrease.id="decre_"+getID;
-				itemMinus.appendChild(decrease);
-
-				// row col5 special instructions
-				var comment =document.createElement("td");
-				comment.className="item-comment";
-				var comment_input =document.createElement("input");
-				comment_input.className="in_comment";
-				comment_input.placeholder="Special Instructions";
-				comment_input.id="in-comment_"+getID;
-				comment.appendChild(comment_input); // add input to col
-
-				// add cols to row
-				order_row.appendChild(itemName);
-				order_row.appendChild(itemAdd);
-				order_row.appendChild(qty);
-				order_row.appendChild(itemMinus);
-				order_row.appendChild(comment);
-				orderView.delRow(getID);
-				orderView.incItem(getID);
-				orderView.decreItem(getID);
-
-			}
-
-			else{
-				document.getElementById("item-qty_"+getID).innerHTML=parseInt(document.getElementById("item-qty_"+getID).innerHTML)+1;
-			}
-		}
-
-		else if(flag==="false"){
-			//alert("item not available");
-		}
-	},
-
-	delRow: function(getID){
-		var del=document.getElementById("delete_"+getID);
-		del.onclick=function()
-		{
-			var child = document.getElementById("s-o-e__item_"+getID);
-			child.parentNode.removeChild(child);
-		}
-	},
-
-	incItem: function(getID){
-		var plus=document.getElementById("add_"+getID);
-		plus.onclick=function(){
-
-			document.getElementById("item-qty_"+getID).innerHTML=parseInt(document.getElementById("item-qty_"+getID).innerHTML)+1;
-		};
-	},
-
-	decreItem: function(getID){
-		var minus=document.getElementById("decre_"+getID);
-		minus.onclick=function(){
-			if(parseInt(document.getElementById("item-qty_"+getID).innerHTML)>1)
-			{
-				document.getElementById("item-qty_"+getID).innerHTML=parseInt(document.getElementById("item-qty_"+getID).innerHTML)-1;
-			}
-			else if(parseInt(document.getElementById("item-qty_"+getID).innerHTML)==1){
-				var child = document.getElementById("s-o-e__item_"+getID);
-				child.parentNode.removeChild(child);
-			}
-		};
-	}
-
-
-};
-
-*/
-
-
 
 

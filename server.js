@@ -123,8 +123,7 @@ var menu = [
 var notifications = [];
 http.createServer(function(req, res) {
 
-	//console.log(${req.method} request for ${req.url});
-
+	console.log(req.url);
 	if (req.url === "/admin") {
 		fs.readFile("./AdminPage/admin.html", "UTF-8", function(err, html) {
 			res.writeHead(200, {"Content-Type": "text/html"});
@@ -149,18 +148,18 @@ http.createServer(function(req, res) {
 		fileStream.pipe(res);
 
 	} 
-	else if (req.url === '/style.css') {
+	else if (req.url === '/style/style.css') {
 
 		//var cssPath = path.join(__dirname, 'AdminPage', req.url);
-		fs.readFile("./Homepage/style.css", "UTF-8", function(err, css) {
+		fs.readFile("./Homepage/style/style.css", "UTF-8", function(err, css) {
             res.writeHead(200, {"Content-Type": "text/css"});
             
                 res.end(css);
                 });
 
 	} 
-	else if(req.url === "/front_styles.css") {
-		fs.readFile("./Homepage/front_styles.css", "UTF-8", function(err, css) {
+	else if(req.url === "/style/front_styles.css") {
+		fs.readFile("./Homepage/style/front_styles.css", "UTF-8", function(err, css) {
             res.writeHead(200, {"Content-Type": "text/css"});
             res.end(css);
                 });
@@ -183,9 +182,10 @@ http.createServer(function(req, res) {
 
 		fileStream.pipe(res);
 	} 
-		else if (req.url==="/services.js"||req.url==="/login.js" || req.url==="/items_tiles.js" || req.url === "/mvo/controller.js" || req.url === "/mvo/view.js" || req.url === "/mvo/model.js") {
+		else if (req.url==="/javascript/Item.js"||req.url==="/javascript/login.js" || req.url==="/javascript/main.js" || req.url === "/javascript/menuOrder.js" || req.url === "/javascript/notification.js" || req.url === "/javascript/Order.js"|| req.url === "/javascript/services.js") {
 			console.log(req.url);
 		var jsPath = path.join(__dirname, 'Homepage', req.url);
+            //console.log(jsPath);
 		var fileStream = fs.createReadStream(jsPath, "UTF-8");
 
 		res.writeHead(200, {"Content-Type": "text/js"});
@@ -324,11 +324,8 @@ http.createServer(function(req, res) {
 		{
 			var order="";
         if (req.method == 'POST') {
-           // console.log("[200] " + req.method + " to " + req.url);
 
             req.on('data', function(chunk) {
-                //console.log("Received body data:");
-               // console.log(chunk.toString());
                 order+=chunk;
             });
 

@@ -1,15 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <link rel="stylesheet" type="text/css" href="style.css">
-<link rel="stylesheet" type="text/css" href="front_styles.css">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
-  
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
- <!--   <script src="https://apis.google.com/js/platform.js"></script>-->
-    <script src="login.js"></script>
-    <!--<script src="items_tiles.js" async></script>-->
-    <meta name="google-signin-client_id" content="791398864475-kr8tci2q4cbkpg10on2s7j2g536qh3ls.apps.googleusercontent.com">
+    <link rel="stylesheet" type="text/css" href="style/style.css">
+    <link rel="stylesheet" type="text/css" href="style/front_styles.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+  <meta name="google-signin-client_id" content="791398864475-kr8tci2q4cbkpg10on2s7j2g536qh3ls.apps.googleusercontent.com">
 
 </head>
 <body>
@@ -54,7 +49,7 @@
 
                 <span id="ui__name" class="ui__name"></span>
             </div>
-            <div class="sign-out" onClick="signOut()">
+            <div class="sign-out" onClick="login.signOut()">
             <i class="fa fa-sign-out"></i>
             </div>
 
@@ -111,7 +106,7 @@
                         <input class ="user-input"id="user-table"placeholder="Table Number">
 
                         <div class="submit">
-                            <button class="submit-btn" onclick="sendorder()">
+                            <button class="submit-btn" onclick="controllerMenuOrder.submit()">
                                 Submit</button>
                         </div>
 
@@ -120,13 +115,15 @@
             </div>
     </div>
         
-        <script src="https://apis.google.com/js/platform.js?onload='login.renderButton' async defer></script>
+        <script src="javascript/login.js"></script>
+        <script src="https://apis.google.com/js/platform.js?onload=renderButton" async defer></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
         
-        <script type="text/javascript" src="services.js"></script>
-        <script type="text/javascript" src="mvo/model.js"></script>
-        <script type="text/javascript" src="mvo/view.js"></script>
-        <script type="text/javascript" src="mvo/controller.js"></script>
-
+        <script type="text/javascript" src="javascript/services.js"></script>
+        <script type="text/javascript" src="javascript/Order.js"></script>
+        <script type="text/javascript" src="javascript/notification.js"></script>
+        <script type="text/javascript" src="javascript/menuOrder.js"></script>
+        <script type="text/javascript" src="javascript/Item.js"></script>
+        <script type="text/javascript" src="javascript/main.js"></script>
 </body>
 </html>
