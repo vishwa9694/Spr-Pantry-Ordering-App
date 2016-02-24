@@ -5,7 +5,7 @@ var orderQueueView = {
 		orderTable = document.getElementById("orderTable");
 
 		this.render();
-		var item = document.getElementsByClassName("menu__container")[0];
+		var item = document.getElementsByClassName("s-q__table")[0];
 		item.onclick = function(e) {
 			e = e || event
 			var target = e.target;
