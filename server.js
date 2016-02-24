@@ -183,7 +183,7 @@ http.createServer(function(req, res) {
 
 		fileStream.pipe(res);
 	} 
-		else if (req.url==="/login.js" || req.url==="/items_tiles.js" || req.url === "/mvo/controller.js" || req.url === "/mvo/view.js" || req.url === "/mvo/model.js") {
+		else if (req.url==="/services.js"||req.url==="/login.js" || req.url==="/items_tiles.js" || req.url === "/mvo/controller.js" || req.url === "/mvo/view.js" || req.url === "/mvo/model.js") {
 			console.log(req.url);
 		var jsPath = path.join(__dirname, 'Homepage', req.url);
 		var fileStream = fs.createReadStream(jsPath, "UTF-8");
