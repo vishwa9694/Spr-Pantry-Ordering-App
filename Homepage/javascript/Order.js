@@ -11,12 +11,16 @@ var controllerQueue={
 renderQueue:function(){
 	console.log("this is model order "+modelOrder.order);
 	viewQueue.init();
+	var displaycancel=false;
 	if(!(modelOrder.order===null||modelOrder.order===undefined))
 	{
 		modelOrder.order.forEach(function(orderItem,index){
-		console.log(orderItem.orderId);
-			viewQueue.addOrder(orderItem.orderName,orderItem.itemName,orderItem.status,orderItem.orderId)
-		
+		console.log("uid:"+orderItem.uid+" loginid:"+login.user.id);
+		if(orderItem.uid===login.user.id)
+			displaycancel=true;
+		console.log(displaycancel);
+		viewQueue.addOrder(orderItem.orderName,orderItem.itemName,orderItem.status,orderItem.orderId,orderItem.uid,displaycancel);
+		displaycancel=false;
 	});
 	}
 	else
@@ -69,16 +73,21 @@ var viewQueue = {
 		}
 	},
 
-	orderRowInnerHTML: function(personName, itemName, status, orderID){
-		return '<td class="s-q__name"><i class="fa fa-times-circle fa-lg" id="cancel_'+orderID+'" ></i><span>'+ personName+'<span></td><td class="s-q__item">' + itemName + '</td><td class="s-q__status--'+status+'">'+status+' </td>';
+	orderRowInnerHTML: function(personName, itemName, status, orderID,displaycancel){
+		console.log("cancel button:"+displaycancel);
+		if(displaycancel)
+			return '<td class="s-q__name"><i class="fa fa-times-circle fa-lg" id="cancel_'+orderID+'" ></i><span>'+ personName+'<span></td><td class="s-q__item">' + itemName + '</td><td class="s-q__status--'+status+'">'+status+' </td>';
+		else
+			return '<td class="s-q__name"><span>'+ personName+'<span></td><td class="s-q__item">' + itemName + '</td><td class="s-q__status--'+status+'">'+status+' </td>';			
 	},
 
-	addOrder: function(personName, itemName, status, orderID, userID){
+	addOrder: function(personName, itemName, status, orderID, userID,displaycancel){
 		rowel = document.createElement("tr");
-		rowel.innerHTML = viewQueue.orderRowInnerHTML(personName, itemName, status,orderID);
+		rowel.innerHTML = viewQueue.orderRowInnerHTML(personName, itemName, status,orderID,displaycancel);
 		rowel.setAttribute('class', 's-q-e__item '+userID);
 		rowel.setAttribute('id', orderID);
 		orderTableel.appendChild(rowel);
+		
 	},
 
 	ordertableReset: function(){

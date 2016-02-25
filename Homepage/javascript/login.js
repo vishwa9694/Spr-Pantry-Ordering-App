@@ -31,6 +31,8 @@
             login.signOut();
             alert("You must use a sprinklr.com id to login");
         }
+        controllerMain.init();
+
     };
     function onFailure(error) {
         console.log(error);
