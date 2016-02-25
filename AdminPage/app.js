@@ -14,10 +14,14 @@ $(function() {
 		getClubbedOrders: function() {
 			if(!("clubbedOrders" in orderModel)) {
 				var orders = this.getAllSortedOrders();
+
+				//todo: remove this
 				var tempOrders = orders.map(function(order) {
 					return order;
 				});
 				var clubbedOrders = [];
+
+				//todo: reduce
 				while(tempOrders.length > 0) {
 					var item = tempOrders[0].itemName;
 					console.log("inloop");
@@ -40,7 +44,7 @@ $(function() {
 		findCategoryByName: function(categoryName) {
 			var requiredCategory = this.menu.find(function(category) {
 				if(category.category === categoryName) {
-					return category;
+					return category;    //todo:
 				}
 			});
 			return requiredCategory;
@@ -53,126 +57,29 @@ $(function() {
 			return categoryNames;
 		},
 	};
-	var services = {
-		createGETRequest: function(url) {
-			var xhttp = new XMLHttpRequest();
-			xhttp.open("GET", url, true);
-			return xhttp;
-		},
-
-		createPOSTRequest: function(url) {
-			var xhttp = new XMLHttpRequest();
-			xhttp.open("POST", url, true);
-			return xhttp;
-		},
-
-		requestOrders: function() {
-			var xhr = this.createGETRequest("/orders");
-			xhr.onreadystatechange = function() {
-			    if (xhr.readyState == 4 && xhr.status == 200) {
-			    	orderModel.orders = JSON.parse(xhr.responseText);
-			      	//model.orders = receivedOrders;
-			      	orderQueueView.init();
-					//cancelDialogView.init();
-					//addNewItemDialogView.init();
-					
-			    }
-			};
-			xhr.send();
-		},
-
-		requestMenu: function() {
-			var xhr = this.createGETRequest("/menu");
-			xhr.onreadystatechange = function() {
-			    if (xhr.readyState == 4 && xhr.status == 200) {
-			    	menuModel.menu = JSON.parse(xhr.responseText);
-			      	// orderQueueView.init();
-					//cancelDialogView.init();
-					//addNewItemDialogView.init();
-					leftSidePanelView.init();
-					
-			    }
-			};
-			xhr.send();
-		},
-
-		addNewItem: function(itemDetails) {
-			var xhr = this.createPOSTRequest("/addItemInMenu");
-			xhr.onreadystatechange = function() {
-			    if (xhr.readyState == 4 && xhr.status == 200) {
-			    	controller.addNewItemUtil(itemDetails);					
-			    }
-			};
-			xhr.send(JSON.stringify(itemDetails));
-		},
-
-		cancelOrder: function(orderDetails, currentOrder) {
-			var xhr = this.createPOSTRequest("/changeOrderStatus");
-			xhr.onreadystatechange = function() {
-			    if (xhr.readyState == 4 && xhr.status == 200) {
-			    	currentOrder.status = "Cancelled";
-			    	orderQueueView.removeOrderFromOrderQueue(currentOrder.orderId);					
-			    }
-			};
-			xhr.send(JSON.stringify(orderDetails));
-		},
-
-		onOrderComplete: function(orderDetails) {
-			var xhr = this.createPOSTRequest("/changeOrderStatus");
-			xhr.onreadystatechange = function() {
-			    if (xhr.readyState == 4 && xhr.status == 200) {
-			    	controller.clickedItemOrder.status = "Completed";
-			    	orderQueueView.removeOrderFromOrderQueue(controller.clickedItemOrder.orderId);
-			    	deliveredOrdersView.addDeliveredOrder(controller.clickedItemOrder);					
-			    }
-			};
-			xhr.send(JSON.stringify(orderDetails));
-		},
-		onOrderInProgress: function(orderDetails) {
-			var xhr = this.createPOSTRequest("/changeOrderStatus");
-			xhr.onreadystatechange = function() {
-			    if (xhr.readyState == 4 && xhr.status == 200) {
-			    	controller.clickedItemOrder.status = "InProgress";
-			    	orderQueueView.changeRowBackgroundColor();			
-			    }
-			};
-			xhr.send(JSON.stringify(orderDetails));
-		},
-
-		changeItemStatus: function(itemDetails) {
-			var xhr = this.createPOSTRequest("/changeItemStatus");
-			xhr.onreadystatechange = function() {
-			    if (xhr.readyState == 4 && xhr.status == 200) {
-			    	controller.changeItemStatus(itemDetails);		
-			    }
-			};
-			xhr.send(JSON.stringify(itemDetails));
-
-		},
-		onItemAvailable: function(itemDetails) {
-			var xhr = this.createPOSTRequest("/changeItemStatus");
-			xhr.onreadystatechange = function() {
-			    if (xhr.readyState == 4 && xhr.status == 200) {
-			    	controller.onItemAvailableUtil(itemDetails);		
-			    }
-			};
-			xhr.send(JSON.stringify(itemDetails));
-		},
-	};
+	
 	var controller = {
 		clickedItemOrder: null,
 
 		init: function() {
 			//services.temp();
-			services.requestOrders();
-			services.requestMenu();
+			services.createRequest("GET","/orders",this.onOrdersReceived);
+			services.createRequest("GET","/menu", this.onMenuReceived);
 			// orderQueueView.init();
 			cancelDialogView.init();
 			addNewItemDialogView.init();
 			// leftSidePanelView.init();
 		},
 
+		onOrdersReceived: function(orders) {
+			orderModel.orders = JSON.parse(orders);
+			orderQueueView.init();
+		},
 
+		onMenuReceived: function(menu) {
+			menuModel.menu = JSON.parse(menu);
+			leftSidePanelView.init();
+		},
 		getAllOrders: function() {
 			return orderModel.getAllOrders();
 		},
@@ -218,7 +125,7 @@ $(function() {
 				itemName: itemName,
 				itemImg: itemImg
 			};
-			services.addNewItem(itemDetails);
+			services.createRequest("POST","/addItemInMenu",this.addNewItemSuccess,itemDetails);
 		},
 		getCategoryItemsForCategory: function(category) {
 			var reqCategory =  menuModel.findCategoryByName(category);
@@ -226,15 +133,15 @@ $(function() {
 				var itemObject = {
 					itemName: item.itemName,
 					available: item.available
-				}
+				};
 				return itemObject;
 			});
 			return items;
-		},
-		addNewItemUtil: function(itemDetails) {
+		},//todo
+		addNewItemSuccess: function(response, itemDetails) {
 			var categoryName = itemDetails.categoryName;
-			var itemName = itemName;
-			var itemImg = itemImg;
+			var itemName = itemDetails.itemName;
+			var itemImg = itemDetails.itemImg;
 			var menu = menuModel.getmenu();
 			var selectedCategory = menuModel.findCategoryByName(categoryName);
 			if(selectedCategory) {
@@ -245,7 +152,7 @@ $(function() {
 			else {
 				var menuCategory = {category: categoryName, categoryItems:[{itemName: itemName, available: true, imgSrc: itemImg}]};
 				menu.push(menuCategory);
-				var categoryItems = this.getCategoryItemsForCategory(menuCategory.category);
+				var categoryItems = controller.getCategoryItemsForCategory(menuCategory.category);
 				leftSidePanelView.addCategoryInSidePanel(menuCategory.category, categoryItems);
 			}
 			
@@ -264,28 +171,39 @@ $(function() {
 
 		// },
 		cancelOrder: function(reason) {
-			services.cancelOrder({reason: reason, status:"Cancelled", orderId: this.clickedItemOrder.orderId, ntStatus: 'Cancelled'}, this.clickedItemOrder);
+			services.createRequest("POST", "/changeOrderStatus",this.cancelOrderSuccess, {reason: reason, status:"Cancelled", orderId: this.clickedItemOrder.orderId, ntStatus: 'Cancelled'});
 		},
-
+		cancelOrderSuccess: function() {
+			controller.clickedItemOrder.status = "Cancelled";
+			orderQueueView.removeOrderFromOrderQueue(controller.clickedItemOrder.orderId);
+		},
 		orderCompleted: function() {
 			//this.clickedItemOrder.status = "Completed";
-			services.onOrderComplete({reason: null, status:"Completed", orderId: this.clickedItemOrder.orderId, ntStatus: 'Done'});
+			services.createRequest("POST","/changeOrderStatus",this.onOrderCompleteSuccess,{reason: null, status:"Completed", orderId: this.clickedItemOrder.orderId, ntStatus: 'Done'});
 			
 
 			//console.log(model.orders);
 		},
-
+		onOrderCompleteSuccess: function() {
+			controller.clickedItemOrder.status = "Completed";
+			orderQueueView.removeOrderFromOrderQueue(controller.clickedItemOrder.orderId);
+			deliveredOrdersView.addDeliveredOrder(controller.clickedItemOrder);
+		},
 		orderInProgress: function() {
 			//this.clickedItemOrder.status = "InProgress";
-			services.onOrderInProgress({reason: null,status:"InProgress", orderId: this.clickedItemOrder.orderId, ntStatus: 'InProgress'});
+			services.createRequest("POST", "/changeOrderStatus",this.orderInProgressSuccess,{reason: null,status:"InProgress", orderId: this.clickedItemOrder.orderId, ntStatus: 'InProgress'});
 			//console.log(model.orders);
+		},
+		orderInProgressSuccess: function() {
+			controller.clickedItemOrder.status = "InProgress";
+			orderQueueView.changeRowBackgroundColor();
 		},
 
 		onItemUnavailable: function(categoryName, itemName) {
-			services.changeItemStatus({category: categoryName, item:itemName, status: false});
+			services.createRequest("POST","/changeItemStatus",this.onItemUnavailableSuccess,{category: categoryName, item:itemName, status: false});
 		},
 
-		changeItemStatus: function(itemDetails) {
+		onItemUnavailableSuccess: function(response,itemDetails) {
 			var categoryName = itemDetails.category;
 			var itemName = itemDetails.item;
 			var selectedCategory = menuModel.findCategoryByName(categoryName);
@@ -296,21 +214,51 @@ $(function() {
 			});
 			selectedItem.available = false;
 			
-			var orders = this.getAllOrders();
+			var orders = controller.getAllOrders();
 			orders.forEach(function(order){
 				if(order.itemName === itemName) {
-					services.cancelOrder({reason: "Item not available", status:"Cancelled", orderId: order.orderId, ntStatus: 'Cancelled'},order);
+					controller.clickedItemOrder = order;
+					services.createRequest("POST", "/changeOrderStatus",controller.cancelOrderUnavailableItemSuccess,{reason: "Item not available", status:"Cancelled", orderId: order.orderId, ntStatus: 'Cancelled'});
+					//controller.cancelOrder();
 				}
 			});
-			//console.log(menu);
-
-			//orderQueueView.removeUnavailableOrders(selectedItem.itemName);
 		},
+
+		cancelOrderUnavailableItemSuccess: function(response, object) {
+			var order = controller.getAllOrders().find(function(ord){
+				return (ord.orderId === object.orderId)
+			});
+			order.status = "Cancelled";
+			orderQueueView.removeOrderFromOrderQueue(object.orderId);
+		},
+
+		
+		// changeItemStatus: function(itemDetails) {
+		// 	var categoryName = itemDetails.category;
+		// 	var itemName = itemDetails.item;
+		// 	var selectedCategory = menuModel.findCategoryByName(categoryName);
+		// 	var selectedItem = selectedCategory.categoryItems.find(function(item) {
+		// 		if(item.itemName === itemName) {
+		// 			return item;
+		// 		}
+		// 	});
+		// 	selectedItem.available = false;
+			
+		// 	var orders = this.getAllOrders();
+		// 	orders.forEach(function(order){
+		// 		if(order.itemName === itemName) {
+		// 			services.cancelOrder({reason: "Item not available", status:"Cancelled", orderId: order.orderId, ntStatus: 'Cancelled'},order);
+		// 		}
+		// 	});
+		// 	//console.log(menu);
+
+		// 	//orderQueueView.removeUnavailableOrders(selectedItem.itemName);
+		// },
 
 		onItemAvailable: function(categoryName, itemName) {
-			services.onItemAvailable({category: categoryName, item:itemName, status: true});
+			services.createRequest("POST","/changeItemStatus", this.onItemAvailableSuccess, {category: categoryName, item:itemName, status: true});
 		},
-		onItemAvailableUtil: function(itemDetails) {
+		onItemAvailableSuccess: function(response, itemDetails) {
 			var categoryName = itemDetails.category;
 			var itemName = itemDetails.item;
 			//var menu = this.getmenu();
@@ -336,7 +284,7 @@ $(function() {
 			orders.forEach(this.addOrderInQueue);
 			$("#clubOrdersCheck").change(function(){
 				if($(this).is(":checked")) {
-					$("#queueTable *").remove();
+					$("#queueTable *").remove(); //todo:
 					var clubbedOrders = controller.getClubbedOrders();
 					clubbedOrders.forEach(orderQueueView.addOrderInQueue);
 					//orderQueueView.showInProgressOrders(clubbedOrders);
@@ -348,6 +296,7 @@ $(function() {
 					//orderQueueView.showInProgressOrders(orders);
 				}
 			});
+			//TODO 
 			$("#queueTable").click(function(e){
 				if(e.target.id.indexOf("cancel")===0) {
 					var index = Number(e.target.id.split("_")[1]);
@@ -436,7 +385,7 @@ $(function() {
 		// 	});
 		// },
 	};
-
+//TODO inline styling
 	var cancelDialogView = {
 
 		init: function() {
@@ -568,7 +517,7 @@ $(function() {
 					controller.onItemUnavailable(categoryName, $(this).val());
 				}
 				else {
-					controller.onItemAvailable(categoryName, $(this).val());
+						controller.onItemAvailable(categoryName, $(this).val());
 				}
 			}));
 		},

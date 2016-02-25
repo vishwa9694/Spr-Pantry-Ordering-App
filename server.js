@@ -173,7 +173,7 @@ http.createServer(function(req, res) {
 
 		imgStream.pipe(res);
 
-	} else if (req.url==="/app.js") {
+	} else if (req.url==="/app.js" || req.url==="/services.js") {
 
 		var jsPath = path.join(__dirname, 'AdminPage', req.url);
 		var fileStream = fs.createReadStream(jsPath, "UTF-8");
