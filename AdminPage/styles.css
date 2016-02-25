@@ -197,6 +197,7 @@ body.has-active-menu{
      -moz-box-sizing: border-box;
           box-sizing: border-box;
     padding-top: 10px; 
+    padding-left: 8px;
     background-color: white;
 }
 
