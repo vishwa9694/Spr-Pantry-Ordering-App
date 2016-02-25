@@ -1,8 +1,11 @@
 
+var notificationPanel;
+
 var modelNotifications={
-init:function(){	
-	this.notification=serverServices.getNotifications();
-}
+
+	init:function(){	
+		this.notification=serverServices.getNotifications();
+	}
 
 };
 
@@ -24,28 +27,26 @@ var notificationsController = {
 };
 
 var notificationsView = {
+	
 	init: function(){
 		notificationPanel = document.getElementById("notificationBody");
-		this.render();
 	},
 
-	render: function(){
-		var notifications, nli, nreason;
-		notifications =  notificationsController.getNotifications();
-		notifications.forEach(function(nitem){
-			if(!nitem.read) {
-				nli = document.createElement("li");
-				nli.setAttribute('id', 'notification--' + nitem.status);
-				nli.innerHTML = "Your Item : " + nitem.item + " is " + nitem.status + ". "
-				if (nitem.reason) {
-					nreason = document.createElement("div");
-					nreason.setAttribute('id', 'notification__cancel__reason');
-					nreason.innerHTML = nitem.reason;
-					nli.appendChild(nreason);
-				}
-				notificationPanel.appendChild(nli);
-			}
-		});
+	addNotification: function(itemName, status, reason){
+		notificationel = document.createElement("li");
+		notificationel.setAttribute('id', 'notification--' + status);
+		notificationel.innerHTML = "Your Item : " + itemName + " is " + status + ". "
+		if (!reason){
+			notificationReasonDivel = document.createElement("div");
+			notificationReasonDivel.setAttribute('id', 'notification__cancel__reason');
+			notificationReasonDivel.innerHTML = reason;
+			notificationel.appendChild(notificationReasonDivel);
+		} 
+		notificationPanel.appendChild(notificationel);
+	}
 
+	showUnread = function(unreadMsgCount){
+		unreadNotificationel = document.getElementById("notification_count");
+		unreadNotificationel.innerHTML = unreadMsgCount; 
 	}
 };
