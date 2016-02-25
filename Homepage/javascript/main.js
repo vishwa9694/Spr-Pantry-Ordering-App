@@ -13,6 +13,9 @@ var controllerMain={
 		controllerMenuOrder.init();
 		viewMenuOrder.init();
 
+		modelNotifications.init();
+		controllerNotifications.init();
+
 
 
 

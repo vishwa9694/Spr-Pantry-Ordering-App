@@ -61,14 +61,24 @@ sendorder:function (order){
 
 
 },
-getNotifications: function() {		
+getNotifications: function(userid) {		
 		var xhttp = this.createPostRequest("getNotifications");		
-		xhttp.send(JSON.stringify({userId: user.id}));		
+		xhttp.send(JSON.stringify({userId:userid}));		
 		if (xhttp.readyState == 4 && xhttp.status == 200) {		
 			console.log(xhttp.responseText);	
-		 	 notifications = JSON.parse(xhttp.responseText);		
+		 	  return JSON.parse(xhttp.responseText);		
 			}		
+	},
+readNotification:function(userid){
+		var xhttp = this.createPostRequest("readNotification");		
+		xhttp.send(JSON.stringify({userId:userid}));		
+		if (xhttp.readyState == 4 && xhttp.status == 200) {		
+			console.log(xhttp.responseText);	
+		 	 // return JSON.parse(xhttp.responseText);		
+			}		
+
 	}
+
 
 
 

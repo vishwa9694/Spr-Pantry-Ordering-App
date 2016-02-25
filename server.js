@@ -173,7 +173,7 @@ http.createServer(function(req, res) {
 
 		imgStream.pipe(res);
 
-	} else if (req.url==="/app.js" || req.url==="/services.js") {
+	} else if (req.url==="/app.js") {
 
 		var jsPath = path.join(__dirname, 'AdminPage', req.url);
 		var fileStream = fs.createReadStream(jsPath, "UTF-8");
@@ -360,17 +360,38 @@ http.createServer(function(req, res) {
             	console.log(user);		
             	user = JSON.parse(user);		
             	var filter=notifications.filter(function(notification) {		
-            		return (notification.uid === user.userId && notification.read === false);		
+            		return (notification.uid === user.userId);		
             	});		
             	filter.forEach(function(notification) {		
             		console.log(notification.item);		
             	});		
-            	console.log()		
+            //	console.log()		
             	res.writeHead(200, "OK", {'Content-Type': 'text/json'});		
                 res.end(JSON.stringify(filter));		
             });		
 		}
-	
+	else if(req.url==="/readNotification")
+	{
+			var user = "";		
+			req.on('data', function(chunk) {		
+                user+=chunk;		
+            });		
+            req.on("end", function() {		
+            	console.log(user);		
+            	user = JSON.parse(user);		
+            	var filter=notifications.filter(function(notification) {		
+            		return (notification.uid === user.userId && notification.read === false);		
+            	});		
+            	filter.forEach(function(notification) {		
+            		notification.read=true;
+            		//console.log(notification.item);		
+            	});		
+            	console.log()		
+            	res.writeHead(200, "OK", {'Content-Type': 'text/json'});		
+                res.end();		
+            });		
+		
+	}
 		
 		else
 		{
