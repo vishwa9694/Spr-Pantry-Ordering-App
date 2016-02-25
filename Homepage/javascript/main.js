@@ -18,4 +18,4 @@ var controllerMain={
 
 	}
 };
-controllerMain.init();
+//controllerMain.init();

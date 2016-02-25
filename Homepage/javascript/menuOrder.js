@@ -40,6 +40,8 @@ var controllerMenuOrder={
     },
     addItem:function(itemname)
     {
+        if(modelmenuOrder.orderitemlist.length===0&&!(login.user.id===null||login.user.id===undefined))
+            viewMenuOrder.showsubmit();
         neworderitem=new Object();
         neworderitem.uid=login.user.id;
         neworderitem.orderName=login.user.name;
@@ -66,6 +68,9 @@ var controllerMenuOrder={
         console.log(modelmenuOrder.orderitemlist);
         viewMenuOrder.menuOrderReset();
         this.render();
+
+        if(modelmenuOrder.orderitemlist.length===0)
+            viewMenuOrder.hidesubmit();
         //modelmenuOrder.orderitem.length-=1;
 
     },
@@ -212,6 +217,17 @@ var viewMenuOrder = {
 		console.log("special_"+name);
 		console.log("domelement: "+document.getElementById("special_"+name));
         return document.getElementById("special_"+name).value;
+    },
+    showsubmit:function()
+    {
+        document.getElementsByClassName("user-form")[0].style.display="block";
+
+    },
+
+    hidesubmit:function()
+    {
+        document.getElementsByClassName("user-form")[0].style.display="none";
+
     }
 };
 
