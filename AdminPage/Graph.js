@@ -1,4 +1,6 @@
 (function(){
+
+
 var createCanvas=function (divName) {
 		var div = document.getElementById(divName);
 		var canvas = document.createElement('canvas');
@@ -272,6 +274,26 @@ CompareBarGraph.prototype.animateCompareBarGraph=function(newArr1,newArr2){
 	}
 	var timeoutId=setInterval(loop.bind(this),animationinterval);
 }
+function getLast7daysDate() {
+    var lastSevenDays=[];
+		for(var i=0;i<7;i++){
+			var toDay=new Date();
+			toDay.setDate(toDay.getDate()-i)
+			//console.log(toDay)
+			lastSevenDays.push(toDay.getDate() + '/' + (toDay.getMonth()+1))
+		}
+	return lastSevenDays;
+}
+function getLast7daysDateObject() {
+    var lastSevenDays=[];
+		for(var i=0;i<7;i++){
+			var toDay=new Date();
+			toDay.setDate(toDay.getDate()-i)
+			//console.log(toDay)
+			lastSevenDays.push(toDay.getDate() + '/' + (toDay.getMonth()+1)+'/'+toDay.getFullYear())
+		}
+	return lastSevenDays;
+}
 
 
 
@@ -292,66 +314,67 @@ var model={
 		orderNo:1,
 		orderName: "Vishwa",
 		table: 9,
-		itemName: "Cornflakes",
-		quantity: 1,
+		itemName: "Maggi",
+		quantity: 2,
 		itemDescription: "cold",
 		status: "Queued",
+		itemPlacedOn:"Thu Feb 25 2016 11:36:12 GMT+0530 (IST)",
+
 	},
 	{
 		uid: "113352049485747139246",
-		orderId:2,
+		orderId:1,
 		orderNo:1,
 		orderName: "Vishwa",
 		table: 9,
 		itemName: "Chocos",
-		quantity: 1,
+		quantity: 3,
 		itemDescription: "cold",
 		status: "Queued",
+		itemPlacedOn:"Wed Feb 24 2016 11:36:12 GMT+0530 (IST)",
+
 	},
 	{
 		uid: "113352049485747139246",
-		orderId:3,
-		orderNo:2,
-		orderName: "Anup",
+		orderId:1,
+		orderNo:1,
+		orderName: "Vishwa",
 		table: 9,
-		itemName: "Maggi",
-		quantity: 1,
-		itemDescription: "-",
+		itemName: "Coffee",
+		quantity: 4,
+		itemDescription: "cold",
 		status: "Queued",
+		itemPlacedOn:"Wed Feb 23 2016 11:36:12 GMT+0530 (IST)",
+
 	},
 	{
 		uid: "113352049485747139246",
-		orderId:4,
-		orderNo:2,
-		orderName: "Anup",
+		orderId:1,
+		orderNo:1,
+		orderName: "Vishwa",
 		table: 9,
-		itemName: "Tea",
-		quantity: 1,
+		itemName: "Bournvita",
+		quantity: 5,
 		itemDescription: "cold",
 		status: "Queued",
+		itemPlacedOn:"Wed Feb 22 2016 11:36:12 GMT+0530 (IST)",
+
 	},
 	{
 		uid: "113352049485747139246",
-		orderId:5,
-		orderNo:3,
-		orderName: "Akshat",
+		orderId:1,
+		orderNo:1,
+		orderName: "Vishwa",
 		table: 9,
-		itemName: "Cornflakes",
-		quantity: 1,
+		itemName: "Eggs",
+		quantity: 6,
 		itemDescription: "cold",
 		status: "Queued",
+		itemPlacedOn:"Wed Feb 21 2016 11:36:12 GMT+0530 (IST)",
+
 	},
-	{
-		uid: "113352049485747139246",
-		orderId:6,
-		orderNo:3,
-		orderName: "Akshat",
-		table: 9,
-		itemName: "Chocos",
-		quantity: 1,
-		itemDescription: "cold",
-		status: "Queued",
-	},
+	
+	
 
 	],
 
@@ -416,9 +439,6 @@ var model={
 	}
 	]
 }
-
-
-
 var controller={
 	init:function(){
 		model.init();
@@ -427,7 +447,7 @@ var controller={
 		update model from server
 
 		***/
-		controller.setBarGraphArray();
+		
 		graphView.init();
 		view.init();
 	},
@@ -435,29 +455,68 @@ var controller={
 		return model.orders
 	},
 	getOrdersQuantity:function(itemName,status){
-		return model.orders.reduce(function(x,y){
-			if(itemName==y.itemName && status==y.status) x=x+parseInt(y.quantity);
-		},0)
+		var x=0;
+		var arr=[0,0,0,0,0,0,0];
+
+		var toDay=new Date();
+		var lastSevenDays=[toDay,toDay-1,toDay-2,toDay-3,toDay-4,toDay-5,toDay-6]
+		
+		//dateObj.setDate(dateObj.getDate()-1);get previous day
+	 model.orders.forEach(function(y){
+			if(itemName==y.itemName && status==y.status) {	
+				x=x+parseInt(y.quantity);
+				//console.log(y.itemName +":"+y.status+":"+y.quantity+":"+x)
+			}
+		})
+		return x;
 	},
+	//getLastSevenDaysOrders(itemName,status)
 	getOrdersByType:function(itemName){
 		return model.orders.filter(function(x){
 			return x.itemName==itemName;
 		})
 	},
-	getAllDeliveredOrders:function(){
-		return model.orders.filter(function(x){
-			return x.status=="Delivered";
-		});
-	},
-	getAllCancelledOrders:function(){
-		return model.orders.filter(function(x){
-			return x.status=="cancelled";
-		});
-	},
-	getAllQueuedOrders:function(){
-		return model.orders.filter(function(x){
-			return x.status=="Queued";
-		});
+	addOrderToSimpleGraph:function(x){
+		var dayArr=getLast7daysDateObject();
+		var thatDay=new Date(x.itemPlacedOn);
+		var thatDayString=thatDay.getDate() + '/' + (thatDay.getMonth()+1)+'/'+thatDay.getFullYear();
+		for (var i=0;i<dayArr.length;i+=1){
+			if(thatDayString==dayArr[i]){
+				graphView.barValuesSimple[i]=graphView.barValuesSimple[i]+parseInt(x.quantity)
+				break;
+			}
+		}
+		
+	}
+	,
+	addOrderToDoubleGraph:function(index,x){
+		var dayArr=getLast7daysDateObject();
+		var thatDay=new Date(x.itemPlacedOn);
+		var thatDayString=thatDay.getDate() + '/' + (thatDay.getMonth()+1)+'/'+thatDay.getFullYear();
+		for (var i=0;i<dayArr.length;i+=1){
+			if(thatDayString==dayArr[i]){
+				if(index)
+				graphView.barValuesDouble.first[i]=graphView.barValuesDouble.first[i]+parseInt(x.quantity)
+				break;
+			}
+		}
+		
+	}
+	,
+	getOrderLastSevenDays:function(itemName){
+		
+		model.orders.filter(function(x){
+			if(x.itemName==itemName){
+				controller.addOrderToSimpleGraph(x);
+				if(x.status=="Delivered"){
+					controller.addOrderToDoubleGraph(0,x);
+				}
+				else {
+					controller.addOrderToDoubleGraph(1,x);
+				}
+			};
+		})
+		console.log(graphView.barValuesSimple)
 	},
 	getAllMenu:function(){
 		return model.menu;
@@ -468,6 +527,11 @@ var controller={
 	},
 	setBarGraphArray:function(){
 		console.log("setting Bar Graph Array");
+		//console.log(controller.getOrdersQuantity(model.currentGraph.categoryItem,"Queued"));
+		/****
+		***/
+		graphView.resetGraphBarArrays();
+		controller.getOrderLastSevenDays(model.currentGraph.categoryItem);
 	},
 	itemClicked:function(category,item){
 		controller.setCurrentGraph(category,item);
@@ -477,15 +541,12 @@ var controller={
 	},
 	day:["sun","mon","tue","wed","thur","fri","sat"]
 	,
-	setxLabelArray:function(){
-		var dayint=(new Date()).getDay();
-		var arr=controller.day.map(function(x,index){
-			return controller.day[(dayint+1+index)%7]
-		})
-		console.log(dayint+arr)
-		graphView.xAxisLabelArr=arr;
+	setxLabelArray:function(){	
+		
+		graphView.xAxisLabelArr=getLast7daysDate();
 		/**
-		setLastweek array
+		setBased on weeks array
+		last 4 weeks
 		**/
 	},
 
@@ -497,7 +558,7 @@ var view ={
 		this.snackElement=document.getElementById("Snacks");
 		view.render();
 	},
-	//need to change
+	//need to change this function 
 	updateMenu:function(){
 		var allMenu=controller.getAllMenu();
 		var BevarageItems=allMenu[0].categoryItems;
@@ -542,8 +603,10 @@ var view ={
        		view.updateMenu();
        	}
        }
+
  var graphView={
  		init:function(){
+ 			controller.setBarGraphArray();
  			controller.setxLabelArray();
  			graphView.render();
  		},
@@ -561,12 +624,17 @@ var view ={
 			bgraph2.update(graphView.barValuesDouble.first,graphView.barValuesDouble.second);
 			
        	},
-
+       	resetGraphBarArrays:function(){
+       		graphView.barValuesSimple=[0,0,0,0,0,0,0];
+       		graphView.barValuesDouble.first=[0,0,0,0,0,0,0];
+       		graphView.barValuesDouble.second=[0,0,0,0,0,0,0];
+       	}
+,
        	xAxisLabelArr:["sun","mon","tue","wed","thur","fri","sat"],
-       	barValuesSimple:[10,20,30,40,50,60,70],
+       	barValuesSimple:[0,0,0,0,0,0,0],
        	barValuesDouble:{
-       		first:[40,20,30,40,50,60,70],
-       		second:[10,20,30,40,50,60,70],
+       		first:[0,0,0,0,0,0,0],
+       		second:[0,0,0,0,0,0,0],
        	},
        };
  controller.init();
