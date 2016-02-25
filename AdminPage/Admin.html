@@ -5,6 +5,7 @@
 		<link rel="stylesheet" href="styles.css">
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 		<!-- <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"> -->
+
 	</head>
 	<body id="body">
 		<nav id="c-menu--slide-left" class="c-menu c-menu--slide-left">
@@ -32,8 +33,10 @@
 			</div>
 			<div class="header__text">
 				Orders Now
+				<div class="header__stats" id="StatsLink" > <span >Stats</span></div>
 				<div class="header__add-icon" title="Add New Items" id="openAddItemModal"><i class="fa fa-plus-circle fa-lg"></i></div>
 			</div>
+
 		</div>
 		<div class="main-section">
 			<div class="order-queue box-border">
@@ -148,5 +151,11 @@
 		</div>
 		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script> 
 		<script src="app.js"></script>
+		<script type="text/javascript">
+		document.getElementById("StatsLink").addEventListener("click", function(){
+			// window.alert("ds")
+			location.href="./stats.html"
+   			 					})
+		</script>
 	</body>
 </html>

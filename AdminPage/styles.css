@@ -249,6 +249,18 @@ body.has-active-menu{
 	padding-left: 20px;
 	padding-right: 20px;
 }
+.header__stats {
+	display: inline-block;
+	vertical-align: top;
+	color: #767676;
+	font-family: "Helvetica Neue";
+	width: calc(100% - 10% - 60px);
+	-webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+          box-sizing: border-box;
+	padding-left: 40px;
+	padding-right: 20px;
+}
 
 .header__text:after{
 	visibility: hidden;
