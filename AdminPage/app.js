@@ -12,27 +12,25 @@ $(function() {
 			return (order1.orderNo - order2.orderNo);
 		},
 		getClubbedOrders: function() {
-			if(!("clubbedOrders" in orderModel)) {
-				var orders = this.getAllSortedOrders();
+			var orders,filteredOrders,clubbedOrders,item;
+			orders = this.getAllSortedOrders();
+			filteredOrders = orders.filter(function(order) {
+				return (!(order.status.toLowerCase() === "completed" || order.status.toLowerCase() === "cancelled"));
+			});
+			clubbedOrders = [];
 
-				//todo: remove this
-				var tempOrders = orders.map(function(order) {
-					return order;
-				});
-				var clubbedOrders = [];
-
-				//todo: reduce
-				while(tempOrders.length > 0) {
-					var item = tempOrders[0].itemName;
-					console.log("inloop");
-					tempOrders.forEach(function(order, index) {
-						if(order.itemName === item) {
-							clubbedOrders.push(tempOrders.splice(index,1)[0]);
-						}
-					});	
-				}
-				orderModel.clubbedOrders = clubbedOrders;
+			//todo: reduce
+			while(filteredOrders.length > 0) {
+				item = filteredOrders[0].itemName;
+				console.log("inloop");
+				filteredOrders.forEach(function(order, index) {
+					if(order.itemName === item) {
+						clubbedOrders.push(filteredOrders.splice(index,1)[0]);
+					}
+				});	
 			}
+			orderModel.clubbedOrders = clubbedOrders;
+		
 			return orderModel.clubbedOrders;	
 		},
 	};
@@ -42,12 +40,10 @@ $(function() {
 			return this.menu;
 		},
 		findCategoryByName: function(categoryName) {
-			var requiredCategory = this.menu.find(function(category) {
-				if(category.category === categoryName) {
-					return category;    //todo:
-				}
+			return requiredCategory = this.menu.find(function(category) {
+				return (category.category === categoryName)
 			});
-			return requiredCategory;
+			//return requiredCategory;
 		},
 
 		getCategoryNames: function() {
@@ -84,9 +80,10 @@ $(function() {
 			return orderModel.getAllOrders();
 		},
 		getOrdersForQueue: function() {
-			var orders = this.getAllOrders();
-			var queueOrders = orders.map(function(order){
-				var mappedOrder = {
+			var orders;
+			orders = this.getAllOrders();
+			return orders.map(function(order){
+				return mappedOrder = {
 					uid: order.uid,
 					orderId:order.orderId,
 					orderNo:order.orderNo,
@@ -97,9 +94,9 @@ $(function() {
 					itemDescription: order.itemDescription,
 					status: order.status
 				}
-				return mappedOrder;
+				//return mappedOrder;
 			});
-			return queueOrders;
+			//return queueOrders;
 		},
 		setcurrentOrder: function(index) {
 			this.clickedItemOrder = orderModel.orders[index];
@@ -129,30 +126,31 @@ $(function() {
 		},
 		getCategoryItemsForCategory: function(category) {
 			var reqCategory =  menuModel.findCategoryByName(category);
-			var items = reqCategory.categoryItems.map(function(item) {
-				var itemObject = {
+			return reqCategory.categoryItems.map(function(item) {
+				return itemObject = {
 					itemName: item.itemName,
 					available: item.available
 				};
-				return itemObject;
+				//return itemObject;
 			});
-			return items;
-		},//todo
+			//return items;
+		},
 		addNewItemSuccess: function(response, itemDetails) {
-			var categoryName = itemDetails.categoryName;
-			var itemName = itemDetails.itemName;
-			var itemImg = itemDetails.itemImg;
-			var menu = menuModel.getmenu();
-			var selectedCategory = menuModel.findCategoryByName(categoryName);
+			var categoryName, itemName, itemImg, menu, selectedCategory, item, categoryItems, menuCategory;
+			categoryName = itemDetails.categoryName;
+			itemName = itemDetails.itemName;
+			itemImg = itemDetails.itemImg;
+			menu = menuModel.getmenu();
+			selectedCategory = menuModel.findCategoryByName(categoryName);
 			if(selectedCategory) {
-				var item = {itemName: itemName, available: true, imgSrc: itemImg};					
+				item = {itemName: itemName, available: true, imgSrc: itemImg};					
 				selectedCategory.categoryItems.push(item);
 				leftSidePanelView.addItemInCategory(item.itemName, item.available, selectedCategory.category);
 			}
 			else {
-				var menuCategory = {category: categoryName, categoryItems:[{itemName: itemName, available: true, imgSrc: itemImg}]};
+				menuCategory = {category: categoryName, categoryItems:[{itemName: itemName, available: true, imgSrc: itemImg}]};
 				menu.push(menuCategory);
-				var categoryItems = controller.getCategoryItemsForCategory(menuCategory.category);
+				categoryItems = controller.getCategoryItemsForCategory(menuCategory.category);
 				leftSidePanelView.addCategoryInSidePanel(menuCategory.category, categoryItems);
 			}
 			
@@ -204,17 +202,16 @@ $(function() {
 		},
 
 		onItemUnavailableSuccess: function(response,itemDetails) {
-			var categoryName = itemDetails.category;
-			var itemName = itemDetails.item;
-			var selectedCategory = menuModel.findCategoryByName(categoryName);
-			var selectedItem = selectedCategory.categoryItems.find(function(item) {
-				if(item.itemName === itemName) {
-					return item;
-				}
+			var categoryName, itemName, selectedCategory, selectedItem, orders;
+			categoryName = itemDetails.category;
+			itemName = itemDetails.item;
+			selectedCategory = menuModel.findCategoryByName(categoryName);
+			selectedItem = selectedCategory.categoryItems.find(function(item) {
+				return (item.itemName === itemName)
 			});
 			selectedItem.available = false;
 			
-			var orders = controller.getAllOrders();
+			orders = controller.getAllOrders();
 			orders.forEach(function(order){
 				if(order.itemName === itemName) {
 					controller.clickedItemOrder = order;
@@ -259,15 +256,13 @@ $(function() {
 			services.createRequest("POST","/changeItemStatus", this.onItemAvailableSuccess, {category: categoryName, item:itemName, status: true});
 		},
 		onItemAvailableSuccess: function(response, itemDetails) {
-			var categoryName = itemDetails.category;
-			var itemName = itemDetails.item;
+			var categoryName, itemName, selectedCategory, selectedItem;
+			categoryName = itemDetails.category;
+			itemName = itemDetails.item;
 			//var menu = this.getmenu();
-			var selectedCategory = menuModel.findCategoryByName(categoryName);
-
-			var selectedItem = selectedCategory.categoryItems.find(function(item) {
-				if(item.itemName === itemName) {
-					return item;
-				}
+			selectedCategory = menuModel.findCategoryByName(categoryName);
+			selectedItem = selectedCategory.categoryItems.find(function(item) {
+				return (item.itemName === itemName)
 			});
 			selectedItem.available = true;
 		},
@@ -280,18 +275,22 @@ $(function() {
 	var orderQueueView = {
 		init: function() {
 			// console.log(this);
-			var orders = controller.getOrdersForQueue();
+			var orders, clubbedOrders;
+			orders = controller.getOrdersForQueue();
 			orders.forEach(this.addOrderInQueue);
 			$("#clubOrdersCheck").change(function(){
+				$("#queueTable *").remove();
 				if($(this).is(":checked")) {
-					$("#queueTable *").remove(); //todo:
-					var clubbedOrders = controller.getClubbedOrders();
+					//$("#queueTable *").remove(); //todo:
+					clubbedOrders = controller.getClubbedOrders();
 					clubbedOrders.forEach(orderQueueView.addOrderInQueue);
 					//orderQueueView.showInProgressOrders(clubbedOrders);
 				}
 				else {
-					$("#queueTable *").remove();
-					//var clubbedOrders = controller.getClubbedOrders();
+					//$("#queueTable *").remove();
+					//clubbedOrders = controller.getClubbedOrders();
+					orders = controller.getOrdersForQueue();
+					console.log(orders);
 					orders.forEach(orderQueueView.addOrderInQueue);
 					//orderQueueView.showInProgressOrders(orders);
 				}
@@ -339,11 +338,13 @@ $(function() {
 		},
 
 		addOrderInQueue: function(order,index) {
+			var tableRow, tdString, actionsCell, inProgressIcon, doneIcon, cancelIcon; 
 			// var that = this;
 			// console.log(this);
 			if(!(order.status === "Completed" || order.status === "Cancelled")) {
-				var tableRow = $("<tr>", {class: "do__row", id: order.orderId});
-				var tdString = '<td class="do__table-data box-border do__table-cell_id">'+order.orderNo+'</td>'+'<td class="do__table-data box-border do__table-cell_name">'+order.orderName+'</td>'+'<td class="do__table-data box-border do__table-cell_order">'+order.itemName+'</td>'+'<td class="do__table-data box-border do__table-cell_description">'+order.itemDescription+'</td>'+'<td class="do__table-data box-border do__table-cell_table">'+order.table+'</td>'+'<td class="do__table-data box-border do__table-cell_quantity">'+order.quantity+'</td>';
+
+				tableRow = $("<tr>", {class: "do__row", id: order.orderId});
+				tdString = '<td class="do__table-data box-border do__table-cell_id">'+order.orderNo+'</td>'+'<td class="do__table-data box-border do__table-cell_name">'+order.orderName+'</td>'+'<td class="do__table-data box-border do__table-cell_order">'+order.itemName+'</td>'+'<td class="do__table-data box-border do__table-cell_description">'+order.itemDescription+'</td>'+'<td class="do__table-data box-border do__table-cell_table">'+order.table+'</td>'+'<td class="do__table-data box-border do__table-cell_quantity">'+order.quantity+'</td>';
 				// tableRow.append($("<td>", {class: "do__table-data box-border do__table-cell_id", text: order.orderNo}));
 				// tableRow.append($("<td>", {class: "do__table-data box-border do__table-cell_name", text: order.orderName}));
 				// tableRow.append($("<td>", {class: "do__table-data box-border do__table-cell_order", text: order.itemName}));
@@ -351,10 +352,10 @@ $(function() {
 				// tableRow.append($("<td>", {class: "do__table-data box-border do__table-cell_table", text: order.table}));
 				// tableRow.append($("<td>", {class: "do__table-data box-border do__table-cell_quantity", text: order.quantity}));
 				$(tableRow).html(tdString);
-				var actionsCell = $("<td>", {class: "do__table-data box-border do__table-cell_actions"});
-				var inProgressIcon = $("<i>", {class: "fa fa-clock-o fa-2x",id: "progress_"+index});
-				var doneIcon = $("<i>", {class: "fa fa-check-circle-o fa-2x", id: "done_"+index});
-				var cancelIcon = $("<i>", {class: "fa fa-times fa-2x", id: "cancel_"+index});
+				actionsCell = $("<td>", {class: "do__table-data box-border do__table-cell_actions"});
+				inProgressIcon = $("<i>", {class: "fa fa-clock-o fa-2x",id: "progress_"+index});
+				doneIcon = $("<i>", {class: "fa fa-check-circle-o fa-2x", id: "done_"+index});
+				cancelIcon = $("<i>", {class: "fa fa-times fa-2x", id: "cancel_"+index});
 				tableRow.append(actionsCell.append(inProgressIcon, doneIcon, cancelIcon));
 				$("#queueTable").append(tableRow);
 				if(order.status === "InProgress") {
@@ -437,12 +438,13 @@ $(function() {
 			});
 
 			$("#saveItemBtn").click(function() {
-				var itemName = $("#itemNameInput").val();
-				var categoryName = $( "#categorySelect option:selected" ).text();
+				var itemName, categoryName, itemImg;
+				itemName = $("#itemNameInput").val();
+				categoryName = $( "#categorySelect option:selected" ).text();
 				if(categoryName == "Add New Category") {
 					categoryName = $("#newCategory input").val();
 				}
-				var itemImg = $("#itemImg input").val() || "assets/defaultItem.png";
+				itemImg = $("#itemImg input").val() || "assets/defaultItem.png";
 				if(!itemName || !categoryName) {
 					if(!itemName) {
 						$("#inWarning").css("display", "block");
@@ -470,11 +472,12 @@ $(function() {
 		},
 
 		viewNewItemDialog: function() {
+			var optionsHTML, menu;
 			//console.log("safd",1)
 			document.getElementById("AddItemModal").style.opacity = 1;
 			document.getElementById("AddItemModal").style.pointerEvents = "auto";
-			var optionsHTML = "";
-			var menu = controller.getmenu();
+			optionsHTML = "";
+			menu = controller.getmenu();
 			menu.forEach(function(category) {
 				optionsHTML += "<option>"+category.category+"</option>"; 
 			});
@@ -500,10 +503,11 @@ $(function() {
 	var leftSidePanelView = {
 		
 		init: function() {
+			var menuCategories;
 			$("#c-button--slide-left").click(this.openSidePanel);
 			$("#c-mask").click(this.closeSidePanel);
 			$("#cancelButton").click(this.closeSidePanel);
-			var menuCategories = controller.getmenuCategories();
+			menuCategories = controller.getmenuCategories();
 			menuCategories.forEach(function(menuCategory) {
 				var items = controller.getCategoryItemsForCategory(menuCategory);
 				leftSidePanelView.addCategoryInSidePanel(menuCategory, items);
@@ -522,8 +526,9 @@ $(function() {
 			}));
 		},
 		addCategoryInSidePanel: function(category, categoryItems) {
+			var categoryItemsList; 
 			$("#categoryList").append($("<li>", {class:"c-menu__item", text: category}));
-			var categoryItemsList = ($("<ul>",{id: category}));
+			categoryItemsList = ($("<ul>",{id: category}));
 			categoryItems.forEach(function(item) {
 				var categoryItem = $("<li>",{class:"c-menu__product"});
 				var checkboxItem = $("<input>",{class: "c-menu__product__check", type:"checkbox", value: item.itemName, checked: item.available});
