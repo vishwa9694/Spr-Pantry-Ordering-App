@@ -116,14 +116,21 @@ var controllerMenuOrder={
     },
     submit:function(){
         var ordertable=viewMenuOrder.getTable();
-        modelmenuOrder.orderitemlist.forEach(function(orderitem)
-        {
-            orderitem.itemDescription=viewMenuOrder.getDescription(orderitem.itemName);
-            orderitem.table=ordertable;
-            console.log(orderitem.itemDescription);
+        if((isNaN(ordertable)) || (ordertable == null)){
+            document.getElementById("submitError").style.display = "block";
+            document.getElementById("user-table").style.border = "1px solid rgb(169,68,66)";
+        }
+        else{
+            modelmenuOrder.orderitemlist.forEach(function(orderitem)
+            {
+                orderitem.itemDescription=viewMenuOrder.getDescription(orderitem.itemName);
+                orderitem.table=ordertable;
+                console.log(orderitem.itemDescription);
 
-        });
-        serverServices.sendorder(modelmenuOrder.orderitemlist);
+            });
+            serverServices.sendorder(modelmenuOrder.orderitemlist);
+            controllerQueue.renderQueue();
+        }
     }
 };
 
@@ -136,9 +143,9 @@ var viewMenuOrder = {
      	this.addEventListener();   
     },
     addEventListener: function(){
-        menuOrderTableEl.onclick = function(e){
-            e = e || event;
-            var target = e.target;
+        menuOrderTableEl.onclick = function(event){
+            event = event || window.event;
+            var target = event.target;
             console.log(target.id.split("_")[1]);
             console.log("classname"+target.className);
             if (target.className == "fa fa-times-circle fa-lg itemcancel"){
