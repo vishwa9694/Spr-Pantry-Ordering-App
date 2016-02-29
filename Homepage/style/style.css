@@ -419,6 +419,7 @@ tr.s-q-e__item td ,tr.s-o-e__item td{
 .s-o__heading{
     display: block;
     height:30px;
+    line-height: 30px;
     font-size: 20px;
     font-weight: 700;
     width: 100%;
@@ -430,7 +431,7 @@ tr.s-q-e__item td ,tr.s-o-e__item td{
 .s-o__element{
     position: relative;
     display: block;
-    height: 95%;
+    height: calc(100% - 30px);
     width:100%;
 }
 /*
@@ -452,13 +453,13 @@ box-sizing: border-box;
     height: 34px;
     font-size: 13px;
     display: none;
-    padding: 10px;
+    padding-left: 10px;
 }
 
 .s-o__table{
     display: block;
     overflow: scroll;
-    max-height: 70%;
+    height: calc(100% - 60px);
 
     box-sizing: border-box;
 }
@@ -504,8 +505,7 @@ box-sizing: border-box;
     padding: 0px;
 }
 .user-form{
-    position: absolute;
-    bottom: 30px;
+    
     display: none;
     width:100%;
     margin: 0 auto;
