@@ -1,5 +1,6 @@
 var modelItems={
 init:function(){
+
 	this.item=serverServices.getItems();
 }
 };
@@ -9,6 +10,7 @@ var itemListController = {
     
     init: function(){
         itemListView.init();
+        itemListView.reset();
         var category=modelItems.item;
         var iIndex=0;
         category.forEach(function(menu,catIndex)
@@ -30,6 +32,7 @@ var itemListController = {
 var itemListView = {
     init: function(){
         var menu;
+
         this.menuList = document.getElementById("menuList");
         console.log("   asfa:"+this.menuList);
         //this.render();
@@ -75,6 +78,10 @@ var itemListView = {
         categoryDiv.appendChild(itemDiv);
       
        
-    }  
+    } ,
+    reset:function(){
+        this.menuList = document.getElementById("menuList");
+        this.menuList.innerHTML=" ";
+    } 
        
     };

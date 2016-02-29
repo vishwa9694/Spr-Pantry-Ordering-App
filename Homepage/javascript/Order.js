@@ -11,6 +11,8 @@ var controllerQueue={
 renderQueue:function(){
 	console.log("this is model order "+modelOrder.order);
 	viewQueue.init();
+		viewQueue.ordertableReset();
+
 	var displaycancel=false;
 	if(!(modelOrder.order===null||modelOrder.order===undefined))
 	{
