@@ -63,18 +63,18 @@ var viewQueue = {
 	init: function(){
 		orderTableDivEl = document.getElementById("orderTableDiv");
 		ordertableEl = document.getElementById("orderTable");
-		this.addEventListener();
+		//this.addEventListener();
 	},
 
-	addEventListener: function(){
-		var tableEl = document.getElementById("orderTable");
-		tableEl.onclick = function(event){
-		event = event || window.event;
-            var target = event.target;
-			console.log("delete:"+target.id.split("_")[1]);
-			controllerQueue.deleteOrder(target.id.split("_")[1]);
-		}
-	},
+	// addEventListener: function(){
+	// 	var tableEl = document.getElementById("orderTable");
+	// 	tableEl.onclick = function(event){
+	// 	event = event || window.event;
+ //            var target = event.target;
+	// 		console.log("delete:"+target.id.split("_")[1]);
+	// 		controllerQueue.deleteOrder(target.id.split("_")[1]);
+	// 	}
+	// },
 
 	orderRowInnerHTML: function(personName, itemName, status, orderID,displaycancel){
 		console.log("cancel button:"+displaycancel);
@@ -99,7 +99,14 @@ var viewQueue = {
 		ordertableEl.innerHTML = '<tr class="s-q-e__heading"><th>Name</th><th>Order</th><th>Status</th></tr>';
 		ordertableEl.setAttribute('class','s-q__table');
 		ordertableEl.setAttribute('id', 'orderTable');
-		orderTableDivEl.appendChild(ordertableEl);	
+		orderTableDivEl.appendChild(ordertableEl);
+		ordertableEl.onclick = function(e){
+			//console.log("asdasd");
+			//e = e || event;
+			var target = e.target;
+			console.log("delete:"+target.id.split("_")[1]);
+			controllerQueue.deleteOrder(target.id.split("_")[1]);
+		};	
 	}
 };
 

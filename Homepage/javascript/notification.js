@@ -73,7 +73,7 @@ var viewNotifications = {
 	handler: function(){
 		var notification=document.getElementsByClassName("header-notification")[0];
 		var notiBody = document.getElementsByClassName("notificationBody")[0];
-		notification.onclick=function()
+		notification.onclick=function(e)
 		{
 			console.log("Yello");
 			$("#notification__count").fadeOut("");
@@ -86,12 +86,13 @@ var viewNotifications = {
 			else
 			{
 				notiBody.style.display = 'block';
-				event.stopPropagation();
+				e.stopPropagation();
 			}
+			controllerNotifications.settrueall();
 		};
 		$(document).click( function(){
 			notiBody.style.display = 'none';
-			controllerNotifications.settrueall();
+			//controllerNotifications.settrueall();
 		});
 	}
 };
