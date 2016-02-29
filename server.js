@@ -79,7 +79,7 @@ var menu = [
 				categoryItems: [
 					{
 						itemName: "Tea",
-						available: false,
+						available: true,
 						imgSrc: "assets/defaultItem.png"
 					},
 					{
@@ -101,7 +101,7 @@ var menu = [
 				categoryItems: [
 					{
 						itemName: "Maggi",
-						available: false,
+						available: true,
 						imgSrc: "assets/defaultItem.png"
 
 					},

@@ -56,13 +56,14 @@ var viewNotifications = {
 		notificationEl = document.createElement("li");
 		notificationEl.setAttribute('id', 'notification--' + status);
 		notificationEl.innerHTML = "Your Item : " + itemName + " is " + status + ". "
-		if (!reason){
+		if (reason!==null){
 			notificationReasonDivEl = document.createElement("div");
 			notificationReasonDivEl.setAttribute('id', 'notification__cancel__reason');
 			notificationReasonDivEl.innerHTML = reason;
 			notificationEl.appendChild(notificationReasonDivEl);
 		} 
-		notificationPanelEl.appendChild(notificationEl);
+		
+		$(notificationPanelEl).prepend(notificationEl);
 	},
 
 	showUnreadCount : function(unreadMsgCount){
