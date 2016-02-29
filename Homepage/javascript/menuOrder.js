@@ -136,9 +136,9 @@ var viewMenuOrder = {
      	this.addEventListener();   
     },
     addEventListener: function(){
-        menuOrderTableEl.onclick = function(e){
-            e = e || event;
-            var target = e.target;
+        menuOrderTableEl.onclick = function(event){
+            event = event || window.event;
+            var target = event.target;
             console.log(target.id.split("_")[1]);
             console.log("classname"+target.className);
             if (target.className == "fa fa-times-circle fa-lg itemcancel"){

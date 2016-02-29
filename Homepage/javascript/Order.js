@@ -65,9 +65,9 @@ var viewQueue = {
 
 	addEventListener: function(){
 		var tableEl = document.getElementById("orderTable");
-		tableEl.onclick = function(e){
-			e = e || event;
-			var target = e.target;
+		tableEl.onclick = function(event){
+		event = event || window.event;
+            var target = event.target;
 			console.log("delete:"+target.id.split("_")[1]);
 			controllerQueue.deleteOrder(target.id.split("_")[1]);
 		}
