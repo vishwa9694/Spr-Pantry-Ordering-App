@@ -1,5 +1,6 @@
 var modelItems={
 init:function(){
+
 	this.item=serverServices.getItems();
 }
 };
@@ -9,6 +10,7 @@ var itemListController = {
     
     init: function(){
         itemListView.init();
+
         var category,iIndex;
         category=modelItems.item;
         iIndex=0;
@@ -81,6 +83,10 @@ var itemListView = {
         categoryDivEl.appendChild(itemDivEl);
       
        
-    }  
+    } ,
+    reset:function(){
+        this.menuList = document.getElementById("menuList");
+        this.menuList.innerHTML=" ";
+    } 
        
     };

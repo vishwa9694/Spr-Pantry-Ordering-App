@@ -116,14 +116,21 @@ var controllerMenuOrder={
     },
     submit:function(){
         var ordertable=viewMenuOrder.getTable();
-        modelmenuOrder.orderitemlist.forEach(function(orderitem)
-        {
-            orderitem.itemDescription=viewMenuOrder.getDescription(orderitem.itemName);
-            orderitem.table=ordertable;
-            console.log(orderitem.itemDescription);
+        if((isNaN(ordertable)) || (ordertable == null)){
+            document.getElementById("submitError").style.display = "block";
+            document.getElementById("user-table").style.border = "1px solid rgb(169,68,66)";
+        }
+        else{
+            modelmenuOrder.orderitemlist.forEach(function(orderitem)
+            {
+                orderitem.itemDescription=viewMenuOrder.getDescription(orderitem.itemName);
+                orderitem.table=ordertable;
+                console.log(orderitem.itemDescription);
 
-        });
-        serverServices.sendorder(modelmenuOrder.orderitemlist);
+            });
+            serverServices.sendorder(modelmenuOrder.orderitemlist);
+            controllerQueue.renderQueue();
+        }
     }
 };
 

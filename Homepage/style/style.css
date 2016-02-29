@@ -1,10 +1,4 @@
-/* http://meyerweb.com/eric/tools/css/reset/
-   v2.0 | 20110126
-   License: none (public domain)
-*/
 
-
-/* Code over here */
 html,body{
     overflow: hidden;
 height:100%;
@@ -410,8 +404,8 @@ tr.s-q-e__item td ,tr.s-o-e__item td{
  }
 .side__order{
     width:100%;
-    overflow: scroll;
-    max-height: 50%;
+    /*overflow: scroll;*/
+    height: 50%;
     padding:10px;
     padding-bottom: 0px;
     background-color:white;
@@ -434,6 +428,7 @@ tr.s-q-e__item td ,tr.s-o-e__item td{
     border-bottom: 1px solid #e9e4dc;
 }
 .s-o__element{
+    position: relative;
     display: block;
     height: 95%;
     width:100%;
@@ -450,6 +445,14 @@ box-sizing: border-box;
 */
 .s-o-e__item{
     height: 48px;
+}
+
+.submitError{
+    color: rgb(169,68,66);
+    height: 34px;
+    font-size: 13px;
+    display: none;
+    padding: 10px;
 }
 
 .s-o__table{
@@ -501,6 +504,8 @@ box-sizing: border-box;
     padding: 0px;
 }
 .user-form{
+    position: absolute;
+    bottom: 30px;
     display: none;
     width:100%;
     margin: 0 auto;
