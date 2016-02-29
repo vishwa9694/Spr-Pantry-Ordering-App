@@ -446,6 +446,14 @@ box-sizing: border-box;
     height: 48px;
 }
 
+.submitError{
+    color: rgb(169,68,66);
+    height: 34px;
+    font-size: 13px;
+    display: none;
+    padding: 10px;
+}
+
 .s-o__table{
     display: block;
     overflow: scroll;

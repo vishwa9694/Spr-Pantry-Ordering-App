@@ -4,7 +4,6 @@ var controllerMain={
 	init:function(){
 		console.log("Hello");
 		
-		modelOrder.init();
 		controllerQueue.renderQueue();
 
 		modelItems.init();
