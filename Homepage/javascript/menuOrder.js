@@ -130,13 +130,13 @@ var controllerMenuOrder={
 var viewMenuOrder = {
     
     init: function(){
-        menuOrderTableel = document.getElementById("menuOrder");
-        tableNoel = document.getElementById("user-table");
-        menuTableDivel = document.getElementById("menuOrderDiv");
+        menuOrderTableEl = document.getElementById("menuOrder");
+        tableNoEl = document.getElementById("user-table");
+        menuTableDivEl = document.getElementById("menuOrderDiv");
      	this.addEventListener();   
     },
     addEventListener: function(){
-        menuOrderTableel.onclick = function(e){
+        menuOrderTableEl.onclick = function(e){
             e = e || event;
             var target = e.target;
             console.log(target.id.split("_")[1]);
@@ -167,51 +167,51 @@ var viewMenuOrder = {
         return '<input class="in_comment" placeholder="Special Instructions" id="special_'+name+'"/>';
     },
     addItem: function(name,qty){
-        var menuOrderRowel = document.createElement("tr");
-        menuOrderRowel.setAttribute('class', 's-o-e__item');
+        var menuOrderRowEl = document.createElement("tr");
+        menuOrderRowEl.setAttribute('class', 's-o-e__item');
         
         // Name Adder
-        var menuOrderItemNameel = document.createElement("td");
-        menuOrderItemNameel.setAttribute('class', 'item__name');
-        menuOrderItemNameel.innerHTML = viewMenuOrder.itemNameInnerHTML(name);
-        menuOrderRowel.appendChild(menuOrderItemNameel);
+        var menuOrderItemNameEl = document.createElement("td");
+        menuOrderItemNameEl.setAttribute('class', 'item__name');
+        menuOrderItemNameEl.innerHTML = viewMenuOrder.itemNameInnerHTML(name);
+        menuOrderRowEl.appendChild(menuOrderItemNameEl);
         //Add button adder
-        var menuOrderAddel = document.createElement("td");
-        menuOrderAddel.innerHTML = viewMenuOrder.addButtonInnerHTML(name);
-        menuOrderRowel.appendChild(menuOrderAddel);
+        var menuOrderAddEl = document.createElement("td");
+        menuOrderAddEl.innerHTML = viewMenuOrder.addButtonInnerHTML(name);
+        menuOrderRowEl.appendChild(menuOrderAddEl);
         //Add the quantity
-        var menuOrderQtyel = document.createElement("td");
-        menuOrderQtyel.setAttribute('class', 'item-qty');
-        menuOrderQtyel.setAttribute('id', 'qty_'+name);
-        menuOrderQtyel.innerHTML = qty;
-        menuOrderRowel.appendChild(menuOrderQtyel);
+        var menuOrderQtyEl = document.createElement("td");
+        menuOrderQtyEl.setAttribute('class', 'item-qty');
+        menuOrderQtyEl.setAttribute('id', 'qty_'+name);
+        menuOrderQtyEl.innerHTML = qty;
+        menuOrderRowEl.appendChild(menuOrderQtyEl);
         //Remove an item (Subtract the quantity)
-        var menuOrderRemel = document.createElement("td");
-        menuOrderRemel.innerHTML = viewMenuOrder.removeButtonInnerHTML(name);
-        menuOrderRowel.appendChild(menuOrderRemel);
+        var menuOrderRemEl = document.createElement("td");
+        menuOrderRemEl.innerHTML = viewMenuOrder.removeButtonInnerHTML(name);
+        menuOrderRowEl.appendChild(menuOrderRemEl);
         //Special Instructions
-        var menuOrderSplInsel = document.createElement("td");
-        menuOrderSplInsel.setAttribute('class', 'item-comment');
-        menuOrderSplInsel.innerHTML = viewMenuOrder.specialInstructionsInnerHTML(name);
-        menuOrderRowel.appendChild(menuOrderSplInsel);
+        var menuOrderSplInsEl = document.createElement("td");
+        menuOrderSplInsEl.setAttribute('class', 'item-comment');
+        menuOrderSplInsEl.innerHTML = viewMenuOrder.specialInstructionsInnerHTML(name);
+        menuOrderRowEl.appendChild(menuOrderSplInsEl);
         //Finally adding the row to the table
-        menuOrderTableel.appendChild(menuOrderRowel);
+        menuOrderTableEl.appendChild(menuOrderRowEl);
     },
     showQuantity: function(itemName, quantity){
-        var quantityel = document.getElementById("qty_"+itemName);
-        quantityel.innerHTML = quantity;
+        var quantityEl = document.getElementById("qty_"+itemName);
+        quantityEl.innerHTML = quantity;
     },
    menuOrderReset: function(){
-        menuTableDivel.innerHTML = " ";
-        menuOrderTableel = document.createElement("table");
-        menuOrderTableel.setAttribute('class', 's-o-e__table');
-        menuOrderTableel.setAttribute('id', 'menuOrder');
-        menuTableDivel.appendChild(menuOrderTableel);
+        menuTableDivEl.innerHTML = " ";
+        menuOrderTableEl = document.createElement("table");
+        menuOrderTableEl.setAttribute('class', 's-o-e__table');
+        menuOrderTableEl.setAttribute('id', 'menuOrder');
+        menuTableDivEl.appendChild(menuOrderTableEl);
     	this.addEventListener();
     },
     getTable: function(){
-    	console.log("Table"+tableNoel.value);
-        return tableNoel.value;
+    	console.log("Table"+tableNoEl.value);
+        return tableNoEl.value;
     },
 	getDescription: function(name){
 		console.log("special_"+name);
