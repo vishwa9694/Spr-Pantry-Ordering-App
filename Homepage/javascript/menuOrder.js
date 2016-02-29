@@ -116,7 +116,7 @@ var controllerMenuOrder={
     },
     submit:function(){
         var ordertable=viewMenuOrder.getTable();
-        if((isNaN(ordertable)) || (ordertable == null)){
+        if((isNaN(ordertable)) || (ordertable == null) || (ordertable == " ")){
             document.getElementById("submitError").style.display = "block";
             document.getElementById("user-table").style.border = "1px solid rgb(169,68,66)";
         }
@@ -218,6 +218,7 @@ var viewMenuOrder = {
     },
     getTable: function(){
     	console.log("Table"+tableNoEl.value);
+        console.log(tableNoEl.value == "");
         return tableNoEl.value;
     },
 	getDescription: function(name){

@@ -1,17 +1,10 @@
 
 var notificationPanelEl;
 
-var modelNotification={
+var modelNotifications={
 
-	init:function(callBackFunction){
-		this.notifications=[];		
-		serverServices.getNotifications(login.user.id,this.setNotifications.bind(this),callBackFunction);
-	},
-	getNotifications:function(){
-		return this.notifications;
-	},
-	setNotifications:function(notification){
-		this.notifications=JSON.parse(notification);
+	init:function(){	
+		this.notification=serverServices.getNotifications(login.user.id);
 	}
 
 };
@@ -24,17 +17,15 @@ var modelNotification={
 //             };
 
 var controllerNotifications = {
-	
 	init: function(){
 		console.log("Hello");
 		viewNotifications.init();
-		modelNotification.init(this.render.bind(this));
 		viewNotifications.handler();
-	
+		this.render();
 	},
 	render:function(){
 		var unreadcount=0;
-		modelNotification.getNotifications().forEach(function(notificationItem){
+		modelNotifications.notification.forEach(function(notificationItem){
 			
 				viewNotifications.addNotification(notificationItem.item,notificationItem.status,notificationItem.reason);
 				if(notificationItem.read===false)
@@ -44,7 +35,7 @@ var controllerNotifications = {
 		viewNotifications.showUnreadCount(unreadcount);
 	},
 	settrueall : function(){
-		modelNotification.getNotifications().forEach(function(notificationItem){
+		modelNotifications.notification.forEach(function(notificationItem){
 			notificationItem.read=true;
 		});	
 		serverServices.readNotification(login.user.id);
