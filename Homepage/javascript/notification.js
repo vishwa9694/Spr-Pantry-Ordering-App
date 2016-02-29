@@ -1,5 +1,5 @@
 
-var notificationPanel;
+var notificationPanelEl;
 
 var modelNotifications={
 
@@ -48,26 +48,26 @@ var controllerNotifications = {
 var viewNotifications = {
 	
 	init: function(){
-		notificationPanel = document.getElementById("notificationBody");
+		notificationPanelEl = document.getElementById("notificationBody");
 	},
 
 	addNotification: function(itemName, status, reason){
 		console.log("adding notification");
-		notificationel = document.createElement("li");
-		notificationel.setAttribute('id', 'notification--' + status);
-		notificationel.innerHTML = "Your Item : " + itemName + " is " + status + ". "
+		notificationEl = document.createElement("li");
+		notificationEl.setAttribute('id', 'notification--' + status);
+		notificationEl.innerHTML = "Your Item : " + itemName + " is " + status + ". "
 		if (!reason){
-			notificationReasonDivel = document.createElement("div");
-			notificationReasonDivel.setAttribute('id', 'notification__cancel__reason');
-			notificationReasonDivel.innerHTML = reason;
-			notificationel.appendChild(notificationReasonDivel);
+			notificationReasonDivEl = document.createElement("div");
+			notificationReasonDivEl.setAttribute('id', 'notification__cancel__reason');
+			notificationReasonDivEl.innerHTML = reason;
+			notificationEl.appendChild(notificationReasonDivEl);
 		} 
-		notificationPanel.appendChild(notificationel);
+		notificationPanelEl.appendChild(notificationEl);
 	},
 
 	showUnreadCount : function(unreadMsgCount){
-		unreadNotificationel = document.getElementById("notification_count");
-		unreadNotificationel.innerHTML = unreadMsgCount; 
+		unreadnotificationEl = document.getElementById("notification_count");
+		unreadnotificationEl.innerHTML = unreadMsgCount; 
 	},
 	handler: function(){
 		var notification=document.getElementsByClassName("header-notification")[0];
