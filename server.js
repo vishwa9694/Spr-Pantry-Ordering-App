@@ -285,7 +285,7 @@ http.createServer(function(req, res) {
 			res.end("Item Updated.");
 		});
 	}
-	else if(req.url === '/yoyo') {
+	else if(req.url === '/addOrder') {
 		var order="";
         console.log("Yello");
         if (req.method == 'POST') {

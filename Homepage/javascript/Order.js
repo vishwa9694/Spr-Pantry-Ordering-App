@@ -1,22 +1,38 @@
 var modelOrder={
-init:function(){
-	this.order=serverServices.getOrders();
+
+init:function(callBackFunction){
+	this.orders=[];
+	serverServices.getOrders((this.setOrders.bind(this)),callBackFunction);
+},
+getOrders:function(){
+	return this.order;
+},
+setOrders:function(orders){
+	this.order=JSON.parse(orders);
+	console.log("Orders are "+this.orders);
+	this.orders.forEach(function(orderitem){console.log(orderitem);})
 }
 };
 
 
 
 var controllerQueue={
+init:function(){
+	modelOrder.init((this.renderQueue.bind(this)));
+	viewQueue.init();
+	viewQueue.ordertableReset();
+},
 
 renderQueue:function(){
-	console.log("this is model order "+modelOrder.order);
-	viewQueue.init();
-		viewQueue.ordertableReset();
+	console.log(modelOrder.getOrders());
+	
+	//viewQueue.init();
+	//viewQueue.ordertableReset();
 
 	var displaycancel=false;
-	if(!(modelOrder.order===null||modelOrder.order===undefined))
+	if(!(modelOrder.getOrders()===null||modelOrder.getOrders()===undefined))
 	{
-		modelOrder.order.forEach(function(orderItem,index){
+		modelOrder.getOrders().forEach(function(orderItem,index){
 		console.log("uid:"+orderItem.uid+" loginid:"+login.user.id);
 		if(orderItem.uid===login.user.id)
 			displaycancel=true;
@@ -38,12 +54,12 @@ deleteOrder:function(cancelrequest){
 		var serviceret=serverServices.cancelOrder(cancelrequest);
 		if(serviceret===true)
 		{
-			modelOrder.order.forEach(function(orderitem){
+			modelOrder.getOrders().forEach(function(orderitem){
 				console.log(orderitem.orderId+" "+cancelrequest);
 				if(orderitem.orderId===cancelrequest)
 					orderitem.status="Cancelled";
 			});
-			console.log(modelOrder.order);
+			console.log(modelOrder.getOrders());
 			viewQueue.ordertableReset();
 			this.renderQueue();			
 		}

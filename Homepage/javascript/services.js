@@ -1,76 +1,106 @@
 var serverServices={
+	
+baseUrl:"http://localhost:3000/",
 
 createGetRequest:function(request){
-
 	var xhttp = new XMLHttpRequest();
-	xhttp.open("GET", "http://localhost:3000/"+request, false);
+	xhttp.open("GET", this.baseUrl+request, false);
 	return xhttp;
 },
 createPostRequest:function(request){
 		var xmlhttp = new XMLHttpRequest();
-		xmlhttp.open("POST", "http://localhost:3000/"+request, false);
+		xmlhttp.open("POST", this.baseUrl+request, false);
+		return xmlhttp;
+},
+
+createAsyncGetRequest:function(request){
+	var xhttp = new XMLHttpRequest();
+	xhttp.open("GET", this.baseUrl+request, true);
+	return xhttp;
+},
+createAsyncPostRequest:function(request){
+		var xmlhttp = new XMLHttpRequest();
+		xmlhttp.open("POST", this.baseUrl+request, true);
 		return xmlhttp;
 },
 
 
-getOrders:function() 
+getOrders:function(setOrder,callBackFunction) 
 {
-	xhttp=this.createGetRequest("orders");
+	var xhttp=this.createAsyncGetRequest("orders");
 	xhttp.send();
-	if (xhttp.readyState == 4 && xhttp.status == 200) {
-		console.log(xhttp.responseText);
-		return JSON.parse(xhttp.responseText);
-
-	}
-	else return null;
-
-},
-
-
-getItems: function() {
-		xhttp=this.createGetRequest("menuItem");
-			xhttp.send();
-			if (xhttp.readyState == 4 && xhttp.status == 200) {
-				console.log(xhttp.responseText);
-				 	 return JSON.parse(xhttp.responseText);
-
-			}
-			else
-				return null;
-
-},
-cancelOrder:function (orderid){
-	console.log("cancel order id :"+orderid);
-		xmlhttp=this.createPostRequest("delorder");
-		xmlhttp.setRequestHeader("Content-Type", "text/plain");
-		xmlhttp.send(JSON.stringify({del:orderid}));
-	
+	xhttp.onreadystatechange=function(){
+		console.log("State Changed");
 		if (xhttp.readyState == 4 && xhttp.status == 200) {
+		
+			console.log(xhttp.responseText);
+			setOrder(xhttp.responseText);
+			callBackFunction();
 			return true;
 		}
-		else
-		{	return false;
+		else return false;
+	};
+
+},
+
+
+getItems: function(setItem,callBackFunction) {
+		var xhttp=this.createAsyncGetRequest("menuItem");
+		xhttp.send();
+		xhttp.onreadystatechange=function(){
+		console.log("Item State Changed");
+		if (xhttp.readyState == 4 && xhttp.status == 200) {
+		
+			console.log(xhttp.responseText);
+			setItem(xhttp.responseText);
+			callBackFunction();
+			return true;
+		}
+		else return false;
+	};
+
+},
+
+cancelOrder:function (orderid){
+	console.log("cancel order id :"+orderid);
+		var xmlhttp=this.createAsyncPostRequest("delorder");
+		xmlhttp.setRequestHeader("Content-Type", "text/plain");
+		xmlhttp.send(JSON.stringify({del:orderid}));
+		xhttp.onreadystatechange=function(){
+		
+		if (!(xhttp.readyState == 4 && xhttp.status == 200)) {
+			
+			alert("Server Cancel Order Eror");
+		}
 		}	
 },
 
 sendorder:function (order){
 	
-	xmlhttp=this.createPostRequest("yoyo");
+	var xmlhttp=this.createAsyncPostRequest("addOrder");
 	console.log(order);
 	xmlhttp.send(JSON.stringify(order));
 
 
 },
-getNotifications: function(userid) {		
+//---------------------------------
+getNotifications: function(userid,setNotification,callBackFunction) {		
 		var xhttp = this.createPostRequest("getNotifications");		
 		xhttp.send(JSON.stringify({userId:userid}));		
-		if (xhttp.readyState == 4 && xhttp.status == 200) {		
-			console.log(xhttp.responseText);	
-		 	  return JSON.parse(xhttp.responseText);		
-			}		
+		xhttp.onreadystatechange=function(){
+			console.log(xhttp.responseText);
+			if (xhttp.readyState == 4 && xhttp.status == 200) {		
+				console.log(xhttp.responseText);	
+			 	 setNotification(xhttp.responseText);
+			 	 callBackFunction();		
+				}
+			else
+				alert("Server Notifications Error");
+
+			};		
 	},
 readNotification:function(userid){
-		var xhttp = this.createPostRequest("readNotification");		
+		var xhttp = this.createAsyncPostRequest("readNotification");		
 		xhttp.send(JSON.stringify({userId:userid}));		
 		if (xhttp.readyState == 4 && xhttp.status == 200) {		
 			console.log(xhttp.responseText);	
