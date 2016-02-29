@@ -58,14 +58,14 @@ deleteOrder:function(cancelrequest){
 
 var viewQueue = {
 	init: function(){
-		orderTableDivel = document.getElementById("orderTableDiv");
-		orderTableel = document.getElementById("orderTable");
+		orderTableDivEl = document.getElementById("orderTableDiv");
+		ordertableEl = document.getElementById("orderTable");
 		this.addEventListener();
 	},
 
 	addEventListener: function(){
-		var tableel = document.getElementById("orderTable");
-		tableel.onclick = function(e){
+		var tableEl = document.getElementById("orderTable");
+		tableEl.onclick = function(e){
 			e = e || event;
 			var target = e.target;
 			console.log("delete:"+target.id.split("_")[1]);
@@ -82,21 +82,21 @@ var viewQueue = {
 	},
 
 	addOrder: function(personName, itemName, status, orderID, userID,displaycancel){
-		rowel = document.createElement("tr");
-		rowel.innerHTML = viewQueue.orderRowInnerHTML(personName, itemName, status,orderID,displaycancel);
-		rowel.setAttribute('class', 's-q-e__item '+userID);
-		rowel.setAttribute('id', orderID);
-		orderTableel.appendChild(rowel);
+		rowEl = document.createElement("tr");
+		rowEl.innerHTML = viewQueue.orderRowInnerHTML(personName, itemName, status,orderID,displaycancel);
+		rowEl.setAttribute('class', 's-q-e__item '+userID);
+		rowEl.setAttribute('id', orderID);
+		ordertableEl.appendChild(rowEl);
 		
 	},
 
 	ordertableReset: function(){
-		orderTableDivel.innerHTML = " ";
-		orderTableel = document.createElement("table");
-		orderTableel.innerHTML = '<tr class="s-q-e__heading"><th>Name</th><th>Order</th><th>Status</th></tr>';
-		orderTableel.setAttribute('class','s-q__table');
-		orderTableel.setAttribute('id', 'orderTable');
-		orderTableDivel.appendChild(orderTableel);	
+		orderTableDivEl.innerHTML = " ";
+		ordertableEl = document.createElement("table");
+		ordertableEl.innerHTML = '<tr class="s-q-e__heading"><th>Name</th><th>Order</th><th>Status</th></tr>';
+		ordertableEl.setAttribute('class','s-q__table');
+		ordertableEl.setAttribute('id', 'orderTable');
+		orderTableDivEl.appendChild(ordertableEl);	
 	}
 };
 
