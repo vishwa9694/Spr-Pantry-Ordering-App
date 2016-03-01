@@ -116,10 +116,9 @@ var viewQueue = {
 		ordertableEl.setAttribute('class','s-q__table');
 		ordertableEl.setAttribute('id', 'orderTable');
 		orderTableDivEl.appendChild(ordertableEl);
-		ordertableEl.onclick = function(e){
-			//console.log("asdasd");
-			//e = e || event;
-			var target = e.target;
+		ordertableEl.onclick = function(event){
+			event = event || window.event;
+            var target = event.target;
 			console.log("delete:"+target.id.split("_")[1]);
 			controllerQueue.deleteOrder(target.id.split("_")[1]);
 		};	
