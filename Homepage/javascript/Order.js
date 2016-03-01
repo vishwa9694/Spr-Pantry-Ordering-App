@@ -1,25 +1,40 @@
 var modelOrder={
-init:function(){
-	this.order=serverServices.getOrders();
+
+init:function(callBackFunction){
+//	this.orders=[];
+	serverServices.getOrders((this.setOrders.bind(this)),callBackFunction);
+},
+getOrders:function(){
+	return this.orders;
+},
+setOrders:function(orders){
+//	this.orders=[];
+	
+	this.orders=JSON.parse(orders);
+	console.log("Orders are "+this.orders);
+	this.orders.forEach(function(orderitem){console.log(orderitem);})
 }
 };
 
 
 
 var controllerQueue={
-
-renderQueue:function(){
-	console.log("this is model order "+modelOrder.order);
+init:function(){
+	console.log("Re rendering the queue");
 	viewQueue.init();
 	viewQueue.ordertableReset();
-	modelOrder.init();
+	modelOrder.init((this.renderQueue.bind(this)));
+},
 
+renderQueue:function(){
+	console.log("This is orders "+modelOrder.getOrders());
 	var displaycancel=false;
-	if(!(modelOrder.order===null||modelOrder.order===undefined))
+	
+	if(!(modelOrder.getOrders()===null||modelOrder.getOrders()===undefined))
 	{
-		modelOrder.order.forEach(function(orderItem,index){
+		modelOrder.getOrders().forEach(function(orderItem,index){
 		console.log("uid:"+orderItem.uid+" loginid:"+login.user.id);
-		if(orderItem.uid===login.user.id)
+		if(orderItem.uid===login.user.id&&orderItem.status==="Queued")
 			displaycancel=true;
 		console.log(displaycancel);
 		viewQueue.addOrder(orderItem.orderName,orderItem.itemName,orderItem.status,orderItem.orderId,orderItem.uid,displaycancel);
@@ -36,22 +51,22 @@ renderQueue:function(){
 
 deleteOrder:function(cancelrequest){
 		cancelrequest=parseInt(cancelrequest);
-		var serviceret=serverServices.cancelOrder(cancelrequest);
-		if(serviceret===true)
+		var serviceret=serverServices.cancelOrder(cancelrequest,this.init.bind(this));
+	/*	if(serviceret===true)
 		{
-			modelOrder.order.forEach(function(orderitem){
+			modelOrder.getOrders().forEach(function(orderitem){
 				console.log(orderitem.orderId+" "+cancelrequest);
 				if(orderitem.orderId===cancelrequest)
 					orderitem.status="Cancelled";
 			});
-			console.log(modelOrder.order);
+			console.log(modelOrder.getOrders());
 			viewQueue.ordertableReset();
-			this.renderQueue();			
+						
 		}
 		else
 		{
 			console.log("fjan");
-		}
+		}*/
 
 	}
 
@@ -94,6 +109,7 @@ var viewQueue = {
 	},
 
 	ordertableReset: function(){
+		var orderTableDivEl = document.getElementById("orderTableDiv");
 		orderTableDivEl.innerHTML = " ";
 		ordertableEl = document.createElement("table");
 		ordertableEl.innerHTML = '<tr class="s-q-e__heading"><th>Name</th><th>Order</th><th>Status</th></tr>';

@@ -8,9 +8,10 @@ init:function(){
 var controllerMenuOrder={
 
 
-    init:function()
-    {
+    init:function(){
+        viewMenuOrder.init();
         modelmenuOrder.init();
+        
     },
     render:function(){
         console.log("rendering");
@@ -18,28 +19,22 @@ var controllerMenuOrder={
             viewMenuOrder.addItem(orderitem.itemName,orderitem.quantity);
         });
     },
-    updateItem:function(name)
-    {
+    updateItem:function(name){
         console.log(modelmenuOrder.orderitemlist);
         var that=this;
         var found=false;
         modelmenuOrder.orderitemlist.forEach(function(menuitem,id){
-            console.log("__"+menuitem.itemName+"__"+name);
-            if(menuitem.itemName===name)
-                {
+            if(menuitem.itemName===name){
                  	found=true;
-                 	console.log("Hurrah");
                     that.increaseQuant(name);
                     //return true;
             }
         });
         if(found===false){
-        console.log("Burrah_"+name);
-        this.addItem(name);
+            this.addItem(name);
         }
     },
-    addItem:function(itemname)
-    {
+    addItem:function(itemname){
         if(modelmenuOrder.orderitemlist.length===0&&!(login.user.id===null||login.user.id===undefined))
             viewMenuOrder.showsubmit();
         neworderitem=new Object();
@@ -55,8 +50,7 @@ var controllerMenuOrder={
         return modelmenuOrder.orderitemlist.length-1;
         
     },
-    deleteItem:function(itemName)
-    {
+    deleteItem:function(itemName){
     	console.log("Deleting");
         modelmenuOrder.orderitemlist.forEach(function(orderitem,index)
         {
@@ -74,6 +68,7 @@ var controllerMenuOrder={
         //modelmenuOrder.orderitem.length-=1;
 
     },
+
     increaseQuant:function(itemName){
             console.log("Increasing");
         	var count=-1;
@@ -90,8 +85,7 @@ var controllerMenuOrder={
         viewMenuOrder.showQuantity(itemName,count);
         
     },
-    decreaseQuant:function(itemName)
-    {
+    decreaseQuant:function(itemName){
     	console.log("Decreasing");
         var count=-1;
         var that=this;
@@ -116,7 +110,7 @@ var controllerMenuOrder={
     },
     submit:function(){
         var ordertable=viewMenuOrder.getTable();
-        if((isNaN(ordertable)) || (ordertable == null) || (ordertable == " ")){
+        if((isNaN(ordertable)) || (ordertable == null)){
             document.getElementById("submitError").style.display = "block";
             document.getElementById("user-table").style.border = "1px solid rgb(169,68,66)";
         }
@@ -128,8 +122,7 @@ var controllerMenuOrder={
                 console.log(orderitem.itemDescription);
 
             });
-            serverServices.sendorder(modelmenuOrder.orderitemlist);
-            controllerQueue.renderQueue();
+            serverServices.sendorder(modelmenuOrder.orderitemlist,controllerQueue.init.bind(controllerQueue));
         }
     }
 };
@@ -218,7 +211,6 @@ var viewMenuOrder = {
     },
     getTable: function(){
     	console.log("Table"+tableNoEl.value);
-        console.log(tableNoEl.value == "");
         return tableNoEl.value;
     },
 	getDescription: function(name){

@@ -1,7 +1,12 @@
 var modelItems={
-init:function(){
-
-	this.item=serverServices.getItems();
+init:function(callBackFunction){
+    serverServices.getItems(this.setItems.bind(this),callBackFunction);
+},
+getItems:function(){
+    return this.items;
+},
+setItems:function(item){
+    this.items=JSON.parse(item);
 }
 };
 
@@ -9,12 +14,15 @@ init:function(){
 var itemListController = {
     
     init: function(){
+        modelItems.init(this.render.bind(this));
         itemListView.init();
-
-        var category,iIndex;
-        category=modelItems.item;
-        iIndex=0;
-        category.forEach(function(menu)
+        itemListView.reset();
+    },
+    
+    render:function(){
+        var category=modelItems.getItems();
+        var iIndex=0;
+        category.forEach(function(menu,catIndex)
         {
             itemListView.addCategory(menu.category);
             

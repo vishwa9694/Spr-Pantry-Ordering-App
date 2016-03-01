@@ -4,15 +4,9 @@ var controllerMain={
 	init:function(){
 		console.log("Hello");
 		
-		controllerQueue.renderQueue();
-
-		modelItems.init();
+		controllerQueue.init();
 		itemListController.init();
-
 		controllerMenuOrder.init();
-		viewMenuOrder.init();
-
-		modelNotifications.init();
 		controllerNotifications.init();
 
 
