@@ -1,7 +1,13 @@
 
-var modelmenuOrder={
+var modelMenuOrder={
 init:function(){
-	this.orderitemlist=[];
+	this.orderItemList=[];
+},
+getOrderItemList:function(){
+    return this.orderItemList;
+},
+setOrderItemList:function(orderlist){
+    this.orderItemList=JSON.parse(orderlist);
 }
 };
 
@@ -10,20 +16,19 @@ var controllerMenuOrder={
 
     init:function(){
         viewMenuOrder.init();
-        modelmenuOrder.init();
-        
+        modelMenuOrder.init();
     },
     render:function(){
         console.log("rendering");
-        modelmenuOrder.orderitemlist.forEach(function(orderitem){
+        modelMenuOrder.getOrderItemList().forEach(function(orderitem){
             viewMenuOrder.addItem(orderitem.itemName,orderitem.quantity);
         });
     },
     updateItem:function(name){
-        console.log(modelmenuOrder.orderitemlist);
+        console.log(modelMenuOrder.getOrderItemList());
         var that=this;
         var found=false;
-        modelmenuOrder.orderitemlist.forEach(function(menuitem,id){
+        modelMenuOrder.getOrderItemList().forEach(function(menuitem,id){
             if(menuitem.itemName===name){
                  	found=true;
                     that.increaseQuant(name);
@@ -35,7 +40,7 @@ var controllerMenuOrder={
         }
     },
     addItem:function(itemname){
-        if(modelmenuOrder.orderitemlist.length===0&&!(login.user.id===null||login.user.id===undefined))
+        if(modelMenuOrder.getOrderItemList().length===0&&!(login.user.id===null||login.user.id===undefined))
             viewMenuOrder.showsubmit();
         neworderitem=new Object();
         neworderitem.uid=login.user.id;
@@ -44,28 +49,27 @@ var controllerMenuOrder={
         neworderitem.table=0;
         neworderitem.quantity=1;
         //neworderitem.itemDescription=description;
-        modelmenuOrder.orderitemlist.push(neworderitem);
-        //modelmenuOrder.orderitemlist.push(neworderitem);
+        modelMenuOrder.getOrderItemList().push(neworderitem);
+        //modelMenuOrder.getOrderItemList().push(neworderitem);
         viewMenuOrder.addItem(itemname,1);
-        return modelmenuOrder.orderitemlist.length-1;
+        return modelMenuOrder.getOrderItemList().length-1;
         
     },
     deleteItem:function(itemName){
     	console.log("Deleting");
-        modelmenuOrder.orderitemlist.forEach(function(orderitem,index)
+        modelMenuOrder.getOrderItemList().forEach(function(orderitem,index)
         {
             if(orderitem.itemName===itemName)
             {
-                modelmenuOrder.orderitemlist.splice(index,1);
+                modelMenuOrder.getOrderItemList().splice(index,1);
             }
         });
-        console.log(modelmenuOrder.orderitemlist);
+        console.log(modelMenuOrder.getOrderItemList());
         viewMenuOrder.menuOrderReset();
         this.render();
 
-        if(modelmenuOrder.orderitemlist.length===0)
+        if(modelMenuOrder.getOrderItemList().length===0)
             viewMenuOrder.hidesubmit();
-        //modelmenuOrder.orderitem.length-=1;
 
     },
 
@@ -73,15 +77,15 @@ var controllerMenuOrder={
             console.log("Increasing");
         	var count=-1;
      
-        modelmenuOrder.orderitemlist.forEach(function(orderitem,index){
+        modelMenuOrder.getOrderItemList().forEach(function(orderitem,index){
             if(orderitem.itemName===itemName)
             {
-                    count=(++modelmenuOrder.orderitemlist[index].quantity);
+                    count=(++modelMenuOrder.getOrderItemList()[index].quantity);
             }
 
         });
         
-        console.log(modelmenuOrder.orderitemlist);
+        console.log(modelMenuOrder.getOrderItemList());
         viewMenuOrder.showQuantity(itemName,count);
         
     },
@@ -89,24 +93,24 @@ var controllerMenuOrder={
     	console.log("Decreasing");
         var count=-1;
         var that=this;
-        modelmenuOrder.orderitemlist.forEach(function(orderitem,index)
+        modelMenuOrder.getOrderItemList().forEach(function(orderitem,index)
         {
             if(orderitem.itemName==itemName)
             {
-                if(modelmenuOrder.orderitemlist[index].quantity===1)
+                if(modelMenuOrder.getOrderItemList()[index].quantity===1)
                 {
                     that.deleteItem(itemName);
                     return true;
                 }
                 else{
-                   count= (--modelmenuOrder.orderitemlist[index].quantity);
+                   count= (--modelMenuOrder.getOrderItemList()[index].quantity);
        				viewMenuOrder.showQuantity(itemName,count);
         			return true;
                 }
             }
         });
 
-        console.log(modelmenuOrder.orderitemlist);
+        console.log(modelMenuOrder.getOrderItemList());
     },
     submit:function(){
         var ordertable=viewMenuOrder.getTable();
@@ -115,14 +119,15 @@ var controllerMenuOrder={
             document.getElementById("user-table").style.border = "1px solid rgb(169,68,66)";
         }
         else{
-            modelmenuOrder.orderitemlist.forEach(function(orderitem)
-            {
+            modelMenuOrder.getOrderItemList().forEach(function(orderitem){
                 orderitem.itemDescription=viewMenuOrder.getDescription(orderitem.itemName);
                 orderitem.table=ordertable;
                 console.log(orderitem.itemDescription);
-
             });
-            serverServices.sendorder(modelmenuOrder.orderitemlist,controllerQueue.init.bind(controllerQueue));
+            serverServices.sendorder(modelMenuOrder.getOrderItemList(),controllerQueue.init.bind(controllerQueue));
+            viewMenuOrder.menuOrderReset();
+            viewMenuOrder.hidesubmit();
+            this.init();
         }
     }
 };
