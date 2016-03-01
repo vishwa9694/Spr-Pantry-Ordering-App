@@ -26,13 +26,20 @@ var controllerNotifications = {
 	},
 	render:function(){
 		var unreadcount=0;
-		modelNotification.getNotifications().forEach(function(notificationItem){	
-			viewNotifications.addNotification(notificationItem.item,notificationItem.status,notificationItem.reason);
-			if(notificationItem.read===false){
-				unreadcount++;
-			}
+		var notifications = modelNotification.getNotifications();
+		if(notifications.length <= 0) {
+			viewNotifications.renderNoNotification();
+		}
+		else {
+			viewNotifications.clearNotifications();
+			notifications.forEach(function(notificationItem){
+			
+				viewNotifications.addNotification(notificationItem.item,notificationItem.status,notificationItem.reason);
+				if(notificationItem.read===false)
+					unreadcount++;
 		
-		});
+			});	
+		}
 		viewNotifications.showUnreadCount(unreadcount);
 	},
 	settrueall : function(){
@@ -50,7 +57,16 @@ var viewNotifications = {
 	init: function(){
 		notificationPanelEl = document.getElementById("notificationBody");
 	},
+	renderNoNotification: function() {
+		var item = document.createElement("li");
+		item.style.color = "black";
+		item.innerHTML = "No notifications";
+		$(notificationPanelEl).append(item);
+	},
 
+	clearNotifications: function() {
+		$(notificationPanelEl).html("");
+	},
 	addNotification: function(itemName, status, reason){
 		notificationEl = document.createElement("li");
 		notificationEl.setAttribute('id', 'notification--' + status);
