@@ -87,8 +87,15 @@ var viewQueue = {
 		ordertableEl.onclick = function(event){
 			event = event || window.event;
             var target = event.target;
-			console.log("delete:"+target.id.split("_")[1]);
-			controllerQueue.deleteOrder(target.id.split("_")[1]);
+           if(target.id.split("_")[0]==="cancel")
+			{
+				console.log("delete:"+target.id.split("_")[1]);
+				controllerQueue.deleteOrder(target.id.split("_")[1]);
+			}
+			else
+			{
+				controllerQueue.init();	
+			}
 		};	
 	}
 };
