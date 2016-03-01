@@ -12,7 +12,7 @@ var orders = [
 	itemName: "Maggi",
 	quantity: 1,
 	itemDescription: "cold",
-	status: "Delivered",
+	status: "Completed",
 	itemPlacedOn:"Tue Mar 01 2016 08:55:40 GMT+0530 (IST)",
 	deliveredOn:""
 
@@ -26,7 +26,7 @@ var orders = [
 	itemName: "Maggi",
 	quantity: 1,
 	itemDescription: "cold",
-	status: "Delivered",
+	status: "Completed",
 	itemPlacedOn:"Tue Mar 01 2016 08:55:40 GMT+0530 (IST)",
 	deliveredOn:""
 
@@ -40,7 +40,7 @@ var orders = [
 	itemName: "Maggi",
 	quantity: 1,
 	itemDescription: "cold",
-	status: "Delivered",
+	status: "Completed",
 	itemPlacedOn:"Mon Feb 22 2016 08:55:40 GMT+0530 (IST)",
 	deliveredOn:""
 
@@ -54,7 +54,7 @@ var orders = [
 	itemName: "Maggi",
 	quantity: 1,
 	itemDescription: "cold",
-	status: "Delivered",
+	status: "Completed",
 	itemPlacedOn:"Mon Feb 22 2016 08:55:40 GMT+0530 (IST)",
 	deliveredOn:""
 
@@ -270,7 +270,7 @@ http.createServer(function(req, res) {
         		filteredOrders[0].status = orderData.status;
         		filteredOrders[0].deliveredOn=new Date();
         		if(!(filteredOrders[0].hasOwnProperty("itemPlacedOn"))){
-				filteredOrders[0].itemPlacedOn=new Date();//adding this to remove errors
+				filteredOrders[0].itemPlacedOn=(new Date()).toString();//adding this to remove errors
 			}
 			orders.forEach(function(order){
 				console.log(order.orderId, order.status);
