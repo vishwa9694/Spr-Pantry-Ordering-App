@@ -20,8 +20,9 @@ var itemListController = {
     },
     
     render:function(){
-        var category=modelItems.getItems();
-        var iIndex=0;
+        var category, iIndex;
+        category=modelItems.getItems();
+        iIndex=0;
         category.forEach(function(menu,catIndex)
         {
             itemListView.addCategory(menu.category);
@@ -45,9 +46,10 @@ var itemListView = {
     init: function(){
         this.menuListEl = document.getElementById("menuList");
         this.menuListEl.onclick = function(event) {
+            var target, itemName;
             event = event || window.event;
-            var target = event.target;
-            var itemName=target.id.split("_")[1];
+            target = event.target;
+            itemName=target.id.split("_")[1];
             if(target.id.indexOf("Click")>=0)
             {
                 controllerMenuOrder.updateItem(itemName);
