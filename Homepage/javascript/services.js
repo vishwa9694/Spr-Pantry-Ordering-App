@@ -30,12 +30,8 @@ getOrders:function(setOrder,callBackFunction)
 	var xhttp=this.createAsyncGetRequest("orders");
 	xhttp.send();
 	xhttp.onreadystatechange=function(){
-		console.log("State Changed For Orders");
 		if (xhttp.readyState == 4 && xhttp.status == 200) {
-		
-			console.log(xhttp.responseText);
 			setOrder(xhttp.responseText);
-//			alert("Service Calling Render NOw");
 			callBackFunction();
 			return true;
 		}
@@ -49,10 +45,7 @@ getItems: function(setItem,callBackFunction) {
 		var xhttp=this.createAsyncGetRequest("menuItem");
 		xhttp.send();
 		xhttp.onreadystatechange=function(){
-		console.log("Item State Changed");
 		if (xhttp.readyState == 4 && xhttp.status == 200) {
-		
-			console.log(xhttp.responseText);
 			setItem(xhttp.responseText);
 			callBackFunction();
 			return true;
@@ -98,9 +91,7 @@ getNotifications: function(userid,setNotification,callBackFunction) {
 		var xhttp = this.createAsyncPostRequest("getNotifications");		
 		xhttp.send(JSON.stringify({userId:userid}));		
 		xhttp.onreadystatechange=function(){
-			console.log(xhttp.responseText);
-			if (xhttp.readyState == 4 && xhttp.status == 200) {		
-				console.log(xhttp.responseText);	
+			if (xhttp.readyState == 4 && xhttp.status == 200) {			
 			 	 setNotification(xhttp.responseText);
 			 	 callBackFunction();		
 				}
