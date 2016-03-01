@@ -26,9 +26,7 @@ var itemListController = {
         {
             itemListView.addCategory(menu.category);
             
-            menu.categoryItems.forEach(function(categoryItem,iIndex)
-            {
-            	console.log(categoryItem.itemName+","+categoryItem.available+","+categoryItem.imgSrc+","+menu.category+","+iIndex);
+            menu.categoryItems.forEach(function(categoryItem,iIndex){
                 var itemProps={ "name":categoryItem.itemName,
                     "available":categoryItem.available,
                     "imgSrc":categoryItem.imgSrc,
@@ -46,7 +44,6 @@ var itemListController = {
 var itemListView = {
     init: function(){
         this.menuListEl = document.getElementById("menuList");
-        console.log("   asfa:"+this.menuList);
         this.menuListEl.onclick = function(event) {
             event = event || window.event;
             var target = event.target;
@@ -68,7 +65,6 @@ var itemListView = {
             headerEl.className="category__header";
             headerEl.id=categoryName+"__header"
             headerEl.innerHTML = categoryName;
-            console.log("category header id "+headerEl.id);
             categoryContainerEl = document.createElement("div");
             categoryContainerEl.className="category__container";
             categoryContainerEl.id=categoryName+"__container";
@@ -89,9 +85,7 @@ var itemListView = {
                 '<i class="fa fa-plus-circle fa-3x ci__hover__click" id="Click_'+itemProps.name+'"></i>' +
                 '</div>' +
                 '<div class="category__item__name" data-type=' +itemProps.available+ ' id="tileName_'+iIndex+'">' + itemProps.name + '</div>';
-            console.log("Cat header "+itemProps.header);
             categoryDivEl=document.getElementById(itemProps.header+"__container");
-            console.log("categoryheader id is "+categoryDivEl.id);
             categoryDivEl.appendChild(itemDivEl);
       }
        

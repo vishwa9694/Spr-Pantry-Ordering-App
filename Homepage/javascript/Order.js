@@ -1,76 +1,56 @@
 var modelOrder={
 
-init:function(callBackFunction){
-//	this.orders=[];
-	serverServices.getOrders((this.setOrders.bind(this)),callBackFunction);
-},
-getOrders:function(){
-	return this.orders;
-},
-setOrders:function(orders){
-//	this.orders=[];
-	
-	this.orders=JSON.parse(orders);
-	console.log("Orders are "+this.orders);
-	this.orders.forEach(function(orderitem){console.log(orderitem);})
-}
-};
-
-
-
-var controllerQueue={
-init:function(){
-	console.log("Re rendering the queue");
-	viewQueue.init();
-	viewQueue.ordertableReset();
-	modelOrder.init((this.renderQueue.bind(this)));
-},
-
-renderQueue:function(){
-	console.log("This is orders "+modelOrder.getOrders());
-	var displaycancel=false;
-	
-	if(!(modelOrder.getOrders()===null||modelOrder.getOrders()===undefined))
-	{
-		modelOrder.getOrders().forEach(function(orderItem,index){
-		console.log("uid:"+orderItem.uid+" loginid:"+login.user.id);
-		if(orderItem.uid===login.user.id&&orderItem.status==="Queued")
-			displaycancel=true;
-		console.log(displaycancel);
-		viewQueue.addOrder(orderItem.orderName,orderItem.itemName,orderItem.status,orderItem.orderId,orderItem.uid,displaycancel);
-		displaycancel=false;
-	});
-	}
-	else
-	{
-		console.log("No Object man");
-	//	viewQueue.orderEmpty();
-	}
+	init:function(callBackFunction){
+		serverServices.getOrders((this.setOrders.bind(this)),callBackFunction);
 	},
 
+	getOrders:function(){
+		return this.orders;
+	},
 
-deleteOrder:function(cancelrequest){
-		cancelrequest=parseInt(cancelrequest);
-		var serviceret=serverServices.cancelOrder(cancelrequest,this.init.bind(this));
-	/*	if(serviceret===true)
-		{
-			modelOrder.getOrders().forEach(function(orderitem){
-				console.log(orderitem.orderId+" "+cancelrequest);
-				if(orderitem.orderId===cancelrequest)
-					orderitem.status="Cancelled";
-			});
-			console.log(modelOrder.getOrders());
-			viewQueue.ordertableReset();
-						
-		}
-		else
-		{
-			console.log("fjan");
-		}*/
-
+	setOrders:function(orders){
+		this.orders=JSON.parse(orders);
 	}
 
+};
 
+var controllerQueue={
+	init:function(){
+		viewQueue.init();
+		viewQueue.ordertableReset();
+		modelOrder.init((this.renderQueue.bind(this)));
+	},
+
+	renderQueue:function(){
+		var displaycancel=false;	
+		if(!(modelOrder.getOrders()===null||modelOrder.getOrders()===undefined)){
+			modelOrder.getOrders().forEach(function(orderItem,index){
+				if(orderItem.uid===login.user.id&&orderItem.status==="Queued"){
+					displaycancel=true;
+				}
+				var order = new controllerQueue.addOrderConstructor(orderItem, displaycancel);
+				viewQueue.addOrder(order);
+				displaycancel=false;
+			});
+		}
+		else{
+		
+		}
+	},
+
+	deleteOrder:function(cancelrequest){
+		cancelrequest=parseInt(cancelrequest);
+		var serviceret=serverServices.cancelOrder(cancelrequest,this.init.bind(this));
+	},
+
+	addOrderConstructor: function(order, displaycancel){
+		this.personName = order.orderName;
+		this.itemName = order.itemName;
+		this.status = order.status;
+		this.orderID = order.orderId;
+		this.userID = order.uid;
+		this.displaycancel = displaycancel;
+	}	
 };
 
 
@@ -78,32 +58,20 @@ var viewQueue = {
 	init: function(){
 		orderTableDivEl = document.getElementById("orderTableDiv");
 		ordertableEl = document.getElementById("orderTable");
-		//this.addEventListener();
 	},
 
-	// addEventListener: function(){
-	// 	var tableEl = document.getElementById("orderTable");
-	// 	tableEl.onclick = function(event){
-	// 	event = event || window.event;
- //            var target = event.target;
-	// 		console.log("delete:"+target.id.split("_")[1]);
-	// 		controllerQueue.deleteOrder(target.id.split("_")[1]);
-	// 	}
-	// },
-
 	orderRowInnerHTML: function(personName, itemName, status, orderID,displaycancel){
-		console.log("cancel button:"+displaycancel);
 		if(displaycancel)
 			return '<td class="s-q__name"><i class="fa fa-times-circle fa-lg" id="cancel_'+orderID+'" ></i><span>'+ personName+'<span></td><td class="s-q__item">' + itemName + '</td><td class="s-q__status--'+status+'">'+status+' </td>';
 		else
 			return '<td class="s-q__name"><span>'+ personName+'<span></td><td class="s-q__item">' + itemName + '</td><td class="s-q__status--'+status+'">'+status+' </td>';			
 	},
 
-	addOrder: function(personName, itemName, status, orderID, userID,displaycancel){
+	addOrder: function(order){
 		rowEl = document.createElement("tr");
-		rowEl.innerHTML = viewQueue.orderRowInnerHTML(personName, itemName, status,orderID,displaycancel);
-		rowEl.setAttribute('class', 's-q-e__item '+userID);
-		rowEl.setAttribute('id', orderID);
+		rowEl.innerHTML = viewQueue.orderRowInnerHTML(order.personName, order.itemName, order.status,order.orderID,order.displaycancel);
+		rowEl.setAttribute('class', 's-q-e__item '+order.userID);
+		rowEl.setAttribute('id', order.orderID);
 		ordertableEl.appendChild(rowEl);
 		
 	},
