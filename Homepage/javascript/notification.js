@@ -82,8 +82,9 @@ var viewNotifications = {
 		unreadnotificationEl.innerHTML = unreadMsgCount; 
 	},
 	handler: function(){
-		var notification=document.getElementsByClassName("header-notification")[0];
-		var notiBody = document.getElementsByClassName("notificationBody")[0];
+		var notificationDiv=document.querySelector(".notification_bar")
+		var notification=notificationDiv.querySelector(".header-notification");
+		var notiBody = notificationDiv.querySelector(".notificationBody");
 		notification.onclick=function(e)
 		{
 			console.log("Yello");

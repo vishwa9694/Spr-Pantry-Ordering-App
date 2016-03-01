@@ -130,9 +130,10 @@ var controllerMenuOrder={
 var viewMenuOrder = {
     
     init: function(){
-        menuOrderTableEl = document.getElementById("menuOrder");
-        tableNoEl = document.getElementById("user-table");
-        menuTableDivEl = document.getElementById("menuOrderDiv");
+        var ordersDiv=document.querySelector(".s-o__element");
+        menuTableDivEl = ordersDiv.querySelector("#menuOrderDiv");
+        menuOrderTableEl = ordersDiv.querySelector("#menuOrder");
+        tableNoEl = ordersDiv.querySelector("#user-table");
      	this.addEventListener();   
     },
     addEventListener: function(){
