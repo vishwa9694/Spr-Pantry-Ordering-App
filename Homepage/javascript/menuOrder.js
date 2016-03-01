@@ -114,7 +114,7 @@ var controllerMenuOrder={
     },
     submit:function(){
         var ordertable=viewMenuOrder.getTable();
-        if((isNaN(ordertable)) || (ordertable == null)){
+        if((isNaN(ordertable)) || (ordertable == " ")){
             document.getElementById("submitError").style.display = "block";
             document.getElementById("user-table").style.border = "1px solid rgb(169,68,66)";
         }

@@ -2,27 +2,45 @@
 <head>
 	<title>Statistics</title>
 	<script type="text/javascript" src="Graph.js" async ></script>
-    <link rel="stylesheet" href="graphStyles.css">
+  <script src="services.js" async></script>
+  <link rel="stylesheet" href="graphStyles.css">
 </head>
 <body>
-    <div id="wrap">
-      <ul class="navbar" id="categories">
-         <li><a href="#">StasHome</a></li>
-         <li><a href="#">Bevarages</a>
-            <ul id="Bevarages">
-            </ul>         
-        </li>
-        <li><a href="#">Snacks</a>
-            <ul id="Snacks">
-            </ul>         
-         </li>
-      </ul>
-    </div>
-    <h2  id="head">Consumption </h2>
-    <div id="BarGraph1">
-    </div>
-    <h2> CompareConsumptionGraph</h2>
-    <div id ="BarGraph2">
-    </div>
-    </body>
+  <div id="wrap">
+    <ul class="navbar" id="categories">
+     <li><a href="#">StasHome</a></li>
+     <li><a href="#">Bevarages</a>
+      <ul id="Bevarages">
+      </ul>         
+    </li>
+    <li><a href="#">Snacks</a>
+      <ul id="Snacks">
+      </ul>         
+    </li>
+  </ul>
+</div>
+<div >
+  <h1 id="header_name">STATS FOR MAGGI</h1>
+</div>
+<h2  class="side_heading" >
+  Consumption 
+  <div  class="heading_with_buttons">
+   <a  class="button" id ="button_weeks_consumtion">Last 4 Weeks</a> 
+   <a  class="button" id ="button_days_consumtion">Last Week</a>
+ </div>
+</h2>
+<div id="BarGraph1">
+</div>
+<h2  class="side_heading"> 
+  CompareConsumption
+  <div  class="heading_with_buttons">
+    <a  class="button" id ="button_weeks_compare_consumtion">Last 4 Weeks</a> 
+   <a  class="button" id ="button_days_compare_consumtion">Last Week</a>
+ </div>
+</h2>
+<div id ="BarGraph2">
+</div>
+</body>
 </html>
+
+

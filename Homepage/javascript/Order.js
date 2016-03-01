@@ -37,7 +37,8 @@ renderQueue:function(){
 		if(orderItem.uid===login.user.id&&orderItem.status==="Queued")
 			displaycancel=true;
 		console.log(displaycancel);
-		viewQueue.addOrder(orderItem.orderName,orderItem.itemName,orderItem.status,orderItem.orderId,orderItem.uid,displaycancel);
+		var order = new controllerQueue.addOrderConstructor(orderItem, displaycancel);
+		viewQueue.addOrder(order);
 		displaycancel=false;
 	});
 	}
@@ -68,7 +69,16 @@ deleteOrder:function(cancelrequest){
 			console.log("fjan");
 		}*/
 
-	}
+	},
+
+addOrderConstructor: function(order, displaycancel){
+	this.personName = order.orderName;
+	this.itemName = order.itemName;
+	this.status = order.status;
+	this.orderID = order.orderId;
+	this.userID = order.uid;
+	this.displaycancel = displaycancel;
+}	
 
 
 };
@@ -99,11 +109,11 @@ var viewQueue = {
 			return '<td class="s-q__name"><span>'+ personName+'<span></td><td class="s-q__item">' + itemName + '</td><td class="s-q__status--'+status+'">'+status+' </td>';			
 	},
 
-	addOrder: function(personName, itemName, status, orderID, userID,displaycancel){
+	addOrder: function(order){
 		rowEl = document.createElement("tr");
-		rowEl.innerHTML = viewQueue.orderRowInnerHTML(personName, itemName, status,orderID,displaycancel);
-		rowEl.setAttribute('class', 's-q-e__item '+userID);
-		rowEl.setAttribute('id', orderID);
+		rowEl.innerHTML = viewQueue.orderRowInnerHTML(order.personName, order.itemName, order.status,order.orderID,order.displaycancel);
+		rowEl.setAttribute('class', 's-q-e__item '+order.userID);
+		rowEl.setAttribute('id', order.orderID);
 		ordertableEl.appendChild(rowEl);
 		
 	},
@@ -116,10 +126,9 @@ var viewQueue = {
 		ordertableEl.setAttribute('class','s-q__table');
 		ordertableEl.setAttribute('id', 'orderTable');
 		orderTableDivEl.appendChild(ordertableEl);
-		ordertableEl.onclick = function(e){
-			//console.log("asdasd");
-			//e = e || event;
-			var target = e.target;
+		ordertableEl.onclick = function(event){
+			event = event || window.event;
+            var target = event.target;
 			console.log("delete:"+target.id.split("_")[1]);
 			controllerQueue.deleteOrder(target.id.split("_")[1]);
 		};	
