@@ -51,6 +51,19 @@ Graph.prototype.setName=function(graphName){
 Graph.prototype.clearEveryThing=function(){
 	this.context.clearRect(0,0,this.canvasWidth,this.canvasHeight);
 }
+Graph.prototype.drawAxis=function(){
+	//alert("hola")
+	var height=this.canvasHeight;
+	var width=this.canvasWidth;
+	var ctx=this.context;
+	ctx.beginPath();
+	ctx.moveTo(0,height-35);
+	ctx.lineTo(width-10,height-35);
+	ctx.moveTo(10,height-15)
+	ctx.lineTo(10,15);
+	ctx.stroke();
+
+}
 //child class of Graph
 /*******BarGraph Class and its functions********/
 function BarGraph(divName){
@@ -101,6 +114,7 @@ BarGraph.prototype.update=function(newArr){
 BarGraph.prototype.draw=function(){
 	//clear everything on canvas (need to change this to only graph)
 	  this.context.clearRect(100,100,this.canvasWidth,this.canvasHeight);//clear everything
+	  
 	 //Assign dimesnsions to canvas
 	 this.context.canvas.width = this.canvasWidth;
 	 this.context.canvas.height = this.canvasHeight;		
@@ -111,12 +125,12 @@ BarGraph.prototype.draw=function(){
 	  this.graphAreaWidth=this.canvasWidth;
 	  
 	  //If x axis labels exist then make room	
-	  if (this.xAxisLabelArr.length) {
+	  // if (this.xAxisLabelArr.length) {
 	  	this.graphAreaHeight -= 40;
-	  }
-	  if (this.yAxisLabelArr.length) {
+	  // }
+	  //if (this.yAxisLabelArr.length) {
 	  	this.graphAreaWidth -= 40;
-	  }
+	  // }
 
 	 this.numOfBars=this.barLengthsArr.length;//number of bars
 	 this.barWidth =this.graphAreaWidth/(2*this.numOfBars );//bar width
@@ -155,6 +169,8 @@ BarGraph.prototype.draw=function(){
 		this.addText(this.xAxisLabelArr[i],"violet","bold 12px sans-serif",xcord+this.barWidth*(1/3),ycord +scaledBarHeight+20);	
 	};
 
+	this.drawAxis();
+
 }
 }
 //child class of BarGraph
@@ -190,12 +206,12 @@ CompareBarGraph.prototype.draw=function(){
 	  this.graphAreaWidth=this.canvasWidth;
 	  
 	  //If x axis labels exist then make room	
-	  if (this.xAxisLabelArr.length) {
+	  // if (this.xAxisLabelArr.length) {
 	  	this.graphAreaHeight -= 40;
-	  }
-	  if (this.yAxisLabelArr.length) {
+	  // }
+	  // if (this.yAxisLabelArr.length) {
 	  	this.graphAreaWidth -= 40;
-	  }
+	  // }
 
 	 this.numOfBars=this.barLengthsArr.length;//number of bars
 	 this.barWidth =this.graphAreaWidth/(3*this.numOfBars );//bar width
@@ -244,8 +260,8 @@ CompareBarGraph.prototype.draw=function(){
 		// Draw bar label if it exists
 		if (this.xAxisLabelArr[i]) {					
 			this.addText(this.xAxisLabelArr[i],"violet","bold 12px sans-serif",xcord+this.barWidth*(1/3),ycord +scaledBarHeight+20);
-		//this.addText(this.xAxisLabelArr[i],"violet","bold 12px sans-serif",xcord+this.barWidth*(1/3),ycord +scaledBarHeight+20);		
 	};
+	this.drawAxis();
 }
 }
 CompareBarGraph.prototype.animateCompareBarGraph=function(newArr1,newArr2){
@@ -307,24 +323,24 @@ function getLast4WeeksDate(){
 	return lastFourWeeks;
 }
 
-var services = {
-	createRequest: function(requestType, url, onSuccessCallback, object) {
-		var xhr;
-		xhr = new XMLHttpRequest();
-		xhr.open(requestType, url, true);
-		xhr.onreadystatechange = function() {
-		    if (xhr.readyState == 4 && xhr.status == 200) {
-		    	onSuccessCallback(xhr.responseText, object);
-		    }
-		};
-		if(requestType === "POST") {
-			xhr.send(JSON.stringify(object));
-		}
-		else {
-			xhr.send();	
-		}
-	},
- }
+// var services = {
+// 	createRequest: function(requestType, url, onSuccessCallback, object) {
+// 		var xhr;
+// 		xhr = new XMLHttpRequest();
+// 		xhr.open(requestType, url, true);
+// 		xhr.onreadystatechange = function() {
+// 		    if (xhr.readyState == 4 && xhr.status == 200) {
+// 		    	onSuccessCallback(xhr.responseText, object);
+// 		    }
+// 		};
+// 		if(requestType === "POST") {
+// 			xhr.send(JSON.stringify(object));
+// 		}
+// 		else {
+// 			xhr.send();	
+// 		}
+// 	},
+//  }
 
 
 
@@ -337,7 +353,64 @@ var model={
 		category:"Snacks",
 		categoryItem:"Maggi"
 	},
-	orders :[],
+	orders :[
+	{
+	uid: "113352049485747139246",
+	orderId:1,
+	orderNo:1,
+	orderName: "Vishwa",
+	table: 9,
+	itemName: "Maggi",
+	quantity: 1,
+	itemDescription: "cold",
+	status: "Completed",
+	itemPlacedOn:"Tue Mar 01 2016 08:55:40 GMT+0530 (IST)",
+	deliveredOn:""
+
+},
+{
+	uid: "113352049485747139246",
+	orderId:2,
+	orderNo:1,
+	orderName: "Vishwa",
+	table: 9,
+	itemName: "Maggi",
+	quantity: 1,
+	itemDescription: "cold",
+	status: "Completed",
+	itemPlacedOn:"Tue Mar 01 2016 08:55:40 GMT+0530 (IST)",
+	deliveredOn:""
+
+},
+{
+	uid: "113352049485747139246",
+	orderId:3,
+	orderNo:1,
+	orderName: "Vikash",
+	table: 9,
+	itemName: "Maggi",
+	quantity: 1,
+	itemDescription: "cold",
+	status: "Completed",
+	itemPlacedOn:"Mon Feb 22 2016 08:55:40 GMT+0530 (IST)",
+	deliveredOn:""
+
+},
+{
+	uid: "113352049485747139246",
+	orderId:4,
+	orderNo:1,
+	orderName: "Vikash",
+	table: 9,
+	itemName: "Maggi",
+	quantity: 1,
+	itemDescription: "cold",
+	status: "Completed",
+	itemPlacedOn:"Mon Feb 22 2016 08:55:40 GMT+0530 (IST)",
+	deliveredOn:""
+
+},
+	],
 	menu :[]
 }
 
@@ -359,7 +432,7 @@ var controller={
 		model.orders=JSON.parse(updatedorders);
 	},
 	updateItems:function(updatedMenu){
-		model.menu=JSON.parse(updatedMenu);
+			model.menu=JSON.parse(updatedMenu);
 		controller.afterUpdated();		
 	},
 
@@ -397,14 +470,16 @@ var controller={
 		
 	}
 	,
-	addOrderToDoubleGraph:function(index,x){
+	addOrderToDoubleGraph:function(x){
 		var dayArr=getLast7daysDateObject();
 		var thatDay=new Date(x.itemPlacedOn);
 		var thatDayString=thatDay.getDate() + '/' + (thatDay.getMonth()+1)+'/'+thatDay.getFullYear();
 		for (var i=0;i<dayArr.length;i+=1){
 			if(thatDayString==dayArr[i]){
-				if(index) graphView.barValuesDouble.first[i]=graphView.barValuesDouble.first[i]+parseInt(x.quantity);
-				else graphView.barValuesDouble.second[i]=graphView.barValuesDouble.second[i]+parseInt(x.quantity)	
+				if(x.status=="Completed") graphView.barValuesDouble.first[i]=graphView.barValuesDouble.first[i]+parseInt(x.quantity);
+				else {
+					graphView.barValuesDouble.second[i]=graphView.barValuesDouble.second[i]+parseInt(x.quantity)	
+				}
 				break;
 			}
 		}
@@ -412,18 +487,12 @@ var controller={
 	}
 	,
 	getOrderLastSevenDays:function(itemName){
-		model.orders.filter(function(x){
-			if(x.itemName==itemName){
-				controller.addOrderToSimpleGraph(x);
-				if(x.status=="Delivered"){
-					controller.addOrderToDoubleGraph(0,x);
-				}
-				else {
-					controller.addOrderToDoubleGraph(1,x);
-				}
-			};
+		controller.getOrdersByType(itemName).forEach(function(x){
+			controller.addOrderToSimpleGraph(x);
+			console.log("id:"+x.orderId+"  "+x.itemName+"  itemPlacedOn:"+(x.itemPlacedOn).toString()+" status:"+x.status);
+			controller.addOrderToDoubleGraph(x);
 		})
-		console.log(graphView.barValuesSimple)
+		console.log(graphView.barValuesDouble.first + "   "+ graphView.barValuesDouble.second)
 	},
 	getAllMenu:function(){
 		return model.menu;
@@ -447,15 +516,13 @@ var controller={
 		var xary=[0,0,0,0];
 		var xaryDelivered=[0,0,0,0];
 		var xaryNotdelivered=[0,0,0,0];
-		// console.log("dsjkdaskj")
-		// console.log(arr)
 		controller.getOrdersByType(model.currentGraph.categoryItem).forEach(function(x){
 			var i=getWeekNumber(new Date(x.itemPlacedOn));
-			console.log("LAL:"+i)
+			//console.log("id: "+x.orderId+"  "+x.itemName+"itemPlacedOn:"+x.itemPlacedOn+"WeekNumber:"+i+"status:"+x.status);
 			for(var z=0;z<4;z++){
 				if(i==arr[z]){
 					xary[z]=xary[z]+parseInt(x.quantity);
-					if(x.status=="Delivered")xaryDelivered[z]=xaryDelivered[z]+parseInt(x.quantity)
+					if(x.status=="Completed")xaryDelivered[z]=xaryDelivered[z]+parseInt(x.quantity)
 						else xaryNotdelivered[z]=xaryNotdelivered[z]+parseInt(x.quantity)
 				}
 			}
@@ -550,21 +617,22 @@ var view ={
 
  var graphView={
  		init:function(){
+ 			graphView.resetGraphBarArrays();
  			controller.setBarGraphArray();
  			controller.setxLabelArray();
  			graphView.render();
  		},
        	render:function(){
   
-       		console.log(model.currentGraph);
+       		//console.log("Model Graph:"+model.currentGraph);
        		var bgraph= new BarGraph("BarGraph1");
 			bgraph.xAxisLabelArr=graphView.xAxisLabelArr;
-			bgraph.graphName="Total Orders";
+			bgraph.graphName="Total Items Placed ";
 			bgraph.update(graphView.barValuesSimple);
 
 			var bgraph2=new CompareBarGraph("BarGraph2");
 			bgraph2.xAxisLabelArr=graphView.xAxisLabelArr;
-			bgraph2.graphName="Orders Delivered vs Not delivered"
+			bgraph2.graphName="Items Delivered  vs Not delivered"
 			bgraph2.update(graphView.barValuesDouble.first,graphView.barValuesDouble.second);
 			
        	},

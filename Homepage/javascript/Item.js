@@ -20,8 +20,9 @@ var itemListController = {
     },
     
     render:function(){
-        var category=modelItems.getItems();
-        var iIndex=0;
+        var category, iIndex;
+        category=modelItems.getItems();
+        iIndex=0;
         category.forEach(function(menu,catIndex)
         {
             itemListView.addCategory(menu.category);
@@ -45,9 +46,10 @@ var itemListView = {
     init: function(){
         this.menuListEl = document.getElementById("menuList");
         this.menuListEl.onclick = function(event) {
+            var target, itemName;
             event = event || window.event;
-            var target = event.target;
-            var itemName=target.id.split("_")[1];
+            target = event.target;
+            itemName=target.id.split("_")[1];
             if(target.id.indexOf("Click")>=0)
             {
                 controllerMenuOrder.updateItem(itemName);
@@ -60,16 +62,10 @@ var itemListView = {
         categoryEl=document.createElement("div");
         categoryEl.className="category";
         if(!document.getElementById(categoryName)){
+
             categoryEl.id=categoryName;
-            headerEl = document.createElement("div");
-            headerEl.className="category__header";
-            headerEl.id=categoryName+"__header"
-            headerEl.innerHTML = categoryName;
-            categoryContainerEl = document.createElement("div");
-            categoryContainerEl.className="category__container";
-            categoryContainerEl.id=categoryName+"__container";
-            categoryEl.appendChild(headerEl);
-            categoryEl.appendChild(categoryContainerEl);
+            categoryEl.innerHTML= '<div class="category__header" id="'+categoryName+'__header">'+categoryName+'</div>'+
+                                    '<div class="category__container" id="'+categoryName+'__container"></div>'
             this.menuListEl.appendChild(categoryEl);
         }
        
