@@ -1,29 +1,30 @@
 
-var modelmenuOrder={
-init:function(){
-	this.orderitemlist=[];
-}
+var modelMenuOrder={
+    init:function(){
+	   this.orderItemList=[];
+    },
+    getOrderItemList:function(){
+        return this.orderItemList;
+    },
+    setOrderItemList:function(orderlist){
+        this.orderItemList=JSON.parse(orderlist);
+    }
 };
 
 var controllerMenuOrder={
-
-
     init:function(){
         viewMenuOrder.init();
-        modelmenuOrder.init();
-        
+        modelMenuOrder.init();
     },
     render:function(){
-        console.log("rendering");
-        modelmenuOrder.orderitemlist.forEach(function(orderitem){
+        modelMenuOrder.getOrderItemList().forEach(function(orderitem){
             viewMenuOrder.addItem(orderitem.itemName,orderitem.quantity);
         });
     },
     updateItem:function(name){
-        console.log(modelmenuOrder.orderitemlist);
         var that=this;
         var found=false;
-        modelmenuOrder.orderitemlist.forEach(function(menuitem,id){
+        modelMenuOrder.getOrderItemList().forEach(function(menuitem,id){
             if(menuitem.itemName===name){
                  	found=true;
                     that.increaseQuant(name);
@@ -35,7 +36,7 @@ var controllerMenuOrder={
         }
     },
     addItem:function(itemname){
-        if(modelmenuOrder.orderitemlist.length===0&&!(login.user.id===null||login.user.id===undefined))
+        if(modelMenuOrder.getOrderItemList().length===0&&!(login.user.id===null||login.user.id===undefined))
             viewMenuOrder.showsubmit();
         neworderitem=new Object();
         neworderitem.uid=login.user.id;
@@ -43,71 +44,58 @@ var controllerMenuOrder={
         neworderitem.itemName=itemname;
         neworderitem.table=0;
         neworderitem.quantity=1;
-        //neworderitem.itemDescription=description;
-        modelmenuOrder.orderitemlist.push(neworderitem);
-        //modelmenuOrder.orderitemlist.push(neworderitem);
+        modelMenuOrder.getOrderItemList().push(neworderitem);
         viewMenuOrder.addItem(itemname,1);
-        return modelmenuOrder.orderitemlist.length-1;
+        return modelMenuOrder.getOrderItemList().length-1;
         
     },
     deleteItem:function(itemName){
-    	console.log("Deleting");
-        modelmenuOrder.orderitemlist.forEach(function(orderitem,index)
+        modelMenuOrder.getOrderItemList().forEach(function(orderitem,index)
         {
             if(orderitem.itemName===itemName)
             {
-                modelmenuOrder.orderitemlist.splice(index,1);
+                modelMenuOrder.getOrderItemList().splice(index,1);
             }
         });
-        console.log(modelmenuOrder.orderitemlist);
         viewMenuOrder.menuOrderReset();
         this.render();
-
-        if(modelmenuOrder.orderitemlist.length===0)
+        if(modelMenuOrder.getOrderItemList().length===0){
             viewMenuOrder.hidesubmit();
-        //modelmenuOrder.orderitem.length-=1;
+        }
 
     },
 
     increaseQuant:function(itemName){
-            console.log("Increasing");
-        	var count=-1;
-     
-        modelmenuOrder.orderitemlist.forEach(function(orderitem,index){
-            if(orderitem.itemName===itemName)
-            {
-                    count=(++modelmenuOrder.orderitemlist[index].quantity);
+        var count=-1; 
+        modelMenuOrder.getOrderItemList().forEach(function(orderitem,index){
+            if(orderitem.itemName===itemName){
+                count=(++modelMenuOrder.getOrderItemList()[index].quantity);
             }
-
         });
-        
-        console.log(modelmenuOrder.orderitemlist);
         viewMenuOrder.showQuantity(itemName,count);
-        
     },
+
     decreaseQuant:function(itemName){
-    	console.log("Decreasing");
         var count=-1;
         var that=this;
-        modelmenuOrder.orderitemlist.forEach(function(orderitem,index)
+        modelMenuOrder.getOrderItemList().forEach(function(orderitem,index)
         {
             if(orderitem.itemName==itemName)
             {
-                if(modelmenuOrder.orderitemlist[index].quantity===1)
+                if(modelMenuOrder.getOrderItemList()[index].quantity===1)
                 {
                     that.deleteItem(itemName);
                     return true;
                 }
                 else{
-                   count= (--modelmenuOrder.orderitemlist[index].quantity);
+                   count= (--modelMenuOrder.getOrderItemList()[index].quantity);
        				viewMenuOrder.showQuantity(itemName,count);
         			return true;
                 }
             }
         });
-
-        console.log(modelmenuOrder.orderitemlist);
     },
+
     submit:function(){
         var ordertable=viewMenuOrder.getTable();
         if((isNaN(ordertable)) || (ordertable == " ")){
@@ -115,14 +103,15 @@ var controllerMenuOrder={
             document.getElementById("user-table").style.border = "1px solid rgb(169,68,66)";
         }
         else{
-            modelmenuOrder.orderitemlist.forEach(function(orderitem)
-            {
+            modelMenuOrder.getOrderItemList().forEach(function(orderitem){
                 orderitem.itemDescription=viewMenuOrder.getDescription(orderitem.itemName);
                 orderitem.table=ordertable;
                 console.log(orderitem.itemDescription);
-
             });
-            serverServices.sendorder(modelmenuOrder.orderitemlist,controllerQueue.init.bind(controllerQueue));
+            serverServices.sendorder(modelMenuOrder.getOrderItemList(),controllerQueue.init.bind(controllerQueue));
+            viewMenuOrder.menuOrderReset();
+            viewMenuOrder.hidesubmit();
+            this.init();
         }
     }
 };
@@ -140,8 +129,6 @@ var viewMenuOrder = {
         menuOrderTableEl.onclick = function(event){
             event = event || window.event;
             var target = event.target;
-            console.log(target.id.split("_")[1]);
-            console.log("classname"+target.className);
             if (target.className == "fa fa-times-circle fa-lg itemcancel"){
                 controllerMenuOrder.deleteItem(target.id.split("_")[1]);
             }
@@ -155,18 +142,23 @@ var viewMenuOrder = {
             
         }
     },
+
     itemNameInnerHTML: function(name){
         return '<i class="fa fa-times-circle fa-lg itemcancel" id="cancel_'+name+'"></i><span>' + name + '</span>';
     },
+
     addButtonInnerHTML: function(name){
         return '<button classs="add-but adder" id="add_'+name+'">+</button>';
-    },  
+    },
+
     removeButtonInnerHTML: function(name){
         return '<button classs="add-but sub" id="sub_'+name+'">-</button>';
     },
+
     specialInstructionsInnerHTML: function(name){
         return '<input class="in_comment" placeholder="Special Instructions" id="special_'+name+'"/>';
     },
+
     addItem: function(name,qty){
         var menuOrderRowEl = document.createElement("tr");
         menuOrderRowEl.setAttribute('class', 's-o-e__item');
@@ -198,11 +190,13 @@ var viewMenuOrder = {
         //Finally adding the row to the table
         menuOrderTableEl.appendChild(menuOrderRowEl);
     },
+
     showQuantity: function(itemName, quantity){
         var quantityEl = document.getElementById("qty_"+itemName);
         quantityEl.innerHTML = quantity;
     },
-   menuOrderReset: function(){
+
+    menuOrderReset: function(){
         menuTableDivEl.innerHTML = " ";
         menuOrderTableEl = document.createElement("table");
         menuOrderTableEl.setAttribute('class', 's-o-e__table');
@@ -210,25 +204,24 @@ var viewMenuOrder = {
         menuTableDivEl.appendChild(menuOrderTableEl);
     	this.addEventListener();
     },
+
     getTable: function(){
     	console.log("Table"+tableNoEl.value);
         return tableNoEl.value;
     },
+
 	getDescription: function(name){
 		console.log("special_"+name);
 		console.log("domelement: "+document.getElementById("special_"+name));
         return document.getElementById("special_"+name).value;
     },
-    showsubmit:function()
-    {
-        document.getElementsByClassName("user-form")[0].style.display="block";
 
+    showsubmit:function(){
+        document.getElementsByClassName("user-form")[0].style.display="block";
     },
 
-    hidesubmit:function()
-    {
+    hidesubmit:function(){
         document.getElementsByClassName("user-form")[0].style.display="none";
-
     }
 };
 
