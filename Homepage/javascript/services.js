@@ -71,7 +71,7 @@ cancelOrder:function (orderid,callBackFunction){
 		
 		if (!(xhttp.readyState == 4 && xhttp.status == 200)) {
 			
-			alert("Server Cancel Order Eror");
+			//alert("Server Cancel Order Eror");
 		}
 		else{
 			callBackFunction();
