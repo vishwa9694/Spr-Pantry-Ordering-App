@@ -60,16 +60,10 @@ var itemListView = {
         categoryEl=document.createElement("div");
         categoryEl.className="category";
         if(!document.getElementById(categoryName)){
+
             categoryEl.id=categoryName;
-            headerEl = document.createElement("div");
-            headerEl.className="category__header";
-            headerEl.id=categoryName+"__header"
-            headerEl.innerHTML = categoryName;
-            categoryContainerEl = document.createElement("div");
-            categoryContainerEl.className="category__container";
-            categoryContainerEl.id=categoryName+"__container";
-            categoryEl.appendChild(headerEl);
-            categoryEl.appendChild(categoryContainerEl);
+            categoryEl.innerHTML= '<div class="category__header" id="'+categoryName+'__header">'+categoryName+'</div>'+
+                                    '<div class="category__container" id="'+categoryName+'__container"></div>'
             this.menuListEl.appendChild(categoryEl);
         }
        
