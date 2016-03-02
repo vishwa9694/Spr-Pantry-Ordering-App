@@ -334,7 +334,14 @@ body.has-active-menu{
 .close:hover { 
 	background: #fa8564; 
 }
-
+.modal-close {
+	opacity: 0;
+	pointer-events: none;
+}
+.modal-open {
+	opacity: 1;
+	pointer-events: auto;	
+}
 .md__heading {
 	font-size: large;
     padding: 15px 0;

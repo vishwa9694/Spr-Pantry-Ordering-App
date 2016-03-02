@@ -364,7 +364,7 @@ $(function() {
 				leftSidePanelView.addCategoryInSidePanel(menuCategory, items);	
 			});
 			$(document).on('change', '#c-menu--slide-left input:checkbox',(function() {
-				var categoryName = $(this).parent().parent().attr('id');
+				var categoryName = $(this).attr('id').split("_")[0];
 				if(!$(this).is(":checked")) {
 					controller.onItemUnavailable(categoryName, $(this).val());
 				}
@@ -388,7 +388,7 @@ $(function() {
 		},
 		addItemInCategory: function(itemName, available, selectedCategory) {
 			var categoryItem = $("<li>",{class:"c-menu__product"});
-			categoryItem.append($("<input>",{class: "c-menu__product__check", type:"checkbox", value: itemName, checked: available}));
+			categoryItem.append($("<input>",{class: "c-menu__product__check", type:"checkbox", value: itemName, checked: available, id: selectedCategory+"_"+itemName}));
 			categoryItem.append(document.createTextNode(itemName));
 			$("#"+selectedCategory).append(categoryItem);
 		},
