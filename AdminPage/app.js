@@ -379,7 +379,7 @@ $(function() {
 			categoryItemsList = ($("<ul>",{id: category}));
 			categoryItems.forEach(function(item) {
 				var categoryItem = $("<li>",{class:"c-menu__product"});
-				var checkboxItem = $("<input>",{class: "c-menu__product__check", type:"checkbox", value: item.itemName, checked: item.available});
+				var checkboxItem = $("<input>",{class: "c-menu__product__check", type:"checkbox", value: item.itemName, checked: item.available, id: category+"_"+item.itemName});
 				categoryItem.append(checkboxItem);
 				categoryItem.append(document.createTextNode(item.itemName));
 				categoryItemsList.append(categoryItem);
