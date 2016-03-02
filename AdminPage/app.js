@@ -215,19 +215,21 @@ $(function() {
 				}
 			});
 			$("#queueTable").click(function(e){
+				var index = Number(e.target.id.split("_")[1]);
+				controller.setcurrentOrder(index);
 				if(e.target.id.indexOf("cancel")===0) {
-					var index = Number(e.target.id.split("_")[1]);
-					controller.setcurrentOrder(index);
+				//	var index = Number(e.target.id.split("_")[1]);
+				//	controller.setcurrentOrder(index);
 					cancelDialogView.viewCancelDialog();
 				}
 				else if(e.target.id.indexOf("done")===0) {
-					var index = Number(e.target.id.split("_")[1]);
-					controller.setcurrentOrder(index);
+				//	var index = Number(e.target.id.split("_")[1]);
+				//	controller.setcurrentOrder(index);
 					controller.orderCompleted();
 				}
 				else if(e.target.id.indexOf("progress")===0) {
-					var index = Number(e.target.id.split("_")[1]);
-					controller.setcurrentOrder(index);
+				//	var index = Number(e.target.id.split("_")[1]);
+				//	controller.setcurrentOrder(index);
 					controller.orderInProgress();
 				}
 			});
@@ -281,7 +283,7 @@ $(function() {
 			$("#openAddItemModal").click(this.viewNewItemDialog);
 			$("#closeNewItemDialog").click(this.closeAddNewItemDialog);		
 			$("#categorySelect").change(function() {
-				if($(this).find(":selected" ).text() == "Add New Category" && !(addNewItemDialogView.categoryDiv)) {
+				if($(this).find(":selected" ).data("type") === "new" && !(addNewItemDialogView.categoryDiv)) {
 					var newCategoryHTML = '<div id="newCategory"><div class="md__labels">New Category Name</div><input class="md__input box-border" placeholder="Enter Category Name"></div>';
 					$(this).after(newCategoryHTML);
 					$("#newCategory input").on('input',function() {
@@ -338,7 +340,7 @@ $(function() {
 			menu.forEach(function(category) {
 				optionsHTML += "<option>"+category.category+"</option>"; 
 			});			
-			optionsHTML += "<option>Add New Category</option>";
+			optionsHTML += "<option data-type='new'>Add New Category</option>";
 			$("#categorySelect").html(optionsHTML);		
 		},
 		closeAddNewItemDialog: function() {
