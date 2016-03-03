@@ -203,7 +203,7 @@ $(function() {
 	};
 	var orderQueueView = {
 		init: function() {
-			var orders, clubbedOrders;
+			var orders, clubbedOrders, actions;
 			orders = controller.getOrdersForQueue();
 			orders.forEach(this.addOrderInQueue);
 			$("#clubOrdersCheck").change(function(){
@@ -217,24 +217,30 @@ $(function() {
 					orders.forEach(orderQueueView.addOrderInQueue);
 				}
 			});
+			actions = {
+				cancel: cancelDialogView.viewCancelDialog.bind(cancelDialogView),
+				done: controller.orderCompleted.bind(controller),
+				progress: controller.orderInProgress.bind(controller)
+			}
 			$("#queueTable").click(function(e){
 				var id = Number(e.target.id.split("_")[1]);
 				controller.setcurrentOrder(id);
-				if(e.target.id.indexOf("cancel")===0) {
-				//	var index = Number(e.target.id.split("_")[1]);
-				//	controller.setcurrentOrder(index);
-					cancelDialogView.viewCancelDialog();
-				}
-				else if(e.target.id.indexOf("done")===0) {
-				//	var index = Number(e.target.id.split("_")[1]);
-				//	controller.setcurrentOrder(index);
-					controller.orderCompleted();
-				}
-				else if(e.target.id.indexOf("progress")===0) {
-				//	var index = Number(e.target.id.split("_")[1]);
-				//	controller.setcurrentOrder(index);
-					controller.orderInProgress();
-				}
+				actions[e.target.id.split("_")[0]]();
+				// if(e.target.id.indexOf("cancel")===0) {
+				// //	var index = Number(e.target.id.split("_")[1]);
+				// //	controller.setcurrentOrder(index);
+				// 	cancelDialogView.viewCancelDialog();
+				// }
+				// else if(e.target.id.indexOf("done")===0) {
+				// //	var index = Number(e.target.id.split("_")[1]);
+				// //	controller.setcurrentOrder(index);
+				// 	controller.orderCompleted();
+				// }
+				// else if(e.target.id.indexOf("progress")===0) {
+				// //	var index = Number(e.target.id.split("_")[1]);
+				// //	controller.setcurrentOrder(index);
+				// 	controller.orderInProgress();
+				// }
 			});
 		},
 		addOrderInQueue: function(order,index) {
