@@ -8,7 +8,7 @@
             'onsuccess': onSuccess,
             'onfailure': onFailure
         });
-        document.getElementById("my-signin2").style.display="block";
+        //document.getElementById("my-signin2").style.display="block";
     };
     function onSuccess(googleUser) {
         var email=googleUser.getBasicProfile().getEmail();
