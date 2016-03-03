@@ -56,35 +56,39 @@ var controllerQueue={
 
 var viewQueue = {
 	init: function(){
-		orderTableDivEl = document.getElementById("orderTableDiv");
-		ordertableEl = document.getElementById("orderTable");
+		this.orderTableDivEl = document.getElementById("orderTableDiv");
+		this.ordertableEl = document.getElementById("orderTable");
 	},
 
-	orderRowInnerHTML: function(personName, itemName, status, orderID,displaycancel){
-		if(displaycancel)
-			return '<td class="s-q__name"><i class="fa fa-times-circle fa-lg" id="cancel_'+orderID+'" ></i><span>'+ personName+'<span></td><td class="s-q__item">' + itemName + '</td><td class="s-q__status--'+status+'">'+status+' </td>';
+	orderRowInnerHTML: function(order){
+		var td, cross, content;
+		td = '<td class="s-q__name">';
+		cross = '<i class="fa fa-times-circle fa-lg" id="cancel_'+order.orderID+'" ></i>';
+		content = '<span>'+ order.personName +'<span></td><td class="s-q__item">' + order.itemName + '</td><td class="s-q__status--'+order.status+'">'+order.status+' </td>';
+		if(order.displaycancel)
+			return td + cross + content;
 		else
-			return '<td class="s-q__name"><span>'+ personName+'<span></td><td class="s-q__item">' + itemName + '</td><td class="s-q__status--'+status+'">'+status+' </td>';			
+			return td + content;			
 	},
 
 	addOrder: function(order){
+		var rowEl;
 		rowEl = document.createElement("tr");
-		rowEl.innerHTML = viewQueue.orderRowInnerHTML(order.personName, order.itemName, order.status,order.orderID,order.displaycancel);
+		rowEl.innerHTML = viewQueue.orderRowInnerHTML(order);
 		rowEl.setAttribute('class', 's-q-e__item '+order.userID);
 		rowEl.setAttribute('id', order.orderID);
-		ordertableEl.appendChild(rowEl);
+		this.ordertableEl.appendChild(rowEl);
 		
 	},
 
 	ordertableReset: function(){
-		var orderTableDivEl = document.getElementById("orderTableDiv");
-		orderTableDivEl.innerHTML = " ";
-		ordertableEl = document.createElement("table");
-		ordertableEl.innerHTML = '<tr class="s-q-e__heading"><th>Name</th><th>Order</th><th>Status</th></tr>';
-		ordertableEl.setAttribute('class','s-q__table');
-		ordertableEl.setAttribute('id', 'orderTable');
-		orderTableDivEl.appendChild(ordertableEl);
-		ordertableEl.onclick = function(event){
+		this.orderTableDivEl.innerHTML = " ";
+		this.ordertableEl = document.createElement("table");
+		this.ordertableEl.innerHTML = '<tr class="s-q-e__heading"><th>Name</th><th>Order</th><th>Status</th></tr>';
+		this.ordertableEl.setAttribute('class','s-q__table');
+		this.ordertableEl.setAttribute('id', 'orderTable');
+		this.orderTableDivEl.appendChild(this.ordertableEl);
+		this.ordertableEl.onclick = function(event){
 			event = event || window.event;
             var target = event.target;
            if(target.id.split("_")[0]==="cancel")
