@@ -1,6 +1,4 @@
 
-var notificationPanelEl;
-
 var modelNotification={
 
 	init:function(callBackFunction){
@@ -55,19 +53,21 @@ var controllerNotifications = {
 var viewNotifications = {
 	
 	init: function(){
-		notificationPanelEl = document.getElementById("notificationBody");
+		this.notificationPanelEl = document.getElementById("notificationBody");
+		this.unreadnotificationEl = document.getElementById("notification_count");
 	},
 	renderNoNotification: function() {
 		var item = document.createElement("li");
 		item.style.color = "black";
 		item.innerHTML = "No notifications";
-		notificationPanelEl.appendChild(item);
+		this.notificationPanelEl.appendChild(item);
 	},
 
 	clearNotifications: function() {
-		notificationPanelEl.innerHTML="";
+		this.notificationPanelEl.innerHTML="";
 	},
 	addNotification: function(itemName, status, reason){
+		var notificationEl, notificationReasonDivEl;
 		notificationEl = document.createElement("li");
 		notificationEl.setAttribute('id', 'notification--' + status);
 		notificationEl.innerHTML = "Your Item : " + itemName + " is " + status + ". "
@@ -77,13 +77,13 @@ var viewNotifications = {
 			notificationReasonDivEl.innerHTML = reason;
 			notificationEl.appendChild(notificationReasonDivEl);
 		} 
-		notificationPanelEl.insertBefore(notificationEl,notificationPanelEl.firstChild);
+		this.notificationPanelEl.insertBefore(notificationEl,this.notificationPanelEl.firstChild);
 	},
 
 	showUnreadCount : function(unreadMsgCount){
-		unreadnotificationEl = document.getElementById("notification_count");
-		unreadnotificationEl.innerHTML = unreadMsgCount; 
+		this.unreadnotificationEl.innerHTML = unreadMsgCount; 
 	},
+	
 	handler: function(){
 		var notificationDiv=document.querySelector(".notification_bar")
 		var notification=notificationDiv.querySelector(".header-notification");
