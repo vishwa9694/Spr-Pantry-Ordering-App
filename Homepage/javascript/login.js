@@ -3,6 +3,7 @@
             'scope': 'https://www.googleapis.com/auth/plus.login',
             'width': 200,
             'height': 50,
+            'display':"none",
             'longtitle': true,
             'theme': 'dark',
             'onsuccess': onSuccess,

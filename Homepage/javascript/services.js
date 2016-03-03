@@ -13,14 +13,13 @@ createAsyncPostRequest:function(request){
 },
 
 
-getOrders:function(setOrder,callBackFunction) 
+getOrders:function(callBackFunction) 
 {
 	var xhttp=this.createAsyncGetRequest("orders");
 	xhttp.send();
 	xhttp.onreadystatechange=function(){
 		if (xhttp.readyState == 4 && xhttp.status == 200) {
-			setOrder(xhttp.responseText);
-			callBackFunction();
+			callBackFunction(JSON.parse(xhttp.responseText));
 			return true;
 		}
 		else return false;
@@ -29,13 +28,12 @@ getOrders:function(setOrder,callBackFunction)
 },
 
 
-getItems: function(setItem,callBackFunction) {
+getItems: function(callBackFunction) {
 		var xhttp=this.createAsyncGetRequest("menuItem");
 		xhttp.send();
 		xhttp.onreadystatechange=function(){
 		if (xhttp.readyState == 4 && xhttp.status == 200) {
-			setItem(xhttp.responseText);
-			callBackFunction();
+			callBackFunction(JSON.parse(xhttp.responseText));
 			return true;
 		}
 		else return false;
@@ -73,18 +71,17 @@ sendorder:function (order,callBackFunction){
 
 
 },
-getNotifications: function(userid,setNotification,callBackFunction) {		
+getNotifications: function(userid,callBackFunction) {		
 		var xhttp = this.createAsyncPostRequest("getNotifications");		
 		xhttp.send(JSON.stringify({userId:userid}));		
 		xhttp.onreadystatechange=function(){
 			if (xhttp.readyState == 4 && xhttp.status == 200) {			
-			 	 setNotification(xhttp.responseText);
-			 	 callBackFunction();		
+			 	 callBackFunction(JSON.parse(xhttp.responseText));		
 				}
 			else{
 				return ;
 			}
-			};		
+		};		
 	},
 readNotification:function(userid){
 		var xhttp = this.createAsyncPostRequest("readNotification");		

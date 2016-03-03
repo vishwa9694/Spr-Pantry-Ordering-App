@@ -1,7 +1,7 @@
 var modelOrder={
 
 	init:function(callBackFunction){
-		serverServices.getOrders((this.setOrders.bind(this)),callBackFunction);
+		serverServices.getOrders(callBackFunction);
 	},
 
 	getOrders:function(){
@@ -9,7 +9,7 @@ var modelOrder={
 	},
 
 	setOrders:function(orders){
-		this.orders=JSON.parse(orders);
+		this.orders=orders;
 	}
 
 };
@@ -18,9 +18,12 @@ var controllerQueue={
 	init:function(){
 		viewQueue.init();
 		viewQueue.ordertableReset();
-		modelOrder.init((this.renderQueue.bind(this)));
+		modelOrder.init((this.serverCallBack.bind(this)));
 	},
-
+	serverCallBack:function(orders){
+		modelOrder.setOrders(orders);
+		this.renderQueue();
+	},
 	renderQueue:function(){
 		var displaycancel=false;	
 		if(!(modelOrder.getOrders()===null||modelOrder.getOrders()===undefined)){
@@ -32,9 +35,6 @@ var controllerQueue={
 				viewQueue.addOrder(order);
 				displaycancel=false;
 			});
-		}
-		else{
-		
 		}
 	},
 

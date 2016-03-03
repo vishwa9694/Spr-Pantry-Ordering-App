@@ -2,6 +2,7 @@
 var modelMenuOrder={
     init:function(){
         this.orderItemList=[];
+        this.mapOrder={};
     },
     getOrderItemList:function(){
         return this.orderItemList;
