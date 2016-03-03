@@ -22,51 +22,48 @@ var controllerQueue={
 	},
 
 	renderQueue:function(){
-		var displaycancel=false;	
-		if(!(modelOrder.getOrders()===null||modelOrder.getOrders()===undefined)){
+		var displayCancel=false;	
+		if(modelOrder.getOrders()){
 			modelOrder.getOrders().forEach(function(orderItem,index){
 				if(orderItem.uid===login.user.id&&orderItem.status==="Queued"){
-					displaycancel=true;
+					displayCancel=true;
 				}
-				var order = new controllerQueue.addOrderConstructor(orderItem, displaycancel);
+				var order = new controllerQueue.order(orderItem, displayCancel);
 				viewQueue.addOrder(order);
-				displaycancel=false;
+				displayCancel=false;
 			});
 		}
-		else{
-		
-		}
 	},
 
-	deleteOrder:function(cancelrequest){
-		cancelrequest=parseInt(cancelrequest);
-		var serviceret=serverServices.cancelOrder(cancelrequest,this.init.bind(this));
+	deleteOrder:function(cancelRequest){
+		cancelRequest=parseInt(cancelRequest);
+		var serviceret=serverServices.cancelOrder(cancelRequest,this.init.bind(this));
 	},
 
-	addOrderConstructor: function(order, displaycancel){
+	order: function(order, displayCancel){
 		this.personName = order.orderName;
 		this.itemName = order.itemName;
 		this.status = order.status;
 		this.orderID = order.orderId;
 		this.userID = order.uid;
-		this.displaycancel = displaycancel;
+		this.displayCancel = displayCancel;
 	}	
 };
 
 
 var viewQueue = {
 	init: function(){
-		this.orderTableDivEl = document.getElementById("orderTableDiv");
-		this.ordertableEl = document.getElementById("orderTable");
+		this.orderTableContEl = document.getElementById("orderTableDiv");
+		this.orderTableEl = document.getElementById("orderTable");
 	},
 
 	orderRowInnerHTML: function(order){
-		var td, cross, content;
+		var td, cancelBtn, content;
 		td = '<td class="s-q__name">';
-		cross = '<i class="fa fa-times-circle fa-lg" id="cancel_'+order.orderID+'" ></i>';
+		cancelBtn = '<i class="fa fa-times-circle fa-lg" id="cancel_'+order.orderID+'" ></i>';
 		content = '<span>'+ order.personName +'<span></td><td class="s-q__item">' + order.itemName + '</td><td class="s-q__status--'+order.status+'">'+order.status+' </td>';
-		if(order.displaycancel)
-			return td + cross + content;
+		if(order.displayCancel)
+			return td + cancelBtn + content;
 		else
 			return td + content;			
 	},
@@ -77,18 +74,14 @@ var viewQueue = {
 		rowEl.innerHTML = viewQueue.orderRowInnerHTML(order);
 		rowEl.setAttribute('class', 's-q-e__item '+order.userID);
 		rowEl.setAttribute('id', order.orderID);
-		this.ordertableEl.appendChild(rowEl);
+		this.orderTableEl.appendChild(rowEl);
 		
 	},
 
 	ordertableReset: function(){
-		this.orderTableDivEl.innerHTML = " ";
-		this.ordertableEl = document.createElement("table");
-		this.ordertableEl.innerHTML = '<tr class="s-q-e__heading"><th>Name</th><th>Order</th><th>Status</th></tr>';
-		this.ordertableEl.setAttribute('class','s-q__table');
-		this.ordertableEl.setAttribute('id', 'orderTable');
-		this.orderTableDivEl.appendChild(this.ordertableEl);
-		this.ordertableEl.onclick = function(event){
+		this.orderTableContEl.innerHTML = '<table class="s-q__table" id="orderTable"><tr class="s-q-e__heading"><th>Name</th><th>Order</th><th>Status</th></tr></table>'
+		this.init();
+		this.orderTableEl.onclick = function(event){
 			event = event || window.event;
             var target = event.target;
            if(target.id.split("_")[0]==="cancel")
