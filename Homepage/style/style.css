@@ -379,6 +379,11 @@ th{
 
     background-color: rgba(128, 128, 128, 0.22);
 }
+
+.s-q-e__heading th{
+    vertical-align: middle;
+}
+
 td {
     height:0px;
     padding: 5px;
