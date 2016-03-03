@@ -62,7 +62,6 @@ var itemListView = {
         categoryEl=document.createElement("div");
         categoryEl.className="category";
         if(!document.getElementById(categoryName)){
-
             categoryEl.id=categoryName;
             categoryEl.innerHTML= '<div class="category__header" id="'+categoryName+'__header">'+categoryName+'</div>'+
                                     '<div class="category__container" id="'+categoryName+'__container"></div>'

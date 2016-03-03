@@ -28,7 +28,6 @@ var controllerMenuOrder={
             if(menuitem.itemName===name){
                  	found=true;
                     that.increaseQuant(name);
-                    //return true;
             }
         });
         if(found===false){

@@ -61,11 +61,11 @@ var viewNotifications = {
 		var item = document.createElement("li");
 		item.style.color = "black";
 		item.innerHTML = "No notifications";
-		$(notificationPanelEl).append(item);
+		notificationPanelEl.appendChild(item);
 	},
 
 	clearNotifications: function() {
-		$(notificationPanelEl).html("");
+		notificationPanelEl.innerHTML="";
 	},
 	addNotification: function(itemName, status, reason){
 		notificationEl = document.createElement("li");
@@ -77,7 +77,7 @@ var viewNotifications = {
 			notificationReasonDivEl.innerHTML = reason;
 			notificationEl.appendChild(notificationReasonDivEl);
 		} 
-		$(notificationPanelEl).prepend(notificationEl);
+		notificationPanelEl.insertBefore(notificationEl,notificationPanelEl.firstChild);
 	},
 
 	showUnreadCount : function(unreadMsgCount){
@@ -90,8 +90,6 @@ var viewNotifications = {
 		var notiBody = notificationDiv.querySelector(".notificationBody");
 		notification.onclick=function(e)
 		{
-			//$("#notification__count").fadeOut("");
-
 			if (notiBody.style.display == 'block'){
 				notiBody.style.display = 'none';
 			}
@@ -101,7 +99,7 @@ var viewNotifications = {
 			}
 			controllerNotifications.settrueall();
 		};
-		$(document).click( function(){
+		document.addEventListener('click', function(){
 			notiBody.style.display = 'none';
 		});
 	}
