@@ -90,8 +90,7 @@ var itemListView = {
        
     } ,
     reset:function(){
-        this.menuList = document.getElementById("menuList");
-        this.menuList.innerHTML=" ";
+        this.menuListEl.innerHTML=" ";
     } 
        
     };

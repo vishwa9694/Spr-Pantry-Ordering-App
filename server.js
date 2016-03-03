@@ -301,7 +301,7 @@ http.createServer(function(req, res) {
 				filteredOrders[0].itemPlacedOn=(new Date()).toString();//adding this to remove errors
 			}
 			orders.forEach(function(order){
-				console.log(order.orderId, order.status);
+				console.log(order.orderId, order.status, order.itemName);
 			});
 			var notification = {
 				uid: filteredOrders[0].uid,

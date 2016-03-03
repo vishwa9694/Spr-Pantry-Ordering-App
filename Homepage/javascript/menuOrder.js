@@ -4,10 +4,10 @@ var modelMenuOrder={
         this.orderItemList=[];
         this.mapOrder={};
     },
-    getOrderItemList:function(){
+    getorderItemList:function(){
         return this.orderItemList;
     },
-    setOrderItemList:function(orderlist){
+    setorderItemList:function(orderlist){
         this.orderItemList=JSON.parse(orderlist);
     }
 };
@@ -18,14 +18,14 @@ var controllerMenuOrder={
         modelMenuOrder.init();
     },
     render:function(){
-        modelMenuOrder.getOrderItemList().forEach(function(orderitem){
-            viewMenuOrder.addItem(orderitem.itemName,orderitem.quantity);
+        modelMenuOrder.getorderItemList().forEach(function(orderItem){
+            viewMenuOrder.addItem(orderItem.itemName,orderItem.quantity);
         });
     },
     updateItem:function(name){
         var that=this;
         var found=false;
-        modelMenuOrder.getOrderItemList().forEach(function(menuitem,id){
+        modelMenuOrder.getorderItemList().forEach(function(menuitem,id){
             if(menuitem.itemName===name){
               found=true;
               that.increaseQuant(name);
@@ -36,33 +36,33 @@ var controllerMenuOrder={
         }
     },
     addItem:function(itemname){
-        var neworderitem;
-        if(modelMenuOrder.getOrderItemList().length===0&&!(login.user.id===null||login.user.id===undefined)){
+        var neworderItem;
+        if(modelMenuOrder.getorderItemList().length===0&&!(login.user.id===null||login.user.id===undefined)){
             viewMenuOrder.showsubmit();
         }
-        neworderitem={
+        neworderItem={
             uid:login.user.id,
             orderName:login.user.name,
             itemName:itemname,
             table:0,
             quantity:1
         };
-        modelMenuOrder.getOrderItemList().push(neworderitem);
+        modelMenuOrder.getorderItemList().push(neworderItem);
         viewMenuOrder.addItem(itemname,1);
-        return modelMenuOrder.getOrderItemList().length-1;
+        return modelMenuOrder.getorderItemList().length-1;
         
     },
     deleteItem:function(itemName){
-        modelMenuOrder.getOrderItemList().forEach(function(orderitem,index)
+        modelMenuOrder.getorderItemList().forEach(function(orderItem,index)
         {
-            if(orderitem.itemName===itemName)
+            if(orderItem.itemName===itemName)
             {
-                modelMenuOrder.getOrderItemList().splice(index,1);
+                modelMenuOrder.getorderItemList().splice(index,1);
             }
         });
         viewMenuOrder.menuOrderReset();
         this.render();
-        if(modelMenuOrder.getOrderItemList().length===0){
+        if(modelMenuOrder.getorderItemList().length===0){
             viewMenuOrder.hidesubmit();
         }
 
@@ -70,9 +70,9 @@ var controllerMenuOrder={
 
     increaseQuant:function(itemName){
         var count=-1; 
-        modelMenuOrder.getOrderItemList().forEach(function(orderitem,index){
-            if(orderitem.itemName===itemName){
-                count=(++modelMenuOrder.getOrderItemList()[index].quantity);
+        modelMenuOrder.getorderItemList().forEach(function(orderItem,index){
+            if(orderItem.itemName===itemName){
+                count=(++modelMenuOrder.getorderItemList()[index].quantity);
             }
         });
         viewMenuOrder.showQuantity(itemName,count);
@@ -81,17 +81,17 @@ var controllerMenuOrder={
     decreaseQuant:function(itemName){
         var count=-1;
         var that=this;
-        modelMenuOrder.getOrderItemList().forEach(function(orderitem,index)
+        modelMenuOrder.getorderItemList().forEach(function(orderItem,index)
         {
-            if(orderitem.itemName==itemName)
+            if(orderItem.itemName==itemName)
             {
-                if(modelMenuOrder.getOrderItemList()[index].quantity===1)
+                if(modelMenuOrder.getorderItemList()[index].quantity===1)
                 {
                     that.deleteItem(itemName);
                     return true;
                 }
                 else{
-                 count= (--modelMenuOrder.getOrderItemList()[index].quantity);
+                 count= (--modelMenuOrder.getorderItemList()[index].quantity);
                  viewMenuOrder.showQuantity(itemName,count);
                  return true;
              }
@@ -101,17 +101,17 @@ var controllerMenuOrder={
 
     submit:function(){
         var ordertable=viewMenuOrder.getTable();
-        if((isNaN(ordertable)) || (ordertable == " ")){
+        if((isNaN(ordertable)) || (ordertable == "")){
             document.getElementById("submitError").style.display = "block";
             document.getElementById("user-table").style.border = "1px solid rgb(169,68,66)";
         }
         else{
-            modelMenuOrder.getOrderItemList().forEach(function(orderitem){
-                orderitem.itemDescription=viewMenuOrder.getDescription(orderitem.itemName);
-                orderitem.table=ordertable;
-                console.log(orderitem.itemDescription);
+            modelMenuOrder.getorderItemList().forEach(function(orderItem){
+                orderItem.itemDescription=viewMenuOrder.getDescription(orderItem.itemName);
+                orderItem.table=ordertable;
+                console.log(orderItem.itemDescription);
             });
-            serverServices.sendorder(modelMenuOrder.getOrderItemList(),controllerQueue.init.bind(controllerQueue));
+            serverServices.sendorder(modelMenuOrder.getorderItemList(),controllerQueue.init.bind(controllerQueue));
             viewMenuOrder.menuOrderReset();
             viewMenuOrder.hidesubmit();
             this.init();
@@ -168,43 +168,51 @@ var viewMenuOrder = {
         return '<input class="in_comment" placeholder="Special Instructions" id="special_'+name+'"/>';
     },
 
+
+    createButtonCol : function (dom,attr,field,itemName) {
+        dom.setAttribute(attr,field);
+        dom.innerHTML = this.buttonInnerHTML(itemName,dom.getAttribute(attr));
+        this.menuOrderRowEl.appendChild(dom);
+    },
+
+    createNameCol : function(dom,itemName,className){
+        dom.className=className;
+        dom.innerHTML = this.itemNameInnerHTML(itemName);
+        this.menuOrderRowEl.appendChild(dom);
+    },
+    
     addItem: function(name,qty){
-        var menuOrderRowEl = document.createElement("tr");
-        menuOrderRowEl.setAttribute('class', 's-o-e__item');
+        this.menuOrderRowEl = document.createElement("tr");
+        this.menuOrderRowEl.setAttribute('class', 's-o-e__item');
         
         // Name Adder
-        var menuOrderItemNameEl = document.createElement("td");
-        menuOrderItemNameEl.setAttribute('class', 'item__name');
-        menuOrderItemNameEl.innerHTML = viewMenuOrder.itemNameInnerHTML(name);
-        menuOrderRowEl.appendChild(menuOrderItemNameEl);
-
+        var menuorderItemNameEl = document.createElement("td");
+        this.createNameCol(menuorderItemNameEl,name,"item__name");
+    
         //Add button adder
         var menuOrderAddEl = document.createElement("td");
-        menuOrderAddEl.setAttribute("data-action","increase-quantity");
-        menuOrderAddEl.innerHTML = viewMenuOrder.buttonInnerHTML(name,menuOrderAddEl.getAttribute("data-action"));
-        menuOrderRowEl.appendChild(menuOrderAddEl);
+        this.createButtonCol (menuOrderAddEl,"data-action","increase-quantity",name);
 
         //Add the quantity
         var menuOrderQtyEl = document.createElement("td");
+        var quantityID="qty_"+name;
         menuOrderQtyEl.setAttribute('class', 'item-qty');
         menuOrderQtyEl.setAttribute('id', 'qty_'+name);
         menuOrderQtyEl.innerHTML = qty;
-        menuOrderRowEl.appendChild(menuOrderQtyEl);
+        this.menuOrderRowEl.appendChild(menuOrderQtyEl);
 
         //Remove an item (Subtract the quantity)
         var menuOrderRemEl = document.createElement("td");
-        menuOrderAddEl.setAttribute("data-action","decrease-quantity");
-        menuOrderRemEl.innerHTML = viewMenuOrder.buttonInnerHTML(name,menuOrderAddEl.getAttribute("data-action"));
-        menuOrderRowEl.appendChild(menuOrderRemEl);
+        this.createButtonCol(menuOrderRemEl,"data-action","decrease-quantity",name);
 
         //Special Instructions
         var menuOrderSplInsEl = document.createElement("td");
         menuOrderSplInsEl.setAttribute('class', 'item-comment');
         menuOrderSplInsEl.innerHTML = viewMenuOrder.specialInstructionsInnerHTML(name);
-        menuOrderRowEl.appendChild(menuOrderSplInsEl);
+        this.menuOrderRowEl.appendChild(menuOrderSplInsEl);
 
         //Finally adding the row to the table
-        menuOrderTableEl.appendChild(menuOrderRowEl);
+        menuOrderTableEl.appendChild(this.menuOrderRowEl);
     },
 
     showQuantity: function(itemName, quantity){

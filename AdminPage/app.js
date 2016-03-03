@@ -28,8 +28,8 @@ $(function() {
 			orderModel.clubbedOrders = clubbedOrders;
 			return orderModel.clubbedOrders;	
 		},
-	};
-	var menuModel = {
+	},
+	menuModel = {
 		menu:null,
 		getMenu: function() {
 			return this.menu;
@@ -45,8 +45,8 @@ $(function() {
 			});
 			return categoryNames;
 		},
-	};
-	var controller = {
+	},
+	controller =  {
 		clickedItemOrder: null,
 		init: function() {
 			services.createRequest("GET","/orders",this.onOrdersReceived);
@@ -67,7 +67,9 @@ $(function() {
 		},
 		getOrdersForQueue: function() {
 			var orders;
-			orders = this.getAllOrders();
+			orders = this.getAllOrders().filter(function(order){
+				return (!(order.status === "Completed" || order.status === "Cancelled"));
+			});
 			return orders.map(function(order){
 				return mappedOrder = {
 					uid: order.uid,
@@ -82,8 +84,11 @@ $(function() {
 				}
 			});
 		},
-		setcurrentOrder: function(index) {
-			this.clickedItemOrder = orderModel.orders[index];
+		setcurrentOrder: function(id) {
+			var reqOrder = orderModel.orders.filter(function(order){
+				return (order.orderId === id);
+			});
+			this.clickedItemOrder = reqOrder[0];
 		},
 		getAllSortedOrders: function() {
 			return orderModel.getAllSortedOrders();
@@ -199,12 +204,15 @@ $(function() {
 		},
 	};
 	var orderQueueView = {
+		queueTemplate: '',
 		init: function() {
-			var orders, clubbedOrders;
+			var orders, clubbedOrders, actions;
 			orders = controller.getOrdersForQueue();
 			orders.forEach(this.addOrderInQueue);
+			$("#queueTable").html(this.queueTemplate);	
 			$("#clubOrdersCheck").change(function(){
 				$("#queueTable *").remove();
+				orderQueueView.queueTemplate = '';
 				if($(this).is(":checked")) {
 					clubbedOrders = controller.getClubbedOrders();
 					clubbedOrders.forEach(orderQueueView.addOrderInQueue);
@@ -213,43 +221,62 @@ $(function() {
 					orders = controller.getOrdersForQueue();
 					orders.forEach(orderQueueView.addOrderInQueue);
 				}
+				$("#queueTable").html(orderQueueView.queueTemplate);
 			});
+			actions = {
+				cancel: cancelDialogView.viewCancelDialog.bind(cancelDialogView),
+				done: controller.orderCompleted.bind(controller),
+				progress: controller.orderInProgress.bind(controller)
+			}
 			$("#queueTable").click(function(e){
-				var index = Number(e.target.id.split("_")[1]);
-				controller.setcurrentOrder(index);
-				if(e.target.id.indexOf("cancel")===0) {
-				//	var index = Number(e.target.id.split("_")[1]);
-				//	controller.setcurrentOrder(index);
-					cancelDialogView.viewCancelDialog();
-				}
-				else if(e.target.id.indexOf("done")===0) {
-				//	var index = Number(e.target.id.split("_")[1]);
-				//	controller.setcurrentOrder(index);
-					controller.orderCompleted();
-				}
-				else if(e.target.id.indexOf("progress")===0) {
-				//	var index = Number(e.target.id.split("_")[1]);
-				//	controller.setcurrentOrder(index);
-					controller.orderInProgress();
-				}
+				var id = Number(e.target.id.split("_")[1]);
+				controller.setcurrentOrder(id);
+				actions[e.target.id.split("_")[0]]();
+				// if(e.target.id.indexOf("cancel")===0) {
+				// //	var index = Number(e.target.id.split("_")[1]);
+				// //	controller.setcurrentOrder(index);
+				// 	cancelDialogView.viewCancelDialog();
+				// }
+				// else if(e.target.id.indexOf("done")===0) {
+				// //	var index = Number(e.target.id.split("_")[1]);
+				// //	controller.setcurrentOrder(index);
+				// 	controller.orderCompleted();
+				// }
+				// else if(e.target.id.indexOf("progress")===0) {
+				// //	var index = Number(e.target.id.split("_")[1]);
+				// //	controller.setcurrentOrder(index);
+				// 	controller.orderInProgress();
+				// }
 			});
 		},
+		
 		addOrderInQueue: function(order,index) {
 			var tableRow, tdString, actionsCell, inProgressIcon, doneIcon, cancelIcon; 
-			if(!(order.status === "Completed" || order.status === "Cancelled")) {
-				tableRow = $("<tr>", {class: "do__row", id: order.orderId});
-				tdString = '<td class="do__table-data box-border do__table-cell_id">'+order.orderNo+'</td>'+'<td class="do__table-data box-border do__table-cell_name">'+order.orderName+'</td>'+'<td class="do__table-data box-border do__table-cell_order">'+order.itemName+'</td>'+'<td class="do__table-data box-border do__table-cell_description">'+order.itemDescription+'</td>'+'<td class="do__table-data box-border do__table-cell_table">'+order.table+'</td>'+'<td class="do__table-data box-border do__table-cell_quantity">'+order.quantity+'</td>';
-				$(tableRow).html(tdString);
-				actionsCell = $("<td>", {class: "do__table-data box-border do__table-cell_actions"});
-				inProgressIcon = $("<i>", {class: "fa fa-clock-o fa-2x",id: "progress_"+index});
-				doneIcon = $("<i>", {class: "fa fa-check-circle-o fa-2x", id: "done_"+index});
-				cancelIcon = $("<i>", {class: "fa fa-times fa-2x", id: "cancel_"+index});
-				tableRow.append(actionsCell.append(inProgressIcon, doneIcon, cancelIcon));
-				$("#queueTable").append(tableRow);
-				if(order.status === "InProgress") {
-					$(tableRow).css('background-color', "#dff0d8");
-				}	
-			}			
+			//todo : filter these orders before hand
+			//if(!(order.status === "Completed" || order.status === "Cancelled")) {
+				//tableRow = $("<tr>", {class: "do__row", id: order.orderId});
+			
+				//$(tableRow).html(tdString);
+				// actionsCell = $("<td>", {class: "do__table-data box-border do__table-cell_actions"});
+				// inProgressIcon = $("<i>", {class: "fa fa-clock-o fa-2x",id: "progress_"+order.orderId});
+				// doneIcon = $("<i>", {class: "fa fa-check-circle-o fa-2x", id: "done_"+order.orderId});
+				// cancelIcon = $("<i>", {class: "fa fa-times fa-2x", id: "cancel_"+order.orderId});
+				// tableRow.append(actionsCell.append(inProgressIcon, doneIcon, cancelIcon));
+				//todo !!!!!!!!!!!! NEVER EVER DO THIS!!!!
+				//$("#queueTable").append(tableRow);
+				//todo: do this with class
+				// if(order.status === "InProgress") {
+				// 	$("").css('background-color', "#dff0d8");
+				// }
+			if(order.status === "InProgress") {
+				tdString = '<tr class="do__row do__row_in-progress" id="'+order.orderId+'">'+'<td class="do__table-data box-border do__table-cell_id">'+order.orderNo+'</td>'+'<td class="do__table-data box-border do__table-cell_name">'+order.orderName+'</td>'+'<td class="do__table-data box-border do__table-cell_order">'+order.itemName+'</td>'+'<td class="do__table-data box-border do__table-cell_description">'+order.itemDescription+'</td>'+'<td class="do__table-data box-border do__table-cell_table">'+order.table+'</td>'+'<td class="do__table-data box-border do__table-cell_quantity">'+order.quantity+'</td>'+'<td class="do__table-data box-border do__table-cell_actions"><i class="fa fa-clock-o fa-2x" id="progress_'+order.orderId+'"></i><i class="fa fa-check-circle-o fa-2x" id="done_'+order.orderId+'"></i><i class="fa fa-times fa-2x" id="cancel_'+order.orderId+'"></i></td></tr>';
+			}
+			else {
+				tdString = '<tr class="do__row" id="'+order.orderId+'">'+'<td class="do__table-data box-border do__table-cell_id">'+order.orderNo+'</td>'+'<td class="do__table-data box-border do__table-cell_name">'+order.orderName+'</td>'+'<td class="do__table-data box-border do__table-cell_order">'+order.itemName+'</td>'+'<td class="do__table-data box-border do__table-cell_description">'+order.itemDescription+'</td>'+'<td class="do__table-data box-border do__table-cell_table">'+order.table+'</td>'+'<td class="do__table-data box-border do__table-cell_quantity">'+order.quantity+'</td>'+'<td class="do__table-data box-border do__table-cell_actions"><i class="fa fa-clock-o fa-2x" id="progress_'+order.orderId+'"></i><i class="fa fa-check-circle-o fa-2x" id="done_'+order.orderId+'"></i><i class="fa fa-times fa-2x" id="cancel_'+order.orderId+'"></i></td></tr>';		
+			}
+			
+			orderQueueView.queueTemplate += tdString;	
+			//}			
 		},
 		removeOrderFromOrderQueue: function(orderId) {
 			$("#"+orderId).remove();
