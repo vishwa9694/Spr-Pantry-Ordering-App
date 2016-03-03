@@ -1,18 +1,6 @@
 var serverServices={
 	
 baseUrl:"http://localhost:3000/",
-/*
-createGetRequest:function(request){
-	var xhttp = new XMLHttpRequest();
-	xhttp.open("GET", this.baseUrl+request, false);
-	return xhttp;
-},
-createPostRequest:function(request){
-		var xmlhttp = new XMLHttpRequest();
-		xmlhttp.open("POST", this.baseUrl+request, false);
-		return xmlhttp;
-},
-*/
 createAsyncGetRequest:function(request){
 	var xhttp = new XMLHttpRequest();
 	xhttp.open("GET", this.baseUrl+request, true);
@@ -63,8 +51,7 @@ cancelOrder:function (orderid,callBackFunction){
 		xhttp.onreadystatechange=function(){
 		
 		if (!(xhttp.readyState == 4 && xhttp.status == 200)) {
-			
-			//alert("Server Cancel Order Eror");
+			return;		
 		}
 		else{
 			callBackFunction();
@@ -80,7 +67,6 @@ sendorder:function (order,callBackFunction){
 	xmlhttp.send(JSON.stringify(order));
 	xmlhttp.onreadystatechange=function(){
 	if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {		
-		//alert("Order Submitted Calling Back");
 		callBackFunction();
 	}
 }
@@ -96,7 +82,7 @@ getNotifications: function(userid,setNotification,callBackFunction) {
 			 	 callBackFunction();		
 				}
 			else{
-				//alert("Server Notifications Error");
+				return ;
 			}
 			};		
 	},
@@ -105,7 +91,6 @@ readNotification:function(userid){
 		xhttp.send(JSON.stringify({userId:userid}));		
 		if (xhttp.readyState == 4 && xhttp.status == 200) {		
 			console.log(xhttp.responseText);	
-		 	 // return JSON.parse(xhttp.responseText);		
 			}		
 
 	}

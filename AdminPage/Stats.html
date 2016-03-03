@@ -1,16 +1,15 @@
 <!DOCTYPE html>
 <head>
 	<title>Statistics</title>
-  <script type="text/javascript" src="services.js" async></script>
-	<script type="text/javascript" src="Graph.js" async ></script>
+
   <link rel="stylesheet" href="graphStyles.css">
 </head>
 <body>
   <div id="wrap">
     <ul class="navbar" id="categories">
      <li><a href="#">StasHome</a></li>
-     <li><a href="#">Bevarages</a>
-      <ul id="Bevarages">
+     <li><a href="#">Beverages</a>
+      <ul id="Beverages">
       </ul>         
     </li>
     <li><a href="#">Snacks</a>
@@ -22,24 +21,43 @@
 <div >
   <h1 id="header_name">STATS FOR MAGGI</h1>
 </div>
-<h2  class="side_heading" >
-  Consumption 
-  <div  class="heading_with_buttons">
-   <a  class="button" id ="button_weeks_consumtion">Last 4 Weeks</a> 
-   <a  class="button" id ="button_days_consumtion">Last Week</a>
- </div>
-</h2>
-<div id="BarGraph1">
+<div  class="side_heading" >
+ <!--  Consumption  -->
+ <div  class="heading_with_buttons">
+
+   <form>
+    From:
+    <input type="date" id="From1">
+    Till:
+    <input type="date" id="Till1">
+    <button id="dateselector" >Go!</button>
+
+  </form>
+  <a  class="button" id ="button_weeks_consumtion">Last 4 Weeks</a> 
+  <a  class="button" id ="button_days_consumtion">Last Week</a>
+
 </div>
-<h2  class="side_heading"> 
-  CompareConsumption
-  <div  class="heading_with_buttons">
-    <a  class="button" id ="button_weeks_compare_consumtion">Last 4 Weeks</a> 
-   <a  class="button" id ="button_days_compare_consumtion">Last Week</a>
- </div>
-</h2>
-<div id ="BarGraph2">
 </div>
+<div id="BarGraph1" class="graph_canvas">
+</div>
+<div class="side_heading"> 
+ <!--  CompareConsumption -->
+ <div  class="heading_with_buttons">
+   <form>
+    From:
+    <input type="date" name="From2">
+    Till:
+    <input type="date" name="Till2">
+    <button id="dateselector2">Go!</button>
+  </form>
+  <a  class="button" id ="button_weeks_compare_consumtion">Last 4 Weeks</a> 
+  <a  class="button" id ="button_days_compare_consumtion">Last Week</a>
+</div>
+</div>
+<div id ="BarGraph2" class="graph_canvas">
+</div>
+<script type="text/javascript" src="services.js" ></script>
+<script type="text/javascript" src="Graph.js" ></script>
 </body>
 </html>
 

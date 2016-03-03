@@ -1,7 +1,7 @@
 (function(){
 
 
-var createCanvas=function (divName) {
+	var createCanvas=function (divName) {
 		var div = document.getElementById(divName);
 		var canvas = document.createElement('canvas');
 		div.innerHTML='';
@@ -9,17 +9,17 @@ var createCanvas=function (divName) {
 		var context = canvas.getContext("2d");
 		return context;
 	};
-/*******Graph Class and its functions********/
-function Graph(divName){
+	/*******Graph Class and its functions********/
+	function Graph(divName){
 		this.context=createCanvas(divName);
 		this.graphName="Graph Name";
 		this.canvasWidth=1000;
 		this.canvasHeight = 700;
 		this.xAxisLabelArr=["x1","x2","x3","x4"];
 		this.yAxisLabelArr=["y1","y2","y3","y4"];
-		this.backgroundColor="#E3F2FD";
+		this.backgroundColor="#ffffff";
 	}
-Graph.prototype.drawBar=function(context,xpos,ypos,width,height){
+	Graph.prototype.drawBar=function(context,xpos,ypos,width,height){
 //.../
 }
 Graph.prototype.drawCircle=function(context,xpos,ypos,width,height){
@@ -46,7 +46,7 @@ Graph.prototype.addText=function(text,color,font,xcord,ycord){
 }
 Graph.prototype.setName=function(graphName){
 	this.graphName=graphName;
-	this.addText(this.graphName,"#9E9E9E","bold 40px sans-serif",(this.canvasWidth)/2,50);
+	this.addText(this.graphName,"#ffffff"," 40px sans-serif",(this.canvasWidth)/2,50);
 }
 Graph.prototype.clearEveryThing=function(){
 	this.context.clearRect(0,0,this.canvasWidth,this.canvasHeight);
@@ -79,7 +79,7 @@ BarGraph.prototype.constructor=BarGraph;
 
 BarGraph.prototype.animateBarGraph=function(newArr){
 	//.....
-	var animationsteps=20,animationinterval=100;
+	var animationsteps=20,animationinterval=50;
 	var delta=[];
 	for(var i=0;i<newArr.length;i+=1){
 		delta.push((newArr[i]-this.barLengthsArr[i])/animationsteps);
@@ -163,10 +163,10 @@ BarGraph.prototype.draw=function(){
 	this.gradientForBar(ratio,xcord,ycord,scaledBarHeight,"white","red");
 };	
 	//Draw text above
-	this.addText(parseInt(arr[i],10),"black","bold 12px sans-serif",xcord+this.barWidth*(1/3),ycord-20);
+	this.addText(parseInt(arr[i],10),"black"," 12px sans-serif",xcord+this.barWidth*(1/3),ycord-20);
 	// Draw bar label if it exists
 	if (this.xAxisLabelArr[i]) {					
-		this.addText(this.xAxisLabelArr[i],"violet","bold 12px sans-serif",xcord+this.barWidth*(1/3),ycord +scaledBarHeight+20);	
+		this.addText(this.xAxisLabelArr[i],"black","bold 12px sans-serif",xcord+this.barWidth*(1/3),ycord +scaledBarHeight+20);	
 	};
 
 	this.drawAxis();
@@ -225,7 +225,7 @@ CompareBarGraph.prototype.draw=function(){
 	 },arr[0]);
 	 
 	 var i,scale,ratio;
-	  this.setName(this.graphName);
+	 this.setName(this.graphName);
 	 //Draw each bar 	 
 	 for (i=0;i<arr.length;i+=1){
 	 	ratio=arr[i]/largestValue;
@@ -260,9 +260,9 @@ CompareBarGraph.prototype.draw=function(){
 		// Draw bar label if it exists
 		if (this.xAxisLabelArr[i]) {					
 			this.addText(this.xAxisLabelArr[i],"violet","bold 12px sans-serif",xcord+this.barWidth*(1/3),ycord +scaledBarHeight+20);
-	};
-	this.drawAxis();
-}
+		};
+		this.drawAxis();
+	}
 }
 CompareBarGraph.prototype.animateCompareBarGraph=function(newArr1,newArr2){
 	var animationsteps=20,animationinterval=100;
@@ -290,57 +290,38 @@ CompareBarGraph.prototype.animateCompareBarGraph=function(newArr1,newArr2){
 	var timeoutId=setInterval(loop.bind(this),animationinterval);
 }
 function getLast7daysDate() {
-    var lastSevenDays=[];
-		for(var i=0;i<7;i++){
-			var toDay=new Date();
-			toDay.setDate(toDay.getDate()-i)
+	var lastSevenDays=[];
+	for(var i=0;i<7;i++){
+		var toDay=new Date();
+		toDay.setDate(toDay.getDate()-i)
 			//console.log(toDay)
 			lastSevenDays.push(toDay.getDate() + '/' + (toDay.getMonth()+1))
 		}
-	return lastSevenDays;
-}
-function getLast7daysDateObject() {
-    var lastSevenDays=[];
+		return lastSevenDays;
+	}
+	function getLast7daysDateObject() {
+		var lastSevenDays=[];
 		for(var i=0;i<7;i++){
 			var toDay=new Date();
 			toDay.setDate(toDay.getDate()-i)
 			lastSevenDays.push(toDay.getDate() + '/' + (toDay.getMonth()+1)+'/'+toDay.getFullYear())
 		}
-	return lastSevenDays;
-}
-function getWeekNumber(givendate) {
-  var date = new Date(givendate);
-  date.setHours(0, 0, 0, 0);
-  date.setDate(date.getDate() + 3 - (date.getDay() + 6) % 7);
-  var week1 = new Date(date.getFullYear(), 0, 4);
-  return 1 + Math.round(((date.getTime() - week1.getTime()) / 86400000
-                        - 3 + (week1.getDay() + 6) % 7) / 7);
-}
-function getLast4WeeksDate(){
-	var i=getWeekNumber(new Date());
-	var lastFourWeeks=[i,i-1,i-2,i-3];	
+		return lastSevenDays;
+	}
+	function getWeekNumber(givendate) {
+		var date = new Date(givendate);
+		date.setHours(0, 0, 0, 0);
+		date.setDate(date.getDate() + 3 - (date.getDay() + 6) % 7);
+		var week1 = new Date(date.getFullYear(), 0, 4);
+		return 1 + Math.round(((date.getTime() - week1.getTime()) / 86400000
+			- 3 + (week1.getDay() + 6) % 7) / 7);
+	}
+	function getLast4WeeksDate(){
+		var i=getWeekNumber(new Date());
+		var lastFourWeeks=[i,i-1,i-2,i-3];	
 	//console.log(lastFourWeeks);
 	return lastFourWeeks;
 }
-
-// var services = {
-// 	createRequest: function(requestType, url, onSuccessCallback, object) {
-// 		var xhr;
-// 		xhr = new XMLHttpRequest();
-// 		xhr.open(requestType, url, true);
-// 		xhr.onreadystatechange = function() {
-// 		    if (xhr.readyState == 4 && xhr.status == 200) {
-// 		    	onSuccessCallback(xhr.responseText, object);
-// 		    }
-// 		};
-// 		if(requestType === "POST") {
-// 			xhr.send(JSON.stringify(object));
-// 		}
-// 		else {
-// 			xhr.send();	
-// 		}
-// 	},
-//  }
 
 
 
@@ -353,75 +334,110 @@ var model={
 		category:"Snacks",
 		categoryItem:"Maggi"
 	},
+	getCurrentItem:function(){
+		return model.currentGraph.categoryItem;
+	}
+	,
 	orders :[
 	{
-	uid: "113352049485747139246",
-	orderId:1,
-	orderNo:1,
-	orderName: "Vishwa",
-	table: 9,
-	itemName: "Maggi",
-	quantity: 1,
-	itemDescription: "cold",
-	status: "Completed",
-	itemPlacedOn:"Tue Mar 01 2016 08:55:40 GMT+0530 (IST)",
-	deliveredOn:""
+		uid: "113352049485747139246",
+		orderId:1,
+		orderNo:1,
+		orderName: "Vishwa",
+		table: 9,
+		itemName: "Maggi",
+		quantity: 1,
+		itemDescription: "cold",
+		status: "Completed",
+		itemPlacedOn:"Tue Mar 01 2016 08:55:40 GMT+0530 (IST)",
+		deliveredOn:""
 
-},
-{
-	uid: "113352049485747139246",
-	orderId:2,
-	orderNo:1,
-	orderName: "Vishwa",
-	table: 9,
-	itemName: "Maggi",
-	quantity: 1,
-	itemDescription: "cold",
-	status: "Completed",
-	itemPlacedOn:"Tue Mar 01 2016 08:55:40 GMT+0530 (IST)",
-	deliveredOn:""
+	},
+	{
+		uid: "113352049485747139246",
+		orderId:1,
+		orderNo:1,
+		orderName: "Vishwa",
+		table: 9,
+		itemName: "Maggi",
+		quantity: 1,
+		itemDescription: "cold",
+		status: "Completed",
+		itemPlacedOn:"Mon Feb 15 2016 08:55:40 GMT+0530 (IST)",
+		deliveredOn:""
 
-},
-{
-	uid: "113352049485747139246",
-	orderId:3,
-	orderNo:1,
-	orderName: "Vikash",
-	table: 9,
-	itemName: "Maggi",
-	quantity: 1,
-	itemDescription: "cold",
-	status: "Completed",
-	itemPlacedOn:"Mon Feb 22 2016 08:55:40 GMT+0530 (IST)",
-	deliveredOn:""
+	},
+	{
+		uid: "113352049485747139246",
+		orderId:1,
+		orderNo:1,
+		orderName: "Vishwa",
+		table: 9,
+		itemName: "Maggi",
+		quantity: 1,
+		itemDescription: "cold",
+		status: "Completed",
+		itemPlacedOn:"Mon Feb 22 2016 08:55:40 GMT+0530 (IST)",
+		deliveredOn:""
 
-},
-{
-	uid: "113352049485747139246",
-	orderId:4,
-	orderNo:1,
-	orderName: "Vikash",
-	table: 9,
-	itemName: "Maggi",
-	quantity: 1,
-	itemDescription: "cold",
-	status: "Completed",
-	itemPlacedOn:"Mon Feb 22 2016 08:55:40 GMT+0530 (IST)",
-	deliveredOn:""
-
-},
+	},
 	],
-	menu :[]
+	menu : [
+	{
+		category: "Beverages",
+		categoryItems: [
+		{
+			itemName: "Tea",
+			available: true,
+			imgSrc: "assets/defaultItem.png"
+		},
+		{
+			itemName: "Coffee",
+			available: true,
+			imgSrc: "assets/defaultItem.png"
+
+		},
+		{
+			itemName: "Bournvita",
+			available:true,
+			imgSrc: "assets/defaultItem.png"
+
+		}
+		]
+	},
+	{
+		category: "Snacks",
+		categoryItems: [
+		{
+			itemName: "Maggi",
+			available: true,
+			imgSrc: "assets/defaultItem.png"
+
+		},
+		{
+			itemName: "Chocos",
+			available: true,
+			imgSrc: "assets/defaultItem.png"
+
+		},
+		{
+			itemName: "Cornflakes",
+			available:true,
+			imgSrc: "assets/defaultItem.png"
+
+		}
+		]
+	}
+	]
 }
 
 
 
 var controller={
 	init:function(){
-		getLast4WeeksDate();
 		model.init();
 		services.createRequest("GET","/getAllOrders",controller.updateOrders);
-		services.createRequest("GET","/getAllMenu",controller.updateItems)			
+		services.createRequest("GET","/getAllMenu",controller.updateMenuItems);			
 	},
 	afterUpdated:function(){
 		view.init();
@@ -431,68 +447,41 @@ var controller={
 	updateOrders:function(updatedorders){
 		model.orders=JSON.parse(updatedorders);
 	},
-	updateItems:function(updatedMenu){
-			model.menu=JSON.parse(updatedMenu);
-		controller.afterUpdated();		
+	updateMenuItems:function(updatedMenu){
+		model.menu=JSON.parse(updatedMenu);
+		controller.afterUpdated();	
 	},
 
-	getAllordersPlaced:function(){
-		return model.orders
+	getOrdersQuantityArrayBydate:function(ordersArr,startTime,endTime){
+		var arr=[];
+		var first=(new Date(startTime)).getTime();
+		var last=(new Date(endTime)).getTime();
+		var len =parseInt((last-first)/(24*60*60*1000));
+		for(var i=0;i<len;i++)arr[i]=0;
+			//console.log(len);
+		//console.log(arr)
+		ordersArr.forEach(function(x){
+			var itemTime=(new Date(x.itemPlacedOn)).getTime();
+			var index=parseInt((last-itemTime)/(24*60*60*1000))
+			arr[index]=arr[index]+x.quantity;
+		});
+		return arr;
 	},
-	getOrdersQuantity:function(itemName,status){
-		var x=0;
-		var arr=[0,0,0,0,0,0,0];
-		var toDay=new Date();
-		var lastSevenDays=[toDay,toDay-1,toDay-2,toDay-3,toDay-4,toDay-5,toDay-6]
-		 model.orders.forEach(function(y){
-			if(itemName==y.itemName && status==y.status) {	
-				x=x+parseInt(y.quantity);
-			}
-		})
-		return x;
-	},
-	//getLastSevenDaysOrders(itemName,status)
 	getOrdersByType:function(itemName){
 		return model.orders.filter(function(x){
 			return x.itemName==itemName;
 		})
 	},
-	addOrderToSimpleGraph:function(x){
-		var dayArr=getLast7daysDateObject();
-		var thatDay=new Date(x.itemPlacedOn);
-		var thatDayString=thatDay.getDate() + '/' + (thatDay.getMonth()+1)+'/'+thatDay.getFullYear();
-		for (var i=0;i<dayArr.length;i+=1){
-			if(thatDayString==dayArr[i]){
-				graphView.barValuesSimple[i]=graphView.barValuesSimple[i]+parseInt(x.quantity)
-				break;
-			}
-		}
-		
-	}
-	,
-	addOrderToDoubleGraph:function(x){
-		var dayArr=getLast7daysDateObject();
-		var thatDay=new Date(x.itemPlacedOn);
-		var thatDayString=thatDay.getDate() + '/' + (thatDay.getMonth()+1)+'/'+thatDay.getFullYear();
-		for (var i=0;i<dayArr.length;i+=1){
-			if(thatDayString==dayArr[i]){
-				if(x.status=="Completed") graphView.barValuesDouble.first[i]=graphView.barValuesDouble.first[i]+parseInt(x.quantity);
-				else {
-					graphView.barValuesDouble.second[i]=graphView.barValuesDouble.second[i]+parseInt(x.quantity)	
-				}
-				break;
-			}
-		}
-		
-	}
-	,
-	getOrderLastSevenDays:function(itemName){
-		controller.getOrdersByType(itemName).forEach(function(x){
-			controller.addOrderToSimpleGraph(x);
-			console.log("id:"+x.orderId+"  "+x.itemName+"  itemPlacedOn:"+(x.itemPlacedOn).toString()+" status:"+x.status);
-			controller.addOrderToDoubleGraph(x);
+	getAllOrdersByTypeByTimeByStatus:function(itemName,itemStatus,startTime,endTime){
+		return model.orders.filter(function(x){
+			var  first=(new Date(startTime)).getTime();
+			var  last=(new Date(endTime)).getTime();
+			var  itemTime=(new Date(x.itemPlacedOn)).getTime();
+
+			var f = itemTime >= first && itemTime <= last;
+
+			return (x.itemName==itemName && (x.status==itemStatus || itemStatus=="") && f); 
 		})
-		console.log(graphView.barValuesDouble.first + "   "+ graphView.barValuesDouble.second)
 	},
 	getAllMenu:function(){
 		return model.menu;
@@ -501,9 +490,44 @@ var controller={
 		model.currentGraph.category=category;
 		model.currentGraph.categoryItem=item;
 	},
-	setBarGraphArray:function(){
+	setBarGraphArray:function(days){
 		graphView.resetGraphBarArrays();
-		controller.getOrderLastSevenDays(model.currentGraph.categoryItem);
+		var toDay=new Date();
+		var from=new Date();
+		if(typeof days=='undefined')days=7;
+		from.setDate(toDay.getDay()-(days+1));
+
+		var ordersArr=controller.getAllOrdersByTypeByTimeByStatus(model.getCurrentItem(),"",from,toDay);
+		graphView.setFirstBarValues(controller.getOrdersQuantityArrayBydate(ordersArr,from,toDay));
+		//console.log(controller.getOrdersQuantityArrayBydate(ordersArr,from,toDay));
+
+		var ordersArr1=controller.getAllOrdersByTypeByTimeByStatus(model.getCurrentItem(),"Completed",from,toDay);
+		ordersArr1=controller.getOrdersQuantityArrayBydate(ordersArr1,from,toDay)
+		var ordersArr2=controller.getAllOrdersByTypeByTimeByStatus(model.getCurrentItem(),"Cancelled",from,toDay);
+		ordersArr2=controller.getOrdersQuantityArrayBydate(ordersArr2,from,toDay)
+		//console.log(ordersArr1)
+		//console.log(ordersArr2)
+		graphView.setSecondBarValues(ordersArr1,ordersArr2);;
+	},
+	setBarGraphArrayWithFromTill:function(from,till){
+		graphView.resetGraphBarArrays();
+		var tillDate=new Date(till);
+		var fromDate=new Date(from);
+		//if(typeof days=='undefined')days=7;
+		//from.setDate(toDay.getDay()-(days+1));
+		console.log("from:"+fromDate)
+		console.log("till:"+tillDate)
+		var ordersArr=controller.getAllOrdersByTypeByTimeByStatus(model.getCurrentItem(),"",fromDate,tillDate);
+		graphView.setFirstBarValues(controller.getOrdersQuantityArrayBydate(ordersArr,fromDate,tillDate));
+		//console.log(controller.getOrdersQuantityArrayBydate(ordersArr,from,toDay));
+
+		var ordersArr1=controller.getAllOrdersByTypeByTimeByStatus(model.getCurrentItem(),"Completed",fromDate,tillDate);
+		ordersArr1=controller.getOrdersQuantityArrayBydate(ordersArr1,fromDate,tillDate)
+		var ordersArr2=controller.getAllOrdersByTypeByTimeByStatus(model.getCurrentItem(),"Cancelled",fromDate,tillDate);
+		ordersArr2=controller.getOrdersQuantityArrayBydate(ordersArr2,fromDate,tillDate)
+		//console.log(ordersArr1)
+		//console.log(ordersArr2)
+		graphView.setSecondBarValues(ordersArr1,ordersArr2);;
 	},
 	itemClicked:function(category,item){
 		controller.changeHeading(item);
@@ -511,6 +535,11 @@ var controller={
 		controller.setBarGraphArray();
 		graphView.render();
 	},
+	dateSelected:function(from,till){
+		controller.setBarGraphArrayWithFromTill(from,till);
+		graphView.render();
+	}
+	,
 	changeToWeeks:function(){
 		var arr=getLast4WeeksDate();
 		var xary=[0,0,0,0];
@@ -518,13 +547,12 @@ var controller={
 		var xaryNotdelivered=[0,0,0,0];
 		controller.getOrdersByType(model.currentGraph.categoryItem).forEach(function(x){
 			var i=getWeekNumber(new Date(x.itemPlacedOn));
-			//console.log("id: "+x.orderId+"  "+x.itemName+"itemPlacedOn:"+x.itemPlacedOn+"WeekNumber:"+i+"status:"+x.status);
 			for(var z=0;z<4;z++){
 				if(i==arr[z]){
 					xary[z]=xary[z]+parseInt(x.quantity);
 					if(x.status=="Completed")xaryDelivered[z]=xaryDelivered[z]+parseInt(x.quantity)
 						else xaryNotdelivered[z]=xaryNotdelivered[z]+parseInt(x.quantity)
-				}
+					}
 			}
 		})
 		graphView.barValuesSimple=xary;
@@ -534,7 +562,7 @@ var controller={
 		graphView.render();
 	},
 	changeToDays :function(){
-		controller.init();
+		controller.afterUpdated();
 	}
 	,
 	changeHeading:function(item){
@@ -550,7 +578,7 @@ var controller={
 }
 var view ={
 	init:function(){
-		this.bevarageElement=document.getElementById("Bevarages");
+		this.bevarageElement=document.getElementById("Beverages");
 		this.snackElement=document.getElementById("Snacks");
 		view.addClickeventstoButtons();
 		view.render();
@@ -560,6 +588,10 @@ var view ={
 		this.buttonGraph1weeks=document.getElementById("button_weeks_consumtion");
 		this.buttonGraph2days=document.getElementById("button_days_compare_consumtion");
 		this.buttonGraph2weeks=document.getElementById("button_weeks_compare_consumtion");
+		console.log(document.getElementById("dateselector"))
+		document.getElementById("dateselector").addEventListener('click',view.getDateSelected);
+		
+
 		this.buttonGraph1days.addEventListener('click',function(){
 			controller.changeToDays();
 		});
@@ -571,8 +603,31 @@ var view ={
 		});
 		this.buttonGraph2weeks.addEventListener('click',function(){
 			controller.changeToWeeks();
-		})
+		});
+		
 	},
+	getDateSelected:function (event)
+	{
+		event.preventDefault();
+		var myDate=document.getElementById("From1").value;//2016-03-01 
+		console.log(myDate+"   TO");
+		myDate=myDate.split("-");
+		var newDate=myDate[1]+","+myDate[2]+","+myDate[0];
+		console.log(newDate)
+		var from=new Date(newDate).getTime();
+
+		var myDate=document.getElementById("Till1").value;
+		myDate=myDate.split("-");
+		var newDate=myDate[1]+","+myDate[2]+","+myDate[0];
+		var till=new Date(newDate).getTime();
+		till=till+24*60*60*1000;
+
+		if(till < from  ) alert("select a valid date ");
+
+		controller.dateSelected(from,till);
+
+	}
+	,
 	//need to change this function 
 	updateMenu:function(){
 		var allMenu=controller.getAllMenu();
@@ -588,7 +643,7 @@ var view ={
 					return function() {		
 						controller.itemClicked(categorycopy,itemcopy);
 					};
-				})("Bevarages",BevarageItems[i].itemName))
+				})("Beverages",BevarageItems[i].itemName))
 			this.bevarageElement.appendChild(eachCategoryItem);
 
 		}
@@ -615,33 +670,39 @@ var view ={
        	}
        }
 
- var graphView={
- 		init:function(){
- 			graphView.resetGraphBarArrays();
- 			controller.setBarGraphArray();
- 			controller.setxLabelArray();
- 			graphView.render();
- 		},
+       var graphView={
+       	init:function(){
+       		controller.setBarGraphArray();
+       		controller.setxLabelArray();
+       		graphView.render();
+       	},
        	render:function(){
-  
+
        		//console.log("Model Graph:"+model.currentGraph);
        		var bgraph= new BarGraph("BarGraph1");
-			bgraph.xAxisLabelArr=graphView.xAxisLabelArr;
-			bgraph.graphName="Total Items Placed ";
-			bgraph.update(graphView.barValuesSimple);
+       		bgraph.xAxisLabelArr=graphView.xAxisLabelArr;
+       		bgraph.graphName="Total Items Placed ";
+       		bgraph.update(graphView.barValuesSimple);
 
-			var bgraph2=new CompareBarGraph("BarGraph2");
-			bgraph2.xAxisLabelArr=graphView.xAxisLabelArr;
-			bgraph2.graphName="Items Delivered  vs Not delivered"
-			bgraph2.update(graphView.barValuesDouble.first,graphView.barValuesDouble.second);
-			
+       		var bgraph2=new CompareBarGraph("BarGraph2");
+       		bgraph2.xAxisLabelArr=graphView.xAxisLabelArr;
+       		bgraph2.graphName="Items Delivered  vs Not delivered"
+       		bgraph2.update(graphView.barValuesDouble.first,graphView.barValuesDouble.second);
+
        	},
        	resetGraphBarArrays:function(){
        		graphView.barValuesSimple=[0,0,0,0,0,0,0];
        		graphView.barValuesDouble.first=[0,0,0,0,0,0,0];
        		graphView.barValuesDouble.second=[0,0,0,0,0,0,0];
+       	},
+       	setFirstBarValues:function(arr){
+       		graphView.barValuesSimple=arr;
+       	},
+       	setSecondBarValues:function(arr1,arr2){
+       		graphView.barValuesDouble.first=arr1;
+       		graphView.barValuesDouble.second=arr2;
        	}
-		,
+       	,
        	xAxisLabelArr:["sun","mon","tue","wed","thur","fri","sat"]
        	,
        	barValuesSimple:[0,0,0,0,0,0,0]
@@ -651,6 +712,6 @@ var view ={
        		second:[0,0,0,0,0,0,0],
        	},
        };
- controller.init();
+       controller.init();
 
    })();

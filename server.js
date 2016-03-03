@@ -4,6 +4,20 @@ var fs = require("fs");
 var path = require("path");
 var orders = [
 {
+  uid: "113352049485747139246",
+  orderId:1,
+  orderNo:1,
+  orderName: "Vishwa",
+  table: 9,
+  itemName: "Maggi",
+  quantity: 1,
+  itemDescription: "cold",
+  status: "Cancelled",
+  itemPlacedOn:"Tue Mar 01 2016 08:55:40 GMT+0530 (IST)",
+  deliveredOn:""
+
+},
+{
 	uid: "113352049485747139246",
 	orderId:1,
 	orderNo:1,
@@ -24,7 +38,7 @@ var orders = [
 	orderName: "Vishwa",
 	table: 9,
 	itemName: "Maggi",
-	quantity: 1,
+	quantity: 2,
 	itemDescription: "cold",
 	status: "Completed",
 	itemPlacedOn:"Tue Mar 01 2016 08:55:40 GMT+0530 (IST)",
@@ -59,13 +73,27 @@ var orders = [
 	deliveredOn:""
 
 },
+{
+  uid: "113352049485747139246",
+  orderId:4,
+  orderNo:1,
+  orderName: "Vikash",
+  table: 9,
+  itemName: "Cornflakes",
+  quantity: 1,
+  itemDescription: "cold",
+  status: "Completed",
+  itemPlacedOn:"Mon Feb 22 2016 08:55:40 GMT+0530 (IST)",
+  deliveredOn:""
+
+},
 
 ];
 
 
 var menu = [
 {
-	category: "Bevarages",
+	category: "Beverages",
 	categoryItems: [
 	{
 		itemName: "Tea",

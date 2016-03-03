@@ -479,6 +479,9 @@ box-sizing: border-box;
 .item__name{
     text-align: left;
 }
+.itemCancel{
+    padding-right: 5px;
+}
 .fa-times-circle:hover{
     color:red;
 }
