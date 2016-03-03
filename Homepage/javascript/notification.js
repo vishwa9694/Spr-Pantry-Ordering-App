@@ -90,7 +90,6 @@ var viewNotifications = {
 		var notiBody = notificationDiv.querySelector(".notificationBody");
 		notification.onclick=function(e)
 		{
-			//$("#notification__count").fadeOut("");
 
 			if (notiBody.style.display == 'block'){
 				notiBody.style.display = 'none';

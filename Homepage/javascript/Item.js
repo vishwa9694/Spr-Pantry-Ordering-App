@@ -17,6 +17,7 @@ var itemListController = {
         modelItems.init(this.render.bind(this));
         itemListView.init();
         itemListView.reset();
+        
     },
     
     render:function(){
