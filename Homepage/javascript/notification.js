@@ -69,7 +69,7 @@ var viewNotifications = {
 	addNotification: function(itemName, status, reason){
 		var notificationEl, notificationReasonDivEl;
 		notificationEl = document.createElement("li");
-		notificationEl.setAttribute('id', 'notification--' + status);
+		notificationEl.setAttribute('class', 'notification--' + status);
 		notificationEl.innerHTML = "Your Item : " + itemName + " is " + status + ". "
 		if (reason!==null){
 			notificationReasonDivEl = document.createElement("div");

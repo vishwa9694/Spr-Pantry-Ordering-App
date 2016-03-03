@@ -64,7 +64,6 @@ body{
     left:auto;
 }
 .notificationBody > li{
-    padding:10px;
     margin: 10px;
     box-sizing:border-box;
     border-radius: 5px;
@@ -73,37 +72,39 @@ body{
     overflow: scroll;
     font-weight: 300;
     font-size: 15px;
+    text-align: center;
+    line-height: 50px;
 
 }
 
-#notification--Done{
+.notification--Done{
     background-color: #E5F2E5;
     color:black;
     cursor: pointer;
 }
 
-#notification--Done:hover{
+.notification--Done:hover{
     background-color: #27ae60;
     color: white;
 }
 
-#notification--InProgress{
+.notification--InProgress{
     background-color: #f1c40f;
     color:black;
     cursor: pointer;
 }
 
-#notification--InProgress:hover{
+.notification--InProgress:hover{
     background-color: #f39c12;
     color: white;
 }
 
-#notification--Cancelled{
+.notification--Cancelled{
     background-color:#FF9999;
     cursor: pointer;
 }
 
-#notification--Cancelled:hover{
+.notification--Cancelled:hover{
     background-color: #e74c3c
 }
 
