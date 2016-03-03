@@ -28,8 +28,8 @@ $(function() {
 			orderModel.clubbedOrders = clubbedOrders;
 			return orderModel.clubbedOrders;	
 		},
-	};
-	var menuModel = {
+	},
+	menuModel = {
 		menu:null,
 		getMenu: function() {
 			return this.menu;
@@ -45,8 +45,8 @@ $(function() {
 			});
 			return categoryNames;
 		},
-	};
-	var controller = {
+	},
+	controller =  {
 		clickedItemOrder: null,
 		init: function() {
 			services.createRequest("GET","/orders",this.onOrdersReceived);
@@ -82,8 +82,11 @@ $(function() {
 				}
 			});
 		},
-		setcurrentOrder: function(index) {
-			this.clickedItemOrder = orderModel.orders[index];
+		setcurrentOrder: function(id) {
+			var reqOrder = orderModel.orders.filter(function(order){
+				return (order.orderId === id);
+			});
+			this.clickedItemOrder = reqOrder[0];
 		},
 		getAllSortedOrders: function() {
 			return orderModel.getAllSortedOrders();
@@ -215,8 +218,8 @@ $(function() {
 				}
 			});
 			$("#queueTable").click(function(e){
-				var index = Number(e.target.id.split("_")[1]);
-				controller.setcurrentOrder(index);
+				var id = Number(e.target.id.split("_")[1]);
+				controller.setcurrentOrder(id);
 				if(e.target.id.indexOf("cancel")===0) {
 				//	var index = Number(e.target.id.split("_")[1]);
 				//	controller.setcurrentOrder(index);
@@ -236,16 +239,19 @@ $(function() {
 		},
 		addOrderInQueue: function(order,index) {
 			var tableRow, tdString, actionsCell, inProgressIcon, doneIcon, cancelIcon; 
+			//todo : filter these orders before hand
 			if(!(order.status === "Completed" || order.status === "Cancelled")) {
 				tableRow = $("<tr>", {class: "do__row", id: order.orderId});
 				tdString = '<td class="do__table-data box-border do__table-cell_id">'+order.orderNo+'</td>'+'<td class="do__table-data box-border do__table-cell_name">'+order.orderName+'</td>'+'<td class="do__table-data box-border do__table-cell_order">'+order.itemName+'</td>'+'<td class="do__table-data box-border do__table-cell_description">'+order.itemDescription+'</td>'+'<td class="do__table-data box-border do__table-cell_table">'+order.table+'</td>'+'<td class="do__table-data box-border do__table-cell_quantity">'+order.quantity+'</td>';
 				$(tableRow).html(tdString);
 				actionsCell = $("<td>", {class: "do__table-data box-border do__table-cell_actions"});
-				inProgressIcon = $("<i>", {class: "fa fa-clock-o fa-2x",id: "progress_"+index});
-				doneIcon = $("<i>", {class: "fa fa-check-circle-o fa-2x", id: "done_"+index});
-				cancelIcon = $("<i>", {class: "fa fa-times fa-2x", id: "cancel_"+index});
+				inProgressIcon = $("<i>", {class: "fa fa-clock-o fa-2x",id: "progress_"+order.orderId});
+				doneIcon = $("<i>", {class: "fa fa-check-circle-o fa-2x", id: "done_"+order.orderId});
+				cancelIcon = $("<i>", {class: "fa fa-times fa-2x", id: "cancel_"+order.orderId});
 				tableRow.append(actionsCell.append(inProgressIcon, doneIcon, cancelIcon));
+				//todo !!!!!!!!!!!! NEVER EVER DO THIS!!!!
 				$("#queueTable").append(tableRow);
+				//todo: do this with class
 				if(order.status === "InProgress") {
 					$(tableRow).css('background-color', "#dff0d8");
 				}	
