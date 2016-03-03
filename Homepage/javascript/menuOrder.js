@@ -167,43 +167,51 @@ var viewMenuOrder = {
         return '<input class="in_comment" placeholder="Special Instructions" id="special_'+name+'"/>';
     },
 
+
+    createButtonCol : function (dom,attr,field,itemName) {
+        dom.setAttribute(attr,field);
+        dom.innerHTML = this.buttonInnerHTML(itemName,dom.getAttribute(attr));
+        this.menuOrderRowEl.appendChild(dom);
+    },
+
+    createNameCol : function(dom,itemName,className){
+        dom.className=className;
+        dom.innerHTML = this.itemNameInnerHTML(itemName);
+        this.menuOrderRowEl.appendChild(dom);
+    },
+    
     addItem: function(name,qty){
-        var menuOrderRowEl = document.createElement("tr");
-        menuOrderRowEl.setAttribute('class', 's-o-e__item');
+        this.menuOrderRowEl = document.createElement("tr");
+        this.menuOrderRowEl.setAttribute('class', 's-o-e__item');
         
         // Name Adder
         var menuOrderItemNameEl = document.createElement("td");
-        menuOrderItemNameEl.setAttribute('class', 'item__name');
-        menuOrderItemNameEl.innerHTML = viewMenuOrder.itemNameInnerHTML(name);
-        menuOrderRowEl.appendChild(menuOrderItemNameEl);
-
+        this.createNameCol(menuOrderItemNameEl,name,"item__name");
+    
         //Add button adder
         var menuOrderAddEl = document.createElement("td");
-        menuOrderAddEl.setAttribute("data-action","increase-quantity");
-        menuOrderAddEl.innerHTML = viewMenuOrder.buttonInnerHTML(name,menuOrderAddEl.getAttribute("data-action"));
-        menuOrderRowEl.appendChild(menuOrderAddEl);
+        this.createButtonCol (menuOrderAddEl,"data-action","increase-quantity",name);
 
         //Add the quantity
         var menuOrderQtyEl = document.createElement("td");
+        var quantityID="qty_"+name;
         menuOrderQtyEl.setAttribute('class', 'item-qty');
         menuOrderQtyEl.setAttribute('id', 'qty_'+name);
         menuOrderQtyEl.innerHTML = qty;
-        menuOrderRowEl.appendChild(menuOrderQtyEl);
+        this.menuOrderRowEl.appendChild(menuOrderQtyEl);
 
         //Remove an item (Subtract the quantity)
         var menuOrderRemEl = document.createElement("td");
-        menuOrderAddEl.setAttribute("data-action","decrease-quantity");
-        menuOrderRemEl.innerHTML = viewMenuOrder.buttonInnerHTML(name,menuOrderAddEl.getAttribute("data-action"));
-        menuOrderRowEl.appendChild(menuOrderRemEl);
+        this.createButtonCol(menuOrderRemEl,"data-action","decrease-quantity",name);
 
         //Special Instructions
         var menuOrderSplInsEl = document.createElement("td");
         menuOrderSplInsEl.setAttribute('class', 'item-comment');
         menuOrderSplInsEl.innerHTML = viewMenuOrder.specialInstructionsInnerHTML(name);
-        menuOrderRowEl.appendChild(menuOrderSplInsEl);
+        this.menuOrderRowEl.appendChild(menuOrderSplInsEl);
 
         //Finally adding the row to the table
-        menuOrderTableEl.appendChild(menuOrderRowEl);
+        menuOrderTableEl.appendChild(this.menuOrderRowEl);
     },
 
     showQuantity: function(itemName, quantity){

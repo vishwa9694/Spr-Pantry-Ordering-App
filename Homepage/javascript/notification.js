@@ -85,23 +85,26 @@ var viewNotifications = {
 	},
 	
 	handler: function(){
-		var notificationDiv=document.querySelector(".notification_bar")
-		var notification=notificationDiv.querySelector(".header-notification");
-		var notiBody = notificationDiv.querySelector(".notificationBody");
+		var notificationDiv,notification,notificationPanel;
+		notificationDiv=document.querySelector(".notification_bar")
+		notification=notificationDiv.querySelector(".header-notification");
+		notificationPanel = notificationDiv.querySelector(".notificationBody");
 		notification.onclick=function(event)
 		{
 
-			if (notiBody.style.display == 'block'){
-				notiBody.style.display = 'none';
+			if (notificationPanel.classList.contains("hide")){
+					notificationPanel.classList.remove("hide");
+					event.stopPropagation();
 			}
+
 			else{
-				notiBody.style.display = 'block';
-				event.stopPropagation();
+				notificationPanel.classList.add("hide");
 			}
+			
 			controllerNotifications.settrueall();
 		};
 		document.addEventListener('click', function(){
-			notiBody.style.display = 'none';
+			notificationPanel.classList.add("hide");
 		});
 	}
 };
