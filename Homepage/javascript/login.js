@@ -1,6 +1,3 @@
-/*
- * Created by anuprai on 18/02/16.
- */
  function renderButton() {
         gapi.signin2.render('my-signin2', {
             'scope': 'https://www.googleapis.com/auth/plus.login',
