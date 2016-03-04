@@ -444,10 +444,7 @@ body.has-active-menu{
 	height: 100%;
 	display: inline-block;
 	vertical-align: top;
-	/*overflow: scroll;*/
 	margin-top: 10px;
-	/*padding: 15px;*/
-	/*border: 1px solid;*/
 	background-color: #fff;
 	border-radius: 4px;
 
@@ -458,18 +455,14 @@ body.has-active-menu{
 	width: 30%;
 	height: 100%;
 	display: inline-block;
-	/*overflow: scroll;*/
 	margin-top: 10px;
 	margin-left: 10px;
-	/*padding: 15px;*/
-	/*border: 1px solid;*/
 	background-color: #fff;
 	border-radius: 4px;
 
 }
 
 .do__heading {
-	/*display: inline-block;*/
 	width:100%;
 	border-color: #eff2f7;
     font-size: 13px;
@@ -478,9 +471,6 @@ body.has-active-menu{
     text-transform: uppercase;
     padding: 15px;
     border-radius: 4px; 
-    /*border-bottom: 1px solid transparent;
-    border-top-right-radius: 3px;
-    border-top-left-radius: 3px;*/
 }
 
 .do__body {
@@ -513,11 +503,6 @@ body.has-active-menu{
     overflow-x: hidden;
 }
 
-/*.do__table tbody td, thead th {
-    width: 25%; 
-    float: left;
-}*/
-
 .do__table-cell_dot {
 	width: 25%; 
     float: left;
@@ -546,17 +531,6 @@ body.has-active-menu{
     font-size: 13px;
     font-family: "Helvetica Neue";
 }
-/*.do__table-head_id {
-	width: 20%;
-}
-
-.do__table-head_name {
-	width: 40%;
-}
-
-.do__table-head_item {
-	width: 40%;
-}*/
 
 .fa-clock-o:hover{
 	color: #FCB322;
