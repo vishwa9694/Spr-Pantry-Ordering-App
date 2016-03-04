@@ -8,19 +8,13 @@ body{
 }
 
 .header-container{
-    //border: 2px solid black;
-    display:block;
-    width:100%;
-    margin: 0 0;
-    //background-color:;
-    vertical-align:baseline;
     position: relative;
     background-color: black;
     height:70px;
 }
 .logo{
     position: relative;
-    left:10;
+    left:10px;
     top:10px;
     background-image: url("https://www.sprinklr.com/wp-content/themes/sprinklrv3/images/logo_refresh_sprite_2x.png") ;
     background-repeat: no-repeat;
@@ -29,7 +23,6 @@ body{
     background-size:102px 96px; 
     color:white;
     display: inline-block;
-    filter:brightness(0);
     width:105px;
     height:48px;
 }
