@@ -3,13 +3,13 @@ var modelNotification={
 
 	init:function(callBackFunction){
 		this.notifications=[];		
-		serverServices.getNotifications(login.user.id,this.setNotifications.bind(this),callBackFunction);
+		serverServices.getNotifications(login.user.id,callBackFunction);
 	},
 	getNotifications:function(){
 		return this.notifications;
 	},
 	setNotifications:function(notification){
-		this.notifications=JSON.parse(notification);
+		this.notifications=notification;
 	}
 
 };
@@ -18,27 +18,34 @@ var controllerNotifications = {
 	
 	init: function(){
 		viewNotifications.init();
-		modelNotification.init(this.render.bind(this));
+		modelNotification.init(this.serverCallBack.bind(this));
 		viewNotifications.handler();
 	
 	},
+	serverCallBack:function(notifications){
+		modelNotification.setNotifications(notifications);
+		this.render();
+	},
+
 	render:function(){
-		var unreadcount=0;
+		var unReadCount=0;
 		var notifications = modelNotification.getNotifications();
+		
 		if(notifications.length <= 0) {
 			viewNotifications.renderNoNotification();
 		}
 		else {
 			viewNotifications.clearNotifications();
 			notifications.forEach(function(notificationItem){
-			
+				
 				viewNotifications.addNotification(notificationItem.item,notificationItem.status,notificationItem.reason);
-				if(notificationItem.read===false)
-					unreadcount++;
+				if(!notificationItem.read){
+					unReadCount++;
+				}
 		
 			});	
-		}
-		viewNotifications.showUnreadCount(unreadcount);
+		};
+		viewNotifications.showUnreadCount(unReadCount);
 	},
 	settrueall : function(){
 		modelNotification.getNotifications().forEach(function(notificationItem){
@@ -69,9 +76,10 @@ var viewNotifications = {
 	addNotification: function(itemName, status, reason){
 		var notificationEl, notificationReasonDivEl;
 		notificationEl = document.createElement("li");
-		notificationEl.setAttribute('id', 'notification--' + status);
+		notificationEl.setAttribute('class', 'notification--' + status);
 		notificationEl.innerHTML = "Your Item : " + itemName + " is " + status + ". "
-		if (reason!==null){
+
+		if (reason){
 			notificationReasonDivEl = document.createElement("div");
 			notificationReasonDivEl.setAttribute('id', 'notification__cancel__reason');
 			notificationReasonDivEl.innerHTML = reason;

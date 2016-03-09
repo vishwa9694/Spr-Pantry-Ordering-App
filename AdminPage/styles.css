@@ -388,12 +388,13 @@ body.has-active-menu{
 	height: 600px;
 }
 .table {
+	height: 100%;
+	display: inline-block;
+	vertical-align: top;
+	margin-top: 10px;
 	background-color: #fff;
 	border-radius: 4px;
 	display: inline-block;
-	height: 100%;
-	margin-top: 10px;
-	vertical-align: top;
 }
 .order-queue{
 	width: 69%;
@@ -406,12 +407,12 @@ body.has-active-menu{
 .do__heading {
 	width: 100%;
     border-color: #eff2f7;
-    font-size: 13px;
-    font-weight: 400;
-    background: #fafafa;
-    padding: 15px;
-    border-radius: 4px;
-    height: 45px;
+	background-color: #fff;
+	border-radius: 4px;
+	font-weight: 400;
+	padding: 15px;
+	font-size: 13px;
+	height: 45px;
 }
 
 .do__body {

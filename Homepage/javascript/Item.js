@@ -1,12 +1,12 @@
 var modelItems={
 init:function(callBackFunction){
-    serverServices.getItems(this.setItems.bind(this),callBackFunction);
+    serverServices.getItems(callBackFunction);
 },
 getItems:function(){
     return this.items;
 },
 setItems:function(item){
-    this.items=JSON.parse(item);
+    this.items=item;
 }
 };
 
@@ -14,12 +14,15 @@ setItems:function(item){
 var itemListController = {
     
     init: function(){
-        modelItems.init(this.render.bind(this));
+        modelItems.init(this.serverCallBack.bind(this));
         itemListView.init();
         itemListView.reset();
         
     },
-    
+    serverCallBack:function(items){
+        modelItems.setItems(items);
+        this.render();
+    },
     render:function(){
         var category, iIndex;
         category=modelItems.getItems();
@@ -87,8 +90,7 @@ var itemListView = {
        
     } ,
     reset:function(){
-        this.menuList = document.getElementById("menuList");
-        this.menuList.innerHTML=" ";
+        this.menuListEl.innerHTML=" ";
     } 
        
     };
