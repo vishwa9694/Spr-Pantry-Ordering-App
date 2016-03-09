@@ -281,7 +281,7 @@
 			var selReason = reasons.filter(function(reason){
 				return reason.checked;
 			});
-			controller.cancelOrder(selReason[0]);	
+			controller.cancelOrder(selReason[0].value);	
 		},	
 	},
 	addNewItemDialogView = {
