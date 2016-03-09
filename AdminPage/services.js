@@ -6,11 +6,6 @@ var services = {
 		xhr.onreadystatechange = function() {
 		    if (xhr.readyState == 4 && xhr.status == 200) {
 		    	onSuccessCallback(xhr.responseText, object);
-		      	//model.orders = receivedOrders;
-		      	//orderQueueView.init();
-				//cancelDialogView.init();
-				//addNewItemDialogView.init();
-				
 		    }
 		};
 		if(requestType === "POST") {

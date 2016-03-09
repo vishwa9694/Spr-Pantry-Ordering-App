@@ -4,150 +4,63 @@
 		<title>Pantry Admin</title>
 		<link rel="stylesheet" href="styles.css">
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
-		<!-- <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"> -->
-
 	</head>
 	<body id="body">
 		<nav id="c-menu--slide-left" class="c-menu c-menu--slide-left">
 			<button class="c-menu__close" id="cancelButton">&larr; Close Menu</button>
-			<ul id = "categoryList" class="c-menu__items">
-				<!-- <li class="c-menu__item">Beverages</li>
-				<ul>
-					<li class="c-menu__product"><input type="checkbox" value="Green Tea" class="c-menu__product__check">Green Tea</li>
-					<li class="c-menu__product"><input type="checkbox" value="Green Tea" class="c-menu__product__check">Black Tea</li>
-					<li class="c-menu__product"><input type="checkbox" value="Green Tea" class="c-menu__product__check">Coke</li>
-				</ul>
-				<li class="c-menu__item">About</li>
-				<li class="c-menu__item">Services</li>
-				<li class="c-menu__item">Work</li>
-				<li class="c-menu__item">Contact</li> -->
+			<ul id = "categoryList" class="c-menu__items">				
 			</ul>
 		</nav>
 		<div id="c-mask" class="c-mask"></div>
-		<div class="header">
+		<div class="header box-border">
 			<div class="header__list-icon">
 				<i title="View Available Items" id ="c-button--slide-left" class="fa fa-bars fa-lg"></i>
 			</div>
 			<div class="header__logo">
 				<img src="assets/spr-logo.png">
 			</div>
-			<div class="header__text">
+			<div class="header__text box-border">
 				Orders Now
-				<div class="header__stats" id="StatsLink" > <span >Stats</span></div>
+				<div class="header__stats box-border" id="StatsLink" > <span >Stats</span></div>
 				<div class="header__add-icon" title="Add New Items" id="openAddItemModal"><i class="fa fa-plus-circle fa-lg"></i></div>
 			</div>
-
 		</div>
 		<div class="main-section">
-			<div class="order-queue box-border">
+			<div class="table order-queue box-border">
 				<div class="do__heading box-border">
-					Order Queue
-					<div class="md__labels float-right"><input type="checkbox" id="clubOrdersCheck"> Club Orders</div> 
+					ORDER QUEUE
+					<div class="md__labels float-right"><input type="checkbox" id="clubOrdersCheck">Club Orders</div> 
 				</div>
 				<div class="do__body box-border">
-					<table class="do__table">
-						<thead>
-							<tr>
-								<th class="do__table-head box-border do__table-cell_id">#</th>
-								<th class="do__table-head box-border do__table-cell_name">Name</th>
-								<th class="do__table-head box-border do__table-cell_order">Order</th>
-								<th class="do__table-head box-border do__table-cell_description">Description</th>
-								<th class="do__table-head box-border do__table-cell_table">Table</th>
-								<th class="do__table-head box-border do__table-cell_quantity">Quantity</th>
-								<th class="do__table-head box-border do__table-cell_actions">Actions</th>
-							</tr>
-						</thead>
-						<tbody id="queueTable">
-							<!-- <tr class="do__row">
-								<td class="do__table-data box-border do__table-cell_id">1</td>
-								<td class="do__table-data box-border do__table-cell_name">Vishwa</td>
-								<td class="do__table-data box-border do__table-cell_order">maggi</td>
-								<td class="do__table-data box-border do__table-cell_description">sdfsdfds</td>
-								<td class="do__table-data box-border do__table-cell_table">11</td>
-								<td class="do__table-data box-border do__table-cell_quantity">3</td>
-								<td class="do__table-data box-border do__table-cell_actions"><i class="fa fa-clock-o fa-2x"></i><i class="fa fa-check-circle-o fa-2x"></i><i id = "cancelBtn" class="fa fa-times fa-2x"></i></td>
-							</tr> -->
-							
-						</tbody>	
-					</table>
-				</div>
-			</div>
-			<div class="del-orders box-border">
-				<div class="do__heading box-border">
-					Orders Delivered
-				</div>
-				<div class="do__body box-border">
-					<table class="do__table">
-						<thead>
-							<tr>
-								<th class="do__table-head box-border do__table-cell_dot">#</th>
-								<th class="do__table-head box-border do__table-cell_dot">Name</th>
-								<th class="do__table-head box-border do__table-cell_dot">Table</th>
-								<th class="do__table-head box-border do__table-cell_dot">Item</th>
-							</tr>
-						</thead>
-						<tbody id="deliveryTable">
-							<!-- <tr class="do__row">
-								<td class="do__table-data box-border do__table-cell_dot">1</td>
-								<td class="do__table-data box-border do__table-cell_dot">Vishwa</td>
-								<td class="do__table-data box-border do__table-cell_dot">11</td>
-								<td class="do__table-data box-border do__table-cell_dot">Maggi</td>
-							</tr> -->
-							
-						</tbody>
-					</table>
-				</div>
-			</div>
-		</div>
-		<div id="AddItemModal" class="modalDialog">
-			<div class="inner">
-				<div title="Close" class="close" id="closeNewItemDialog">X</div>
-				<div class="md__heading">Add New Item</div>
-				<div>
-					<div class="md__labels">Item Name</div>
-					<input class="md__input box-border" id="itemNameInput"placeholder="Enter Item Name">
-					<p id="inWarning" class="md__warnings">Item Name cannot be null</p>
-				</div>
-				<div id="selectDiv">
-					<div class="md__labels">Select Category</div>
-					<select id="categorySelect" class="md__input box-border" >
-						<!-- <option>Option 1</option>
-						<option>Option 1</option>
-						<option>Option 1</option> -->
-					</select>
-				</div>
-				<div>
-					<div class="md__labels">Add Item Image (Optional)</div>
-					<div id="itemImg" class="md__subcat">
-						<!-- <input class="md__input box-border" placeholder="Enter SubCategory Name"> -->
-						<input class="md__input box-border" type="file" accept="image/*">
-						<!-- <input class="md__input box-border" placeholder="Enter SubCategory Name">	 -->
+					<div class="do__table-head">
+						<div class="do__table-cell do__table-cell_id">#</div>
+						<div class="do__table-cell do__table-cell_name">Name</div>
+						<div class="do__table-cell do__table-cell_order">Order</div>
+						<div class="do__table-cell do__table-cell_description">Description</div>
+						<div class="do__table-cell do__table-cell_table">Table</div>
+						<div class="do__table-cell do__table-cell_quantity">Quantity</div>
+						<div class="do__table-cell do__table-cell_actions">Actions</div>
+					</div> 
+					<div class="do__table-body" id="queueTable">	
 					</div>
 				</div>
-				<div>
-					<button id = "saveItemBtn" type="button" class="md__btn md__btn_save">Save</button>
-					<button id="cancelItemBtn" class="md__btn md__btn_cancel">Cancel</button>
+			</div>
+			<div class="table del-orders box-border">
+				<div class="do__heading box-border">
+					ORDERS DELIVERED
+				</div>
+				<div class="do__body box-border">
+					<div class="do__table-head">
+						<div class="do__table-cell do__table-cell_dot">#</div>
+						<div class="do__table-cell do__table-cell_dot">Name</div>
+						<div class="do__table-cell do__table-cell_dot">Table</div>
+						<div class="do__table-cell do__table-cell_dot">Item</div>
+					</div> 
+					<div class="do__table-body" id="deliveryTable">
+					</div>
 				</div>
 			</div>
-		</div>
-		<div id="reasonDialog" class="modalDialog">
-			<div class="inner">
-				<div title="Close" class="close" id="closeReason">X</div>
-				<div class="md__heading">Why are you cancelling order?</div>
-				<div class="md__labels block">
-					<input type="radio" name="reasons" value="Item not available" checked>
-					Item not available
-				</div>
-				<div class="md__labels block">
-					<input type="radio" name="reasons" value="Off Duty">
-					Off Duty
-				</div>
-				<div class="md__labels block">
-					<input type="radio" name="reasons" value="Other">
-					Other
-				</div>
-				<button type="button" id="cancelOrderBtn" class="md__btn md__btn_save block">Ok</button>
-			</div>
+		<div id="modalDialog" class="modalDialog">		
 		</div>
 		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script> 
 		<script src="services.js"></script>

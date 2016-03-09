@@ -1,4 +1,4 @@
-$(function() {
+(function() {
 	var orderModel = {
 		orders: null,
 		getAllOrders: function() {
@@ -51,7 +51,7 @@ $(function() {
 		init: function() {
 			services.createRequest("GET","/orders",this.onOrdersReceived);
 			services.createRequest("GET","/menu", this.onMenuReceived);
-			cancelDialogView.init();
+			//cancelDialogView.init();
 			addNewItemDialogView.init();
 		},
 		onOrdersReceived: function(orders) {
@@ -202,251 +202,244 @@ $(function() {
 			});
 			selectedItem.available = true;
 		},
-	};
-	var orderQueueView = {
+	},
+	orderQueueView = {
 		queueTemplate: '',
+		tableEl: document.getElementById("queueTable"),
 		init: function() {
-			var orders, clubbedOrders, actions;
-			orders = controller.getOrdersForQueue();
-			orders.forEach(this.addOrderInQueue);
-			$("#queueTable").html(this.queueTemplate);	
-			$("#clubOrdersCheck").change(function(){
-				$("#queueTable *").remove();
-				orderQueueView.queueTemplate = '';
-				if($(this).is(":checked")) {
-					clubbedOrders = controller.getClubbedOrders();
-					clubbedOrders.forEach(orderQueueView.addOrderInQueue);
-				}
-				else {
-					orders = controller.getOrdersForQueue();
-					orders.forEach(orderQueueView.addOrderInQueue);
-				}
-				$("#queueTable").html(orderQueueView.queueTemplate);
-			});
-			actions = {
-				cancel: cancelDialogView.viewCancelDialog.bind(cancelDialogView),
+			var that = this;
+			that.orders = controller.getOrdersForQueue();
+			that.render(that.orders);
+
+		},
+		render: function(orders) {
+			queueRowsHTML = orders.map(orderQueueView.getQueueRowHTML).join( '' );
+			orderQueueView.tableEl.innerHTML = queueRowsHTML;
+			this.postRender();
+		},
+		postRender: function() {
+			this.actions = {
+				cancel: cancelDialogView.init.bind(cancelDialogView),
 				done: controller.orderCompleted.bind(controller),
 				progress: controller.orderInProgress.bind(controller)
 			}
-			$("#queueTable").click(function(e){
-				var id = Number(e.target.id.split("_")[1]);
-				controller.setcurrentOrder(id);
-				actions[e.target.id.split("_")[0]]();
-				// if(e.target.id.indexOf("cancel")===0) {
-				// //	var index = Number(e.target.id.split("_")[1]);
-				// //	controller.setcurrentOrder(index);
-				// 	cancelDialogView.viewCancelDialog();
-				// }
-				// else if(e.target.id.indexOf("done")===0) {
-				// //	var index = Number(e.target.id.split("_")[1]);
-				// //	controller.setcurrentOrder(index);
-				// 	controller.orderCompleted();
-				// }
-				// else if(e.target.id.indexOf("progress")===0) {
-				// //	var index = Number(e.target.id.split("_")[1]);
-				// //	controller.setcurrentOrder(index);
-				// 	controller.orderInProgress();
-				// }
-			});
+			this.startQueueListeners();	
 		},
-		
-		addOrderInQueue: function(order,index) {
-			var tableRow, tdString, actionsCell, inProgressIcon, doneIcon, cancelIcon; 
-			//todo : filter these orders before hand
-			//if(!(order.status === "Completed" || order.status === "Cancelled")) {
-				//tableRow = $("<tr>", {class: "do__row", id: order.orderId});
-			
-				//$(tableRow).html(tdString);
-				// actionsCell = $("<td>", {class: "do__table-data box-border do__table-cell_actions"});
-				// inProgressIcon = $("<i>", {class: "fa fa-clock-o fa-2x",id: "progress_"+order.orderId});
-				// doneIcon = $("<i>", {class: "fa fa-check-circle-o fa-2x", id: "done_"+order.orderId});
-				// cancelIcon = $("<i>", {class: "fa fa-times fa-2x", id: "cancel_"+order.orderId});
-				// tableRow.append(actionsCell.append(inProgressIcon, doneIcon, cancelIcon));
-				//todo !!!!!!!!!!!! NEVER EVER DO THIS!!!!
-				//$("#queueTable").append(tableRow);
-				//todo: do this with class
-				// if(order.status === "InProgress") {
-				// 	$("").css('background-color', "#dff0d8");
-				// }
-			if(order.status === "InProgress") {
-				tdString = '<tr class="do__row do__row_in-progress" id="'+order.orderId+'">'+'<td class="do__table-data box-border do__table-cell_id">'+order.orderNo+'</td>'+'<td class="do__table-data box-border do__table-cell_name">'+order.orderName+'</td>'+'<td class="do__table-data box-border do__table-cell_order">'+order.itemName+'</td>'+'<td class="do__table-data box-border do__table-cell_description">'+order.itemDescription+'</td>'+'<td class="do__table-data box-border do__table-cell_table">'+order.table+'</td>'+'<td class="do__table-data box-border do__table-cell_quantity">'+order.quantity+'</td>'+'<td class="do__table-data box-border do__table-cell_actions"><i class="fa fa-clock-o fa-2x" id="progress_'+order.orderId+'"></i><i class="fa fa-check-circle-o fa-2x" id="done_'+order.orderId+'"></i><i class="fa fa-times fa-2x" id="cancel_'+order.orderId+'"></i></td></tr>';
-			}
-			else {
-				tdString = '<tr class="do__row" id="'+order.orderId+'">'+'<td class="do__table-data box-border do__table-cell_id">'+order.orderNo+'</td>'+'<td class="do__table-data box-border do__table-cell_name">'+order.orderName+'</td>'+'<td class="do__table-data box-border do__table-cell_order">'+order.itemName+'</td>'+'<td class="do__table-data box-border do__table-cell_description">'+order.itemDescription+'</td>'+'<td class="do__table-data box-border do__table-cell_table">'+order.table+'</td>'+'<td class="do__table-data box-border do__table-cell_quantity">'+order.quantity+'</td>'+'<td class="do__table-data box-border do__table-cell_actions"><i class="fa fa-clock-o fa-2x" id="progress_'+order.orderId+'"></i><i class="fa fa-check-circle-o fa-2x" id="done_'+order.orderId+'"></i><i class="fa fa-times fa-2x" id="cancel_'+order.orderId+'"></i></td></tr>';		
-			}
-			
-			orderQueueView.queueTemplate += tdString;	
-			//}			
+		startQueueListeners: function() {
+			var that = this;
+			document.getElementById("clubOrdersCheck").addEventListener('change',that.renderClubbedOrders);
+			that.tableEl.addEventListener('click',that.performSelectedAction);
+		},
+		renderClubbedOrders: function(){
+			var orders = this.checked ? controller.getClubbedOrders(): controller.getOrdersForQueue();
+			orderQueueView.render(orders);
+		},
+		performSelectedAction: function(e){
+			var id = Number(e.target.dataset.order);
+			controller.setcurrentOrder(id);
+			orderQueueView.actions[e.target.dataset.btntype]();
+		}, 
+		getQueueRowHTML: function(order,index) {
+			var inProgressClass = order.status === "InProgress"? 'do__row_in-progress': '', 
+			queueRow = '<div class="do__table-row '+ inProgressClass + '" id="'+order.orderId+'"><div class="do__table-cell do__table-cell_id">'+order.orderNo+'</div> <div class="do__table-cell do__table-cell_name">'+order.orderName+'</div> <div class="do__table-cell do__table-cell_order">'+order.itemName+'</div> <div class="do__table-cell do__table-cell_description">'+order.itemDescription+'</div> <div class="do__table-cell do__table-cell_table">'+order.table+'</div> <div class="do__table-cell do__table-cell_quantity">'+order.quantity+'</div> <div class="do__table-cell do__table-cell_actions"><i class="fa fa-clock-o fa-2x" data-btntype="progress" data-order="'+order.orderId+'"></i><i class="fa fa-check-circle-o fa-2x" data-btntype="done" data-order="'+order.orderId+'"></i><i class="fa fa-times fa-2x" data-btntype="cancel" data-order="'+order.orderId+'"></i></div> </div>';
+			return queueRow;			
 		},
 		removeOrderFromOrderQueue: function(orderId) {
-			$("#"+orderId).remove();
+			var orderRow = document.getElementById(''+orderId);
+			orderRow.parentNode.removeChild(orderRow);
 			cancelDialogView.closeCancelDialog();			
 		},
 		changeRowBackgroundColor: function() {
-			$("#"+controller.clickedItemOrder.orderId).css('background-color', "#dff0d8");
+			document.getElementById(""+controller.clickedItemOrder.orderId).classList.add("do__row_in-progress");
 		},
-	};
-	var cancelDialogView = {
+	},
+	cancelDialogView = {
+		modalTemplate: '<div class="inner"> <div title="Close" class="close" id="closeReason">X</div> <div class="md__heading">Why are you cancelling order?</div> <div class="md__labels display-block"> <input type="radio" name="reasons" value="Item not available" checked> Item not available </div> <div class="md__labels display-block"> <input type="radio" name="reasons" value="Off Duty"> Off Duty </div> <div class="md__labels display-block"> <input type="radio" name="reasons" value="Other"> Other </div> <button type="button" id="cancelOrderBtn" class="md__btn md__btn_save display-block">Ok</button> </div>', 
+		reasonModal: document.getElementById('modalDialog'),
 		init: function() {
-			$("#closeReason").click(this.closeCancelDialog);
-			$("#cancelOrderBtn").click(this.cancelOrder);
+			this.render();
+		},
+		render: function() {
+			cancelDialogView.reasonModal.innerHTML = cancelDialogView.modalTemplate;
+			cancelDialogView.reasonModal.classList.add("modal-open");
+			this.postRender();
+		},
+		postRender: function() {
+			this.startCancelDialogListeners();
+		},
+		startCancelDialogListeners: function() {
+			document.getElementById("closeReason").addEventListener('click', this.closeCancelDialog);
+			document.getElementById("cancelOrderBtn").addEventListener('click',this.cancelOrder);
 		},
 		closeCancelDialog: function () {
-			$("#reasonDialog").removeClass("modal-open");
-			$("#reasonDialog").addClass("modal-close");
-		},
-		viewCancelDialog : function() {
-			$("#reasonDialog").removeClass("modal-close");
-			$("#reasonDialog").addClass("modal-open");
+			cancelDialogView.reasonModal.classList.remove("modal-open");
+			cancelDialogView.reasonModal.innerHTML = '';
 		},
 		cancelOrder: function() {
-			var reason = $("input:radio[name='reasons']:checked").val();
-			controller.cancelOrder(reason);	
+			var reasons = document.getElementsByName('reasons');
+			reasons = Array.prototype.slice.call(reasons);
+			var selReason = reasons.filter(function(reason){
+				return reason.checked;
+			});
+			controller.cancelOrder(selReason[0]);	
 		},	
-	};
-	var addNewItemDialogView = {
+	},
+	addNewItemDialogView = {
 		categoryDiv: false,
+		modal: document.getElementById("modalDialog"),
+		modalTemplate: '', 
 		init: function() {
-			$("#openAddItemModal").click(this.viewNewItemDialog);
-			$("#closeNewItemDialog").click(this.closeAddNewItemDialog);		
-			$("#categorySelect").change(function() {
-				if($(this).find(":selected" ).data("type") === "new" && !(addNewItemDialogView.categoryDiv)) {
-					var newCategoryHTML = '<div id="newCategory"><div class="md__labels">New Category Name</div><input class="md__input box-border" placeholder="Enter Category Name"></div>';
-					$(this).after(newCategoryHTML);
-					$("#newCategory input").on('input',function() {
-						$("#cnWarning").css("display", "none");
-						$("#newCategory input").removeClass("md__input_warning");
-					});
-					addNewItemDialogView.categoryDiv = true;
+			document.getElementById("openAddItemModal").addEventListener('click',this.render);//listening
+		},
+		render: function() {
+			var menu= controller.getMenu(),
+			modal = addNewItemDialogView.modal,
+			optionsHTML = menu.reduce(function(html, category) {
+				return html + "<option>"+category.category+"</option>"; 
+			}, '') + '<option data-cattype="new">Add New Category</option>',
+			template = '<div class="inner"> <div title="Close" class="close" id="closeNewItemDialog">X</div> <div class="md__heading">Add New Item</div> <div> <div class="md__labels">Item Name</div> <input class="md__input box-border" id="itemNameInput"placeholder="Enter Item Name"> <p id="inWarning" class="md__warnings">Item Name cannot be null</p> </div> <div id="selectDiv"> <div class="md__labels">Select Category</div> <select id="categorySelect" class="md__input box-border" >' 
+			+ optionsHTML 
+			+'</select> </div> <div> <div class="md__labels">Add Item Image (Optional)</div> <div id="itemImg" class="md__subcat"> <!-- <input class="md__input box-border" placeholder="Enter SubCategory Name"> --> <input id="itemImgInput" class="md__input box-border" type="file" accept="image/*"> <!-- <input class="md__input box-border" placeholder="Enter SubCategory Name">	 --> </div> </div> <div> <button id = "saveItemBtn" type="button" class="md__btn md__btn_save">Save</button> <button id="cancelItemBtn" class="md__btn md__btn_cancel">Cancel</button> </div> </div>';
+			modal.innerHTML = template;
+			modal.classList.add("modal-open");
+			addNewItemDialogView.postRender();
+		},
+		postRender: function() {
+			this.initVariables()
+			this.startAddNewItemModalListeners();
+		},
+		initVariables: function() {
+			this.categorySelectEl = document.getElementById("categorySelect");
+			this.itemNameInputEl = document.getElementById("itemNameInput");
+			this.inWarningEl = document.getElementById("inWarning");
+		},
+		startAddNewItemModalListeners: function() {
+			document.getElementById("closeNewItemDialog").addEventListener('click',addNewItemDialogView.closeAddNewItemDialog);
+			this.categorySelectEl.addEventListener('change', addNewItemDialogView.assignCategoryForItem);
+			document.getElementById("saveItemBtn").addEventListener('click', addNewItemDialogView.addNewItemInSideMenu);
+			document.getElementById("cancelItemBtn").addEventListener('click', addNewItemDialogView.closeAddNewItemDialog);
+			this.itemNameInputEl.addEventListener('input', addNewItemDialogView.removeItemNameWarning);
+		},
+		removeItemNameWarning: function(){
+			addNewItemDialogView.inWarningEl.classList.remove("display-block");
+			addNewItemDialogView.itemNameInputEl.classList.remove("md__input_warning");
+		},
+		addNewItemInSideMenu: function() {
+			var itemNameInputEl = addNewItemDialogView.itemNameInputEl,
+			itemName = itemNameInputEl.value,
+			categorySelectEl = addNewItemDialogView.categorySelectEl,
+			categoryName = categorySelectEl.options[categorySelectEl.selectedIndex].text,
+			itemImg = document.getElementById("itemImgInput").value || "assets/defaultItem.png";
+			if(categoryName == "Add New Category") {
+				categoryName = document.getElementById("newCategoryInput").value;
+			}
+			if(!itemName || !categoryName) {
+				if(!itemName) {
+					addNewItemDialogView.inWarningEl.classList.add("display-block");
+					itemNameInputEl.classList.add("md__input_warning");
 				}
-				else {
-					if(addNewItemDialogView.categoryDiv) {
-						$("#newCategory").remove();
-						addNewItemDialogView.categoryDiv = false;
-					}
+				if(!categoryName) {
+					var cnWarningEl = '<p id="cnWarning" class="md__warnings display-block">Category Name cannot be null</p>';
+					addNewItemDialogView.newCategoryEl.insertAdjacentHTML('beforeend',cnWarningEl);	
+					addNewItemDialogView.newCategoryInputEl.classList.add("md__input_warning");					
 				}
-			});
-			$("#saveItemBtn").click(function() {
-				var itemName, categoryName, itemImg;
-				itemName = $("#itemNameInput").val();
-				categoryName = $( "#categorySelect option:selected" ).text();
-				if(categoryName == "Add New Category") {
-					categoryName = $("#newCategory input").val();
-				}
-				itemImg = $("#itemImg input").val() || "assets/defaultItem.png";
-				if(!itemName || !categoryName) {
-					if(!itemName) {
-						$("#inWarning").css("display", "block");
-						$("#itemNameInput").addClass("md__input_warning");
-					}
-					if(!categoryName) {
-						$("#newCategory").append($("<p>",{class:"md__warnings", text:"Category Name cannot be null", id:"cnWarning"}));
-						$("#cnWarning").css("display", "block");	
-						$("#newCategory input").addClass("md__input_warning");					
-					}
-				}
-				else {
-					controller.addNewItem(categoryName, itemName, itemImg);
-					addNewItemDialogView.closeAddNewItemDialog();
-				}
-			});
-			$("#cancelItemBtn").click(function() {
+			}
+			else {
+				controller.addNewItem(categoryName, itemName, itemImg);
 				addNewItemDialogView.closeAddNewItemDialog();
-			});
-			$("#itemNameInput").on('input',function(){
-				$("#inWarning").css("display", "none");
-				$("#itemNameInput").removeClass("md__input_warning");
-			});
+			}
 		},
-		viewNewItemDialog: function() {
-			var optionsHTML, menu;
-			$("#AddItemModal").removeClass("modal-close");
-			$("#AddItemModal").addClass("modal-open");
-			optionsHTML = "";
-			menu = controller.getMenu();
-			menu.forEach(function(category) {
-				optionsHTML += "<option>"+category.category+"</option>"; 
-			});			
-			optionsHTML += "<option data-type='new'>Add New Category</option>";
-			$("#categorySelect").html(optionsHTML);		
+		assignCategoryForItem: function() {
+			if(this.options[this.selectedIndex].dataset.cattype === "new" && !(addNewItemDialogView.categoryDiv)) {
+				var newCategoryDivEl, newCategoryHTML;
+				newCategoryDivEl = '<div id="newCategory"><div class="md__labels">New Category Name</div><input id="newCategoryInput" class="md__input box-border" placeholder="Enter Category Name"></div>';
+				this.parentNode.insertAdjacentHTML('beforeend', newCategoryDivEl);
+				addNewItemDialogView.newCategoryEl = document.getElementById("newCategory");
+				addNewItemDialogView.newCategoryInputEl = document.getElementById("newCategoryInput");
+				addNewItemDialogView.newCategoryInputEl.addEventListener('input', function() {
+					document.getElementById("cnWarning").classList.remove("display-block");
+					this.classList.remove("md__input_warning");
+				});
+				addNewItemDialogView.categoryDiv = true;
+			}
+			else {
+				if(addNewItemDialogView.categoryDiv) {
+					addNewItemDialogView.newCategoryEl.parentNode.removeChild(addNewItemDialogView.newCategoryEl);
+					addNewItemDialogView.categoryDiv = false;
+				}
+			}
 		},
+		
 		closeAddNewItemDialog: function() {
-			$("#AddItemModal").removeClass("modal-open");
-			$("#AddItemModal").addClass("modal-close");
-			addNewItemDialogView.reset();
+			var modal = addNewItemDialogView.modal;
+			modal.classList.remove("modal-open");
+			modal.innerHTML = '';
 		},
-		reset: function() {
-			$("#itemNameInput").val("");
-			$("#newCategory").remove();
-			addNewItemDialogView.categoryDiv = false;
-		},
-	};
-	var leftSidePanelView = {	
+	},
+	leftSidePanelView = {	
+		bodyElement: document.getElementById("body"),
+		menuElement: document.getElementById("c-menu--slide-left"),
+		maskElement: document.getElementById("c-mask"),
 		init: function() {
+			this.startSidePanelListeners();		
+			this.render();				
+		},
+		render: function() {
 			var menuCategories;
-			$("#c-button--slide-left").click(this.openSidePanel);
-			$("#c-mask").click(this.closeSidePanel);
-			$("#cancelButton").click(this.closeSidePanel);
 			menuCategories = controller.getmenuCategories();
 			menuCategories.forEach(function(menuCategory) {
 				var items = controller.getCategoryItemsForCategory(menuCategory);
 				leftSidePanelView.addCategoryInSidePanel(menuCategory, items);	
 			});
-			$(document).on('change', '#c-menu--slide-left input:checkbox',(function() {
-				var categoryName = $(this).attr('id').split("_")[0];
-				if(!$(this).is(":checked")) {
-					controller.onItemUnavailable(categoryName, $(this).val());
-				}
-				else {
-					controller.onItemAvailable(categoryName, $(this).val());
-				}
-			}));
+		},
+		startSidePanelListeners: function() {
+			document.getElementById("c-button--slide-left").onclick = leftSidePanelView.openSidePanel;
+			this.maskElement.onclick = leftSidePanelView.closeSidePanel;
+			document.getElementById("cancelButton").onclick = leftSidePanelView.closeSidePanel;
+			this.menuElement.onchange = leftSidePanelView.changeItemAvailabilityStatus;
+		},
+
+		changeItemAvailabilityStatus: function(e) {
+			var that = this;
+			var categoryName = e.target.dataset.category;
+			if(!(that.checked)) {
+				controller.onItemUnavailable(categoryName, e.target.value);
+			}
+			else {
+				controller.onItemAvailable(categoryName, e.target.value);
+			}
 		},
 		addCategoryInSidePanel: function(category, categoryItems) {
-			var categoryItemsList; 
-			$("#categoryList").append($("<li>", {class:"c-menu__item", text: category}));
-			categoryItemsList = ($("<ul>",{id: category}));
-			categoryItems.forEach(function(item) {
-				var categoryItem = $("<li>",{class:"c-menu__product"});
-				var checkboxItem = $("<input>",{class: "c-menu__product__check", type:"checkbox", value: item.itemName, checked: item.available, id: category+"_"+item.itemName});
-				categoryItem.append(checkboxItem);
-				categoryItem.append(document.createTextNode(item.itemName));
-				categoryItemsList.append(categoryItem);
-			});
-			$("#categoryList").append(categoryItemsList);
+			var categoryItemsList, categoryListEl, listItemEl;
+			categoryListEl = document.getElementById("categoryList");
+			listItemEl = '<li class="c-menu__item">'+category+'</li>';
+			categoryItemsList = '<ul id="'+category+'">"';
+			categoryItemsList = categoryItems.reduce(function(html,item) {
+				var categoryItem, checkboxItem;
+				return html + '<li class="c-menu__product"><input class="c-menu__product__check" value="'+item.itemName+'" type="checkbox" checked data-category="'+category+'" id="'+category+'_'+item.itemName+'">'+item.itemName+'</li>'
+			}, categoryItemsList) + '</ul>';
+			categoryListEl.insertAdjacentHTML('beforeend',listItemEl + categoryItemsList);
 		},
 		addItemInCategory: function(itemName, available, selectedCategory) {
-			var categoryItem = $("<li>",{class:"c-menu__product"});
-			categoryItem.append($("<input>",{class: "c-menu__product__check", type:"checkbox", value: itemName, checked: available, id: selectedCategory+"_"+itemName}));
-			categoryItem.append(document.createTextNode(itemName));
-			$("#"+selectedCategory).append(categoryItem);
+			var categoryItem = '<li class="c-menu__product"><input class="c-menu__product__check" value="'+itemName+'" type="checkbox" checked data-category="'+selectedCategory+'" id="'+selectedCategory+'_'+itemName+'">'+itemName+'</li>';
+			document.getElementById(selectedCategory).insertAdjacentHTML('beforeend', categoryItem);
 		},
 		openSidePanel: function() {
-			bodyElement = $("#body");
-			menuElement = $("#c-menu--slide-left");
-			maskElement = $("#c-mask");
-			bodyElement.addClass('has-active-menu');
-			menuElement.addClass('is-active');
-			maskElement.addClass('is-active');
+			leftSidePanelView.bodyElement.classList.add('has-active-menu');
+			leftSidePanelView.menuElement.classList.add('is-active');
+			leftSidePanelView.maskElement.classList.add('is-active');
 		},
 		closeSidePanel: function() {
-			bodyElement = $("#body");
-			menuElement = $("#c-menu--slide-left");
-			maskElement = $("#c-mask");
-			bodyElement.removeClass('has-active-menu');
-			menuElement.removeClass('is-active');
-			maskElement.removeClass('is-active');
+			leftSidePanelView.bodyElement.classList.remove('has-active-menu');
+			leftSidePanelView.menuElement.classList.remove('is-active');
+			leftSidePanelView.maskElement.classList.remove('is-active');
 		},
-	};
-	var deliveredOrdersView = {
+	},
+	deliveredOrdersView = {
 		addDeliveredOrder: function(order) {
-			var tableRow = $("<tr>", {class: "do__row"});
-			tableRow.append($("<td>", {class: "do__table-data box-border do__table-cell_dot", text: order.orderNo}));
-			tableRow.append($("<td>", {class: "do__table-data box-border do__table-cell_dot", text: order.orderName}));
-			tableRow.append($("<td>", {class: "do__table-data box-border do__table-cell_dot", text: order.table}));
-			tableRow.append($("<td>", {class: "do__table-data box-border do__table-cell_dot", text: order.itemName}));
-			$("#deliveryTable").prepend(tableRow);
+			var doTableRowEl = '<div class="do__table-row"><div class="do__table-cell do__table-cell_dot">'+order.orderNo+'</div> <div class="do__table-cell do__table-cell_dot">'+order.orderName+'</div><div class="do__table-cell do__table-cell_dot">'+order.table+'</div> <div class="do__table-cell do__table-cell_dot">'+order.itemName+'</div></div>';
+			$("#deliveryTable").prepend(doTableRowEl);
 		},
 	};
 	controller.init();
-});
+}());
